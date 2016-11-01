@@ -26,4 +26,26 @@ $(document).ready(function(){
 
     $('.summernote').summernote();
 
+    $('#product-categories').on(
+        'change',
+        function () {
+            console.log($(this).val());
+            $.post(
+                '/admin/product/get-attributes',
+                {
+                    categories: $(this).val(),
+                    _csrf : $('meta[name="csrf-token"]').attr("content")
+                },
+                function (response) {
+                    if (response.success != null) {
+                        console.log(response.success);
+                    }
+                    if (response.error != null) {
+                        alert(response.error);
+                    }
+                },
+                'json'
+            );
+        }
+    );
 });

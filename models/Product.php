@@ -24,11 +24,15 @@ use Yii;
  * @property string $productDisountId
  * @property string $productManufactureId
  * @property string $imageFileName
+ * @property string $image
+ * @property string $imagesMultiple
+ * @property string $categoriesMultiple
  *
  * @property BasketProduct[] $basketProducts
  * @property Manufacture $manufacture
- * @property Discount $disount
+ * @property Discount $discount
  * @property Attribute[] $productAttributes
+ * @property Specification[] $specifications
  * @property Category[] $categories
  * @property ProductImage[] $images
  * @property IncomingPrice[] $incomingPrices
@@ -39,9 +43,14 @@ class Product extends \yii\db\ActiveRecord
 {
     public $image;
 
-    public $images;
+    public $imagesMultiple;
 
-    public $categories;
+    public $categoriesMultiple;
+
+    public $specificationsMultiple;
+
+    public $attributesMultiple;
+
     /**
      * @inheritdoc
      */
@@ -59,10 +68,10 @@ class Product extends \yii\db\ActiveRecord
             [['sku', 'name', 'currencyCode', 'productManufactureId'], 'required'],
             [['description'], 'string'],
             [['quantityInStock', 'quantityOfSold', 'productDisountId', 'productManufactureId'], 'integer'],
-            [['availableTime', 'createTime', 'updateTime', 'categories'], 'safe'],
+            [['availableTime', 'createTime', 'updateTime', 'categoriesMultiple'], 'safe'],
             [['price'], 'number'],
             [['image'], 'file', 'extensions' => 'gif, jpg, png'],
-            [['images'], 'file', 'extensions' => 'gif, jpg, png', 'maxFiles' => 20],
+            [['imagesMultiple'], 'file', 'extensions' => 'gif, jpg, png', 'maxFiles' => 20],
             [['sku', 'imageFileName'], 'string', 'max' => 255],
             [['name'], 'string', 'max' => 500],
             [['barcode1', 'barcode2', 'barcode3'], 'string', 'max' => 45],
@@ -121,7 +130,7 @@ class Product extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDisount()
+    public function getDiscount()
     {
         return $this->hasOne(Discount::className(), ['id' => 'productDisountId']);
     }

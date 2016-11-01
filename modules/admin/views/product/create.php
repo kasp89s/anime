@@ -40,7 +40,7 @@ foreach (\app\models\Manufacture::find()->all() as $record) {
                     <div class="hr-line-dashed"></div>
                     <?= $form->field($model, 'image')->fileInput(['accept' => 'image/*'])?>
                     <div class="hr-line-dashed"></div>
-                    <?= $form->field($model, 'images[]')->fileInput(['multiple' => true, 'accept' => 'image/*']) ?>
+                    <?= $form->field($model, 'imagesMultiple[]')->fileInput(['multiple' => true, 'accept' => 'image/*']) ?>
                     <div class="hr-line-dashed"></div>
                     <?= $form->field($model, 'quantityInStock') ?>
                     <div class="hr-line-dashed"></div>
@@ -58,7 +58,11 @@ foreach (\app\models\Manufacture::find()->all() as $record) {
                     <div class="hr-line-dashed"></div>
                     <?= $form->field($model, 'currencyCode') ?>
                     <div class="hr-line-dashed"></div>
-                    <?= $form->field($model, 'categories')->dropDownList($categories, ['multiple'=>'multiple']);?>
+                    <?= $form->field($model, 'categoriesMultiple')->dropDownList($categories, ['multiple'=>'multiple']);?>
+                    <div class="hr-line-dashed"></div>
+                    <?= $form->field($model, 'specificationsMultiple')->dropDownList([], ['multiple'=>'multiple', 'style' => 'display:none']);?>
+                    <div class="hr-line-dashed"></div>
+                    <?= $form->field($model, 'attributesMultiple')->dropDownList([], ['multiple'=>'multiple', 'style' => 'display:none']);?>
                     <div class="hr-line-dashed"></div>
                     <?= $form->field($model, 'productDisountId')->dropDownList($discounts);?>
                     <div class="hr-line-dashed"></div>

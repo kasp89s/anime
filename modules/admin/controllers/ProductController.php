@@ -59,4 +59,12 @@ class ProductController extends AdminController {
 
         return parent::actionChange($id);
     }
+
+    public function actionGetAttributes()
+    {
+        $this->layout = false;
+        var_dump($this->_post);
+//        echo \yii\helpers\BaseJson::encode($reply->getErrors());
+        Yii::$app->end();
+    }
 }
