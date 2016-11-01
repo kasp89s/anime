@@ -37,6 +37,11 @@ use Yii;
  */
 class Product extends \yii\db\ActiveRecord
 {
+    public $image;
+
+    public $images;
+
+    public $categories;
     /**
      * @inheritdoc
      */
@@ -54,8 +59,10 @@ class Product extends \yii\db\ActiveRecord
             [['sku', 'name', 'currencyCode', 'productManufactureId'], 'required'],
             [['description'], 'string'],
             [['quantityInStock', 'quantityOfSold', 'productDisountId', 'productManufactureId'], 'integer'],
-            [['availableTime', 'createTime', 'updateTime'], 'safe'],
+            [['availableTime', 'createTime', 'updateTime', 'categories'], 'safe'],
             [['price'], 'number'],
+            [['image'], 'file', 'extensions' => 'gif, jpg, png'],
+            [['images'], 'file', 'extensions' => 'gif, jpg, png', 'maxFiles' => 20],
             [['sku', 'imageFileName'], 'string', 'max' => 255],
             [['name'], 'string', 'max' => 500],
             [['barcode1', 'barcode2', 'barcode3'], 'string', 'max' => 45],
@@ -74,21 +81,24 @@ class Product extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'sku' => 'Sku',
-            'name' => 'Name',
-            'description' => 'Description',
-            'quantityInStock' => 'Quantity In Stock',
-            'quantityOfSold' => 'Quantity Of Sold',
+            'name' => 'Название',
+            'description' => 'Описание',
+            'image' => 'Основная картинка',
+            'images' => 'Изображения товара',
+            'quantityInStock' => 'Количество в наличии',
+            'quantityOfSold' => 'Количество проданных товаров',
             'barcode1' => 'Barcode1',
             'barcode2' => 'Barcode2',
             'barcode3' => 'Barcode3',
-            'availableTime' => 'Available Time',
-            'createTime' => 'Create Time',
-            'updateTime' => 'Update Time',
-            'price' => 'Price',
-            'currencyCode' => 'Currency Code',
-            'productDisountId' => 'Product Disount ID',
-            'productManufactureId' => 'Product Manufacture ID',
-            'imageFileName' => 'Image File Name',
+            'availableTime' => 'Доступное время',
+            'createTime' => 'Создан',
+            'updateTime' => 'Обновлен',
+            'price' => 'Цена',
+            'currencyCode' => 'Валюта',
+            'productDisountId' => 'Скидка',
+            'productManufactureId' => 'Производитель',
+            'imageFileName' => 'Картинка',
+            'categories' => 'Категории',
         ];
     }
 
