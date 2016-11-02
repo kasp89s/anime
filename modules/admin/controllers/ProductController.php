@@ -81,6 +81,9 @@ class ProductController extends AdminController {
                     $productImage = new ProductImage();
                     $productImage->productId = $model->id;
                     $productImage->imageFileName = $photo;
+                    if (!$productImage->validate()) {
+                        var_dump($productImage->errors); exit;
+                    }
                     $productImage->save();
                 }
             }
@@ -113,11 +116,32 @@ class ProductController extends AdminController {
                     $productAttribute->save();
                 }
             }
+
+
             $model->save();
 
+            $incomingPrice->productId = $model->id;
+            $incomingPrice->load($this->_post);
+            if (!$incomingPrice->validate()) {
+                var_dump($incomingPrice->errors); exit;
+            }
+            $incomingPrice->save();
+
+            $relatedProduct->idProduct = $model->id;
+            $relatedProduct->load($this->_post);
+            if (!$relatedProduct->validate()) {
+                var_dump($relatedProduct->errors); exit;
+            }
+            $relatedProduct->save();
+
+            $productMarker->productId = $model->id;
+            $productMarker->load($this->_post);
+            if (!$productMarker->validate()) {
+                var_dump($productMarker->errors); exit;
+            }
+            $productMarker->save();
+
             Yii::$app->response->redirect(array("admin/" . Yii::$app->controller->id . "/list"));
-//            $incomingPrice->productId = $model->id;
-//            $model->load($this->_post)
         }
 
         return $this->render(Yii::$app->controller->action->id, [
