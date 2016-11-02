@@ -31,7 +31,7 @@ class ProductSpecificationRelation extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['productId', 'productSpecificationId', 'value'], 'required'],
+            [['productId', 'productSpecificationId'], 'required'],
             [['productId', 'productSpecificationId'], 'integer'],
             [['value'], 'string'],
             [['productId'], 'exist', 'skipOnError' => true, 'targetClass' => Product::className(), 'targetAttribute' => ['productId' => 'id']],

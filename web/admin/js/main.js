@@ -26,10 +26,11 @@ $(document).ready(function(){
 
     $('.summernote').summernote();
 
-    $('#product-categories').on(
+    $('#product-categoriesmultiple').on(
         'change',
         function () {
-            console.log($(this).val());
+            $('#product-attributesmultiple').empty();
+            $('#product-specificationsmultiple').empty();
             $.post(
                 '/admin/product/get-attributes',
                 {
@@ -37,12 +38,25 @@ $(document).ready(function(){
                     _csrf : $('meta[name="csrf-token"]').attr("content")
                 },
                 function (response) {
-                    if (response.success != null) {
-                        console.log(response.success);
+                    if (response.attributes != null) {
+                        $.each(response.attributes, function (i, item) {
+                            $('#product-attributesmultiple').append($('<option>', {
+                                value: i,
+                                text : item
+                            }));
+                        });
+                        $('#product-attributesmultiple').show();
                     }
-                    if (response.error != null) {
-                        alert(response.error);
+                    if (response.specifications != null) {
+                        $.each(response.specifications, function (i, item) {
+                            $('#product-specificationsmultiple').append($('<option>', {
+                                value: i,
+                                text : item
+                            }));
+                        });
+                        $('#product-specificationsmultiple').show();
                     }
+
                 },
                 'json'
             );

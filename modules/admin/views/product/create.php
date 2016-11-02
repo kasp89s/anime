@@ -29,14 +29,17 @@ foreach (\app\models\Manufacture::find()->all() as $record) {
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <div class="col-lg-12">
+            <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
             <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Основные параметры</h5>
+                </div>
                 <div class="ibox-content">
-                    <?php $form = ActiveForm::begin(); ?>
                     <?= $form->field($model, 'sku') ?>
                     <div class="hr-line-dashed"></div>
                     <?= $form->field($model, 'name') ?>
                     <div class="hr-line-dashed"></div>
-                    <?= $form->field($model, 'description')->textArea(['rows' => '3']) ?>
+                    <?= $form->field($model, 'description')->textArea(['rows' => '3', 'class' => 'summernote']) ?>
                     <div class="hr-line-dashed"></div>
                     <?= $form->field($model, 'image')->fileInput(['accept' => 'image/*'])?>
                     <div class="hr-line-dashed"></div>
@@ -58,24 +61,64 @@ foreach (\app\models\Manufacture::find()->all() as $record) {
                     <div class="hr-line-dashed"></div>
                     <?= $form->field($model, 'currencyCode') ?>
                     <div class="hr-line-dashed"></div>
+                </div>
+            </div>
+
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Входящая цена</h5>
+                </div>
+                <div class="ibox-content">
+                    <?= $form->field($incomingPrice, 'price') ?>
+                    <div class="hr-line-dashed"></div>
+                    <?= $form->field($incomingPrice, 'currencyCode') ?>
+                    <div class="hr-line-dashed"></div>
+                </div>
+            </div>
+
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Категория</h5>
+                </div>
+                <div class="ibox-content">
                     <?= $form->field($model, 'categoriesMultiple')->dropDownList($categories, ['multiple'=>'multiple']);?>
                     <div class="hr-line-dashed"></div>
                     <?= $form->field($model, 'specificationsMultiple')->dropDownList([], ['multiple'=>'multiple', 'style' => 'display:none']);?>
                     <div class="hr-line-dashed"></div>
                     <?= $form->field($model, 'attributesMultiple')->dropDownList([], ['multiple'=>'multiple', 'style' => 'display:none']);?>
                     <div class="hr-line-dashed"></div>
+                </div>
+            </div>
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Дополнительные параметры</h5>
+                </div>
+                <div class="ibox-content">
+                    <?= $form->field($relatedProduct, 'relatedProductId');?>
+                    <div class="hr-line-dashed"></div>
                     <?= $form->field($model, 'productDisountId')->dropDownList($discounts);?>
                     <div class="hr-line-dashed"></div>
                     <?= $form->field($model, 'productManufactureId')->dropDownList($manufactures);?>
                     <div class="hr-line-dashed"></div>
-
+                    <?= $form->field($productMarker, 'isActive')->checkbox(['value' => 1]) ?>
+                    <div class="hr-line-dashed"></div>
+                    <?= $form->field($productMarker, 'isPreOrder')->checkbox(['value' => 1]) ?>
+                    <div class="hr-line-dashed"></div>
+                    <?= $form->field($productMarker, 'isSpecialOffer')->checkbox(['value' => 1]) ?>
+                    <div class="hr-line-dashed"></div>
+                    <?= $form->field($productMarker, 'isNew')->checkbox(['value' => 1]) ?>
+                    <div class="hr-line-dashed"></div>
+                    <?= $form->field($productMarker, 'isSale')->checkbox(['value' => 1]) ?>
+                    <div class="hr-line-dashed"></div>
+                    <?= $form->field($productMarker, 'isAdult')->checkbox(['value' => 1]) ?>
+                    <div class="hr-line-dashed"></div>
                     <div class="form-group">
-                            <?= Html::submitInput('Сохранить', ['class' => 'btn btn-primary']) ?>
-                            <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/list')?>" class="btn btn-white" type="submit">Cancel</a>
+                        <?= Html::submitInput('Сохранить', ['class' => 'btn btn-primary']) ?>
+                        <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/list')?>" class="btn btn-white" type="submit">Cancel</a>
                     </div>
-                    <?php ActiveForm::end(); ?>
                 </div>
             </div>
+            <?php ActiveForm::end(); ?>
         </div>
     </div>
 </div>

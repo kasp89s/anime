@@ -48,12 +48,12 @@ class ProductMarker extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'productId' => 'Product ID',
-            'isActive' => 'Is Active',
-            'isPreOrder' => 'Is Pre Order',
-            'isSpecialOffer' => 'Is Special Offer',
-            'isNew' => 'Is New',
-            'isSale' => 'Is Sale',
-            'isAdult' => 'Is Adult',
+            'isActive' => 'Активен',
+            'isPreOrder' => 'Предзаказ',
+            'isSpecialOffer' => 'Специальное предложение',
+            'isNew' => 'Новый',
+            'isSale' => 'Продаеться',
+            'isAdult' => '18+',
         ];
     }
 

@@ -31,7 +31,7 @@ class IncomingPrice extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['productId', 'currencyCode', 'time'], 'required'],
+            [['productId', 'time'], 'required'],
             [['productId', 'time'], 'integer'],
             [['price'], 'number'],
             [['currencyCode'], 'string', 'max' => 3],
@@ -47,9 +47,9 @@ class IncomingPrice extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'productId' => 'Product ID',
-            'price' => 'Price',
-            'currencyCode' => 'Currency Code',
-            'time' => 'Time',
+            'price' => 'Цена',
+            'currencyCode' => 'Валюта',
+            'time' => 'Время',
         ];
     }
 
