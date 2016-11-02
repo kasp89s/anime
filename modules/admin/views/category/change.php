@@ -28,6 +28,13 @@ foreach (\app\models\Specification::find()->asArray()->all() as $record) {
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
+                <?php if (\Yii::$app->session->hasFlash('save')):?>
+                    <div class="ibox-content">
+                        <div class="alert alert-success">
+                            <?php echo \Yii::$app->session->getFlash('save')?>
+                        </div>
+                    </div>
+                <?php endif;?>
                 <div class="ibox-content">
                     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
                     <?= $form->field($model, 'name') ?>
@@ -35,7 +42,7 @@ foreach (\app\models\Specification::find()->asArray()->all() as $record) {
                     <?= $form->field($model, 'description')->textArea(['rows' => '3']) ?>
                     <div class="hr-line-dashed"></div>
                     <?php if (!empty($model->imageFileName)):?>
-                        <?= Html::img('/uploads/category/' . $model->id .'/' . $model->imageFileName, ['style' => 'max-width: 200px;']);?>
+                        <?= Html::img('/uploads/category/' . $model->id .'/' . $model->imageFileName, ['class' => 'img-rounded img-md']);?>
                     <?php endif;?>
                     <?= $form->field($model, 'image')->fileInput(['accept' => 'image/*'])?>
                     <div class="hr-line-dashed"></div>

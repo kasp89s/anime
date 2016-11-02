@@ -53,16 +53,20 @@ use yii\helpers\Url;
                                             <?php foreach ($record->values as $value):?>
                                                 <li>
                                                     <?= $value->name?> - <?= $value->price?>
-                                                    <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/option-change/' . $value->id)?>"><i class="fa fa-edit"></i></a>
-                                                    <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/option-remove/' . $value->id)?>"><i class="fa fa-eraser"></i></a>
+                                                    <div class="btn-group">
+                                                        <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/option-change/' . $value->id)?>" class="btn-white btn btn-xs">Редактировать</i></a>
+                                                        <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/option-remove/' . $value->id)?>" class="btn-white btn btn-xs">Удалить</a>
+                                                    </div>
                                                 </li>
                                             <?php endforeach;?>
                                             <?php endif;?>
                                             </ul>
                                         </td>
-                                        <td>
-                                            <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/change/' . $record->id)?>"><i class="fa fa-edit"></i></a>
-                                            <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/remove/' . $record->id)?>"><i class="fa fa-eraser"></i></a>
+                                        <td class="text-right footable-visible footable-last-column">
+                                            <div class="btn-group">
+                                                <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/change/' . $record->id)?>" class="btn-white btn btn-xs">Редактировать</a>
+                                                <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/remove/' . $record->id)?>" class="btn-white btn btn-xs">Удалить</a>
+                                            </div>
                                         </td>
                                     </tr>
                                 <?php endforeach;?>

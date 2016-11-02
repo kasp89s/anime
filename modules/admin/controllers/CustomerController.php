@@ -95,7 +95,7 @@ class CustomerController extends AdminController {
 
         if ($model->load($this->_post) && $model->validate()) {
             $model->save();
-            Yii::$app->response->redirect(array("admin/" . Yii::$app->controller->id . "/list"));
+            Yii::$app->session->setFlash('save', 'Изменения успешно сохранены.');
         }
 
         return $this->render(Yii::$app->controller->action->id, [

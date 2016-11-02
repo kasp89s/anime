@@ -30,7 +30,7 @@ class ProductImage extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'productId', 'imageFileName'], 'required'],
+            [['productId', 'imageFileName'], 'required'],
             [['id', 'productId', 'rank'], 'integer'],
             [['imageFileName'], 'string', 'max' => 255],
             [['productId'], 'exist', 'skipOnError' => true, 'targetClass' => Product::className(), 'targetAttribute' => ['productId' => 'id']],

@@ -18,13 +18,20 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
+                <?php if (\Yii::$app->session->hasFlash('save')):?>
+                    <div class="ibox-content">
+                        <div class="alert alert-success">
+                            <?php echo \Yii::$app->session->getFlash('save')?>
+                        </div>
+                    </div>
+                <?php endif;?>
                 <div class="ibox-content">
                     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
                     <?= $form->field($model, 'name') ?>
                     <div class="hr-line-dashed"></div>
                     <?= $form->field($model, 'description')->textArea(['rows' => '3']) ?>
                     <div class="hr-line-dashed"></div>
-                    <?= Html::img('/uploads/banners/' . $model->id .'/' . $model->imageFileName, ['style' => 'max-width: 200px;']);?>
+                    <?= Html::img('/uploads/banners/' . $model->id .'/' . $model->imageFileName, ['class' => 'img-rounded img-md']);?>
                     <?= $form->field($model, 'file')->fileInput(['accept' => 'image/*'])?>
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">

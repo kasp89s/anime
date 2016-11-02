@@ -1,8 +1,8 @@
 <?php
-    use yii\widgets\Breadcrumbs;
-    use yii\widgets\ActiveForm;
-    use yii\helpers\Html;
-    use yii\helpers\Url;
+use yii\widgets\Breadcrumbs;
+use yii\widgets\ActiveForm;
+use yii\helpers\Html;
+use yii\helpers\Url;
 ?>
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
@@ -29,20 +29,20 @@
                     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
                     <?= $form->field($model, 'name') ?>
                     <div class="hr-line-dashed"></div>
-                    <?= $form->field($model, 'content')->textArea(['rows' => '3']) ?>
+                    <?= $form->field($model, 'countryCode') ?>
                     <div class="hr-line-dashed"></div>
-                    <?= Html::img('/uploads/banners/' . $model->id .'/' . $model->imageFileName, ['class' => 'img-rounded img-md']);?>
-                    <?= $form->field($model, 'image')->fileInput(['accept' => 'image/*'])?>
+                    <?= $form->field($model, 'description')->textArea(['rows' => '3']) ?>
                     <div class="hr-line-dashed"></div>
-                    <?= $form->field($model, 'startTime')->textInput(['class' => 'form-control datepicker', 'value' => date('Y-m-d', time())]) ?>
+                    <?= Html::img('/uploads/paymentMethod/' . $model->id .'/' . $model->imageFileName, ['class' => 'img-rounded img-md']);?>
+                    <?= $form->field($model, 'file')->fileInput(['accept' => 'image/*'])?>
                     <div class="hr-line-dashed"></div>
-                    <?= $form->field($model, 'endTime')->textInput(['class' => 'form-control datepicker', 'value' => date('Y-m-d', time())]) ?>
+                    <?= $form->field($model, 'price') ?>
                     <div class="hr-line-dashed"></div>
-                    <?= $form->field($model, 'isActive')->checkbox(['value' => 1]) ?>
+                    <?= $form->field($model, 'feePercent') ?>
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">
-                            <?= Html::submitInput('Сохранить', ['class' => 'btn btn-primary']) ?>
-                            <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/list')?>" class="btn btn-white" type="submit">Cancel</a>
+                        <?= Html::submitInput('Сохранить', ['class' => 'btn btn-primary']) ?>
+                        <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/list')?>" class="btn btn-white" type="submit">Cancel</a>
                     </div>
                     <?php ActiveForm::end(); ?>
                 </div>

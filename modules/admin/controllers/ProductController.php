@@ -56,7 +56,12 @@ class ProductController extends AdminController {
         $relatedProduct = new RelatedProduct();
         $productMarker = new ProductMarker();
 
-        if ($model->load($this->_post) && $model->validate()) {
+        if (
+            $model->load($this->_post) && $model->validate() &&
+            $incomingPrice->load($this->_post) && $incomingPrice->validate() &&
+            $relatedProduct->load($this->_post) && $relatedProduct->validate() &&
+            $productMarker->load($this->_post) && $productMarker->validate()
+        ) {
             $model->save();
             $path = Yii::getAlias('@webroot') . '/uploads/product/' . $model->id;
             if (!is_dir($path)) {
@@ -81,9 +86,6 @@ class ProductController extends AdminController {
                     $productImage = new ProductImage();
                     $productImage->productId = $model->id;
                     $productImage->imageFileName = $photo;
-                    if (!$productImage->validate()) {
-                        var_dump($productImage->errors); exit;
-                    }
                     $productImage->save();
                 }
             }
@@ -121,24 +123,12 @@ class ProductController extends AdminController {
             $model->save();
 
             $incomingPrice->productId = $model->id;
-            $incomingPrice->load($this->_post);
-            if (!$incomingPrice->validate()) {
-                var_dump($incomingPrice->errors); exit;
-            }
             $incomingPrice->save();
 
             $relatedProduct->idProduct = $model->id;
-            $relatedProduct->load($this->_post);
-            if (!$relatedProduct->validate()) {
-                var_dump($relatedProduct->errors); exit;
-            }
             $relatedProduct->save();
 
             $productMarker->productId = $model->id;
-            $productMarker->load($this->_post);
-            if (!$productMarker->validate()) {
-                var_dump($productMarker->errors); exit;
-            }
             $productMarker->save();
 
             Yii::$app->response->redirect(array("admin/" . Yii::$app->controller->id . "/list"));
@@ -160,7 +150,124 @@ class ProductController extends AdminController {
             'url' => ['/'. Yii::$app->controller->module->id .'/'. Yii::$app->controller->id .'/'. Yii::$app->controller->action->id]
         ];
 
-        return parent::actionChange($id);
+        $model = Product::findOne($id);
+        if (empty($model))
+            throw new \yii\web\NotFoundHttpException();
+
+        $model->categoriesMultiple = $model->categories;
+        $model->specificationsMultiple = $model->specifications;
+        foreach ($model->productAttributes as $attribute) {
+            $model->attributesMultiple[] = $attribute->productOptionId . ';' . $attribute->productOptionValueId;
+        }
+
+        if ($model->load($this->_post) && $model->validate()) {
+            $model->updateTime = date('Y-m-d H:i:s', time());
+
+            $path = Yii::getAlias('@webroot') . '/uploads/product/' . $model->id;
+            if (!is_dir($path)) {
+                BaseFileHelper::createDirectory($path);
+            }
+
+            $uploadImage = UploadedFile::getInstances($model, 'image');
+
+            if (!empty($uploadImage)) {
+                foreach ($uploadImage as $file) {
+                    $photo = $file->baseName . '.' . $file->extension;
+                    $file->saveAs($path . '/' . $file->baseName . '.' . $file->extension);
+                }
+                $model->imageFileName = !empty($photo) ? $photo : null ;
+            }
+
+            $uploadImages = UploadedFile::getInstances($model, 'imagesMultiple');
+            if (!empty($uploadImages)) {
+                Yii::$app->session->setFlash('tab', 5);
+                foreach ($uploadImages as $file) {
+                    $photo = $file->baseName . '.' . $file->extension;
+                    $file->saveAs($path . '/' . $file->baseName . '.' . $file->extension);
+                    $productImage = new ProductImage();
+                    $productImage->productId = $model->id;
+                    $productImage->imageFileName = $photo;
+                    $productImage->save();
+                }
+            }
+
+            if (!empty($this->_post['Product']['categoriesMultiple'])) {
+                Yii::$app->session->setFlash('tab', 3);
+                ProductCategoryRelation::deleteAll('productId = :id', [':id' => $model->id]);
+                foreach ($this->_post['Product']['categoriesMultiple'] as $categoryId) {
+                    $productCategoryRelation = new ProductCategoryRelation();
+                    $productCategoryRelation->productId = $model->id;
+                    $productCategoryRelation->productCategoryId = $categoryId;
+                    $productCategoryRelation->save();
+                }
+            }
+
+            if (!empty($this->_post['Product']['specificationsMultiple'])) {
+                ProductSpecificationRelation::deleteAll('productId = :id', [':id' => $model->id]);
+                foreach ($this->_post['Product']['specificationsMultiple'] as $specificationId) {
+                    $productSpecificationRelation = new ProductSpecificationRelation();
+                    $productSpecificationRelation->productId = $model->id;
+                    $productSpecificationRelation->productSpecificationId = $specificationId;
+                    $productSpecificationRelation->save();
+                }
+            }
+
+            if (!empty($this->_post['Product']['attributesMultiple'])) {
+                Attribute::deleteAll('productId = :id', [':id' => $model->id]);
+                foreach ($this->_post['Product']['attributesMultiple'] as $attribute) {
+                    $attribute = explode(';', $attribute);
+                    $productAttribute = new Attribute();
+                    $productAttribute->productId = $model->id;
+                    $productAttribute->productOptionId = $attribute[0];
+                    $productAttribute->productOptionValueId = $attribute[1];
+                    $productAttribute->save();
+                }
+            }
+
+            $model->save();
+            Yii::$app->session->setFlash('save', 'Изменения успешно сохранены.');
+        }
+
+        if ($model->incomingPrice->load($this->_post) && $model->incomingPrice->validate()) {
+            $model->incomingPrice->save();
+            Yii::$app->session->setFlash('save', 'Изменения успешно сохранены.');
+            Yii::$app->session->setFlash('tab', 2);
+        }
+
+        if ($model->relatedProduct->load($this->_post) && $model->relatedProduct->validate()) {
+            $model->relatedProduct->save();
+            Yii::$app->session->setFlash('save', 'Изменения успешно сохранены.');
+            Yii::$app->session->setFlash('tab', 4);
+        }
+
+        if ($model->marker->load($this->_post) && $model->marker->validate()) {
+            $model->marker->save();
+            Yii::$app->session->setFlash('save', 'Изменения успешно сохранены.');
+            Yii::$app->session->setFlash('tab', 4);
+        }
+
+        if (!empty($this->_post['ProductImage'])) {
+            foreach ($this->_post['ProductImage'] as $imageId => $rank) {
+                $image = ProductImage::findOne($imageId);
+                $image->rank = $rank;
+                $image->save();
+            }
+            Yii::$app->session->setFlash('save', 'Изменения успешно сохранены.');
+            Yii::$app->session->setFlash('tab', 5);
+        }
+        return $this->render(Yii::$app->controller->action->id, [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionImageRemove($id)
+    {
+        ProductImage::deleteAll('id = :id', [':id' => $id]);
+
+        Yii::$app->session->setFlash('save', 'Изменения успешно сохранены.');
+        Yii::$app->session->setFlash('tab', 5);
+
+        return $this->redirect(Yii::$app->request->referrer);
     }
 
     public function actionGetAttributes()

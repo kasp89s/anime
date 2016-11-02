@@ -3,6 +3,7 @@ use yii\widgets\LinkPager;
 use yii\widgets\Breadcrumbs;
 use yii\helpers\Url;
 use yii\helpers\Html;
+
 ?>
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
@@ -35,13 +36,10 @@ use yii\helpers\Html;
                         <thead>
                         <tr>
                             <?php foreach ($records[0]->attributeLabels() as $column => $label):?>
-                                <?php if(in_array($column, ['isActive', 'image', 'createUserId', 'updateUserId'])) continue;?>
+                                <?php if(in_array($column, ['file'])) continue;?>
                                 <th><?= $label?></th>
                             <?php endforeach;?>
-                            <th><?= $records[0]->attributeLabels()['image']?></th>
-                            <th><?= $records[0]->attributeLabels()['createUserId']?></th>
-                            <th><?= $records[0]->attributeLabels()['updateUserId']?></th>
-                            <th><?= $records[0]->attributeLabels()['isActive']?></th>
+                            <th><?= $records[0]->attributeLabels()['file']?></th>
                             <th></th>
                         </tr>
                         </thead>
@@ -49,20 +47,11 @@ use yii\helpers\Html;
                         <?php foreach($records as $record): ?>
                         <tr>
                             <?php foreach ($record->attributeLabels() as $column => $label):?>
-                                <?php if(in_array($column, ['isActive', 'image', 'createUserId', 'updateUserId'])) continue;?>
+                                <?php if(in_array($column, ['file'])) continue;?>
                                 <td><?= $record->{$column}?></td>
                             <?php endforeach;?>
                             <td>
-                                <?= Html::img('/uploads/banners/' . $record->id .'/' . $record->imageFileName, ['class' => 'img-rounded img-md']);?>
-                            </td>
-                            <td><?= $record->createUser->email?></td>
-                            <td><?= $record->updateUser->email?></td>
-                            <td>
-                                <?php if ($record->isActive):?>
-                                <span class="badge badge-primary">Активен</span>
-                                <?php else:?>
-                                <span class="badge badge-danger">Не активен</span>
-                                <?php endif;?>
+                                <?= Html::img('/uploads/shippingMethod/' . $record->id .'/' . $record->imageFileName, ['class' => 'img-rounded img-md']);?>
                             </td>
                             <td class="text-right footable-visible footable-last-column">
                                 <div class="btn-group">

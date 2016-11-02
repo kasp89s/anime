@@ -31,9 +31,10 @@ class IncomingPrice extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['productId', 'time'], 'required'],
-            [['productId', 'time'], 'integer'],
+//            [['productId'], 'required'],
+            [['productId'], 'integer'],
             [['price'], 'number'],
+            [['time'], 'safe'],
             [['currencyCode'], 'string', 'max' => 3],
             [['productId'], 'exist', 'skipOnError' => true, 'targetClass' => Product::className(), 'targetAttribute' => ['productId' => 'id']],
         ];

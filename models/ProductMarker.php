@@ -34,7 +34,7 @@ class ProductMarker extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['productId'], 'required'],
+//            [['productId'], 'required'],
             [['productId', 'isActive', 'isPreOrder', 'isSpecialOffer', 'isNew', 'isSale', 'isAdult'], 'integer'],
             [['productId'], 'exist', 'skipOnError' => true, 'targetClass' => Product::className(), 'targetAttribute' => ['productId' => 'id']],
         ];

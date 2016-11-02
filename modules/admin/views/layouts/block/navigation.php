@@ -55,17 +55,17 @@
     <li <?php echo (Yii::$app->controller->id == 'coupon') ? 'class="active"' : '';?>>
     <a href="<?= Url::to('/admin/coupon/list')?>"><i class="fa fa-cc"></i> <span class="nav-label">Купоны</span> </a>
 </li>
+    <li <?php echo (Yii::$app->controller->id == 'shipping-method') ? 'class="active"' : '';?>>
+    <a href="<?= Url::to('/admin/shipping-method/list')?>"><i class="fa fa-cc"></i> <span class="nav-label">shipping-method</span> </a>
+</li>
+    <li <?php echo (Yii::$app->controller->id == 'payment-method') ? 'class="active"' : '';?>>
+    <a href="<?= Url::to('/admin/payment-method/list')?>"><i class="fa fa-cc"></i> <span class="nav-label">payment-method</span> </a>
+</li>
     <li <?php echo (Yii::$app->controller->id == 'news') ? 'class="active"' : '';?>>
     <a href="<?= Url::to('/admin/news/list')?>"><i class="fa fa-h-square"></i> <span class="nav-label">Новости</span> </a>
 </li>
 <li <?php echo (Yii::$app->controller->id == 'product') ? 'class="active"' : '';?>>
-    <a href="javascript:void(0)"><i class="fa fa-cutlery"></i> <span class="nav-label">Товары</span> <span
-            class="fa arrow"></span></a>
-    <ul class="nav nav-second-level collapse">
-        <li>
-            <a href="<?= Url::to('/admin/product/list')?>">Список товаров</a>
-        </li>
-    </ul>
+    <a href="<?= Url::to('/admin/product/list')?>"><i class="fa fa-cutlery"></i> <span class="nav-label">Товары</span> </a>
 </li>
     <li <?php echo (
         Yii::$app->controller->id == 'category' ||

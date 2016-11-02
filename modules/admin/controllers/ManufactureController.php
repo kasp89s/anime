@@ -57,8 +57,9 @@ class ManufactureController extends AdminController {
                     $photo = $file->baseName . '.' . $file->extension;
                     $file->saveAs($path . '/' . $file->baseName . '.' . $file->extension);
                 }
+                $model->image = $photo;
             }
-            $model->image = $photo;
+
             $model->save();
             Yii::$app->response->redirect(array("admin/" . Yii::$app->controller->id . "/list"));
         }
@@ -93,10 +94,14 @@ class ManufactureController extends AdminController {
                     $photo = $file->baseName . '.' . $file->extension;
                     $file->saveAs($path . '/' . $file->baseName . '.' . $file->extension);
                 }
+                $model->image = $photo;
             }
-            $model->image = $photo;
+
             $model->save();
-            Yii::$app->response->redirect(array("admin/" . Yii::$app->controller->id . "/list"));
+            Yii::$app->session->setFlash('save', 'Изменения успешно сохранены.');
         }
+        return $this->render(Yii::$app->controller->action->id, [
+            'model' => $model,
+        ]);
     }
 }

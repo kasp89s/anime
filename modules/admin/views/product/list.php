@@ -31,7 +31,21 @@ use yii\helpers\Url;
                             <table class="table table-striped">
                                 <thead>
                                 <tr>
-                                    <?php foreach ($records[0]->attributeLabels() as $label):?>
+                                    <?php foreach ($records[0]->attributeLabels() as $column => $label):?>
+                                        <?php if(in_array($column, [
+                                            'description',
+                                            'image',
+                                            'imagesMultiple',
+                                            'barcode2',
+                                            'barcode3',
+                                            'availableTime',
+                                            'productDisountId',
+                                            'productManufactureId',
+                                            'imageFileName',
+                                            'categoriesMultiple',
+                                            'specificationsMultiple',
+                                            'attributesMultiple',
+                                        ])) continue;?>
                                         <th><?= $label?></th>
                                     <?php endforeach;?>
                                     <th></th>
@@ -41,11 +55,27 @@ use yii\helpers\Url;
                                 <?php foreach($records as $record): ?>
                                     <tr>
                                         <?php foreach ($record->attributeLabels() as $column => $label):?>
+                                            <?php if(in_array($column, [
+                                                'description',
+                                                'image',
+                                                'imagesMultiple',
+                                                'barcode2',
+                                                'barcode3',
+                                                'availableTime',
+                                                'productDisountId',
+                                                'productManufactureId',
+                                                'imageFileName',
+                                                'categoriesMultiple',
+                                                'specificationsMultiple',
+                                                'attributesMultiple',
+                                            ])) continue;?>
                                             <td><?= $record->{$column}?></td>
                                         <?php endforeach;?>
-                                        <td>
-                                            <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/change/' . $record->id)?>"><i class="fa fa-edit"></i></a>
-                                            <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/remove/' . $record->id)?>"><i class="fa fa-eraser"></i></a>
+                                        <td class="text-right footable-visible footable-last-column">
+                                            <div class="btn-group">
+                                                <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/change/' . $record->id)?>" class="btn-white btn btn-xs">Редактировать</a>
+                                                <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/remove/' . $record->id)?>" class="btn-white btn btn-xs">Удалить</a>
+                                            </div>
                                         </td>
                                     </tr>
                                 <?php endforeach;?>

@@ -57,7 +57,7 @@ abstract class AdminController extends Controller {
         eval("\$model = $this->_activeModel::findOne($id);");
         if (!empty($model) && $model->load($this->_post) && $model->validate()) {
             $model->save();
-            Yii::$app->response->redirect(array("admin/" . Yii::$app->controller->id . "/list"));
+            Yii::$app->session->setFlash('save', 'Изменения успешно сохранены.');
         }
 
         return $this->render(Yii::$app->controller->action->id, [

@@ -7,3 +7,5 @@ ALTER TABLE `relatedproduct` CHANGE `relatedProductId` `relatedProductId` VARCHA
 ====
 
 ALTER TABLE  `productimage` CHANGE  `id`  `id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT ;
+
+ALTER TABLE `shippingpaymentmethodrelation` ADD FOREIGN KEY (`shippingMethodId`) REFERENCES `anime_line`.`shippingmethod`(`id`) ON DELETE CASCADE ON UPDATE CASCADE; ALTER TABLE `shippingpaymentmethodrelation` ADD FOREIGN KEY (`paymentMethodId`) REFERENCES `anime_line`.`paymentmethod`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

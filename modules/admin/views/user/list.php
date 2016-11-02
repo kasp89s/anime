@@ -29,7 +29,7 @@ foreach (\app\models\Group::find()->asArray()->all() as $record) {
                     <div class="col-sm-2 m-b-xs">
                         <div class="col-sm-6">
                             <div class="input-group">
-                                <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/create')?>" class="btn btn-primary">Создать пользователя</a>
+                                <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/create')?>" class="btn btn-primary">Создать</a>
                             </div>
                         </div>
                     </div>
@@ -77,9 +77,11 @@ foreach (\app\models\Group::find()->asArray()->all() as $record) {
                                 <?php endif;?>
                             </td>
                             <td><?= $record->description?></td>
-                            <td>
-                                <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/change/' . $record->id)?>"><i class="fa fa-edit"></i></a>
-                                <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/remove/' . $record->id)?>"><i class="fa fa-eraser"></i></a>
+                            <td class="text-right footable-visible footable-last-column">
+                                <div class="btn-group">
+                                    <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/change/' . $record->id)?>" class="btn-white btn btn-xs">Редактировать</a>
+                                    <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/remove/' . $record->id)?>" class="btn-white btn btn-xs">Удалить</a>
+                                </div>
                             </td>
                         </tr>
                         <?php endforeach;?>

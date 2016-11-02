@@ -18,6 +18,13 @@ use yii\helpers\Url;
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
+                <?php if (\Yii::$app->session->hasFlash('save')):?>
+                    <div class="ibox-content">
+                        <div class="alert alert-success">
+                            <?php echo \Yii::$app->session->getFlash('save')?>
+                        </div>
+                    </div>
+                <?php endif;?>
                 <div class="ibox-content">
                     <?php $form = ActiveForm::begin(); ?>
                     <?= $form->field($model, 'name') ?>

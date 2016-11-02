@@ -35,7 +35,7 @@ use Yii;
  * @property Specification[] $specifications
  * @property Category[] $categories
  * @property ProductImage[] $images
- * @property IncomingPrice[] $incomingPrices
+ * @property IncomingPrice $incomingPrice
  * @property ProductMarker[] $markers
  * @property ProductSpecificationRelation[] $productSpecificationRelations
  */
@@ -89,13 +89,13 @@ class Product extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'sku' => 'Sku',
+            'sku' => 'Код товара',
             'name' => 'Название',
             'description' => 'Описание',
             'image' => 'Основная картинка',
             'imagesMultiple' => 'Изображения товара',
-            'quantityInStock' => 'Количество в наличии',
-            'quantityOfSold' => 'Количество проданных товаров',
+            'quantityInStock' => 'В наличии',
+            'quantityOfSold' => 'Продано',
             'barcode1' => 'Barcode1',
             'barcode2' => 'Barcode2',
             'barcode3' => 'Barcode3',
@@ -158,23 +158,31 @@ class Product extends \yii\db\ActiveRecord
      */
     public function getImages()
     {
-        return $this->hasMany(ProductImage::className(), ['productId' => 'id']);
+        return $this->hasMany(ProductImage::className(), ['productId' => 'id'])->orderBy(['rank' => SORT_ASC]);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getIncomingPrices()
+    public function getIncomingPrice()
     {
-        return $this->hasMany(IncomingPrice::className(), ['productId' => 'id']);
+        return $this->hasOne(IncomingPrice::className(), ['productId' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getMarkers()
+    public function getRelatedProduct()
     {
-        return $this->hasMany(ProductMarker::className(), ['productId' => 'id']);
+        return $this->hasOne(RelatedProduct::className(), ['idProduct' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMarker()
+    {
+        return $this->hasOne(ProductMarker::className(), ['productId' => 'id']);
     }
 
     /**
@@ -190,7 +198,7 @@ class Product extends \yii\db\ActiveRecord
      */
     public function getSpecifications()
     {
-        return $this->hasMany(Specification::className(), ['id' => 'productCategoryId'])->viaTable('productproductspecificationrelation', ['productId' => 'id']);
+        return $this->hasMany(Specification::className(), ['id' => 'productSpecificationId'])->viaTable('productproductspecificationrelation', ['productId' => 'id']);
     }
 
 
