@@ -209,7 +209,7 @@ $(document).ready(function(){
 						 .css('display', 'block') //
 						 .animate({opacity: 1, top: '10%'}, 100);
 
-					 //if(!$('.modal-slide').hasClass('.slick-initialized')) {
+
 						 $('.modal-slide').slick({
 							 dots: true,
 							 arrows: false,
@@ -217,17 +217,10 @@ $(document).ready(function(){
 							 slidesToShow: 1,
 							 slidesToScroll: 1
 						 });
-					 //}
-					 //$('.modal-slide').slick('slickGoTo',1,false);	open slide
+
 			 });
 
 		 });
-
-
-
-
-
-
 
 		 $('.close, #overlay').click( function(){
 			 $('#modal_form')
@@ -247,5 +240,39 @@ $(document).ready(function(){
 	   }
 
 
+	//login modal
+	$('.password-modal').click( function(){
+		event.preventDefault();
+		$('#overlay').fadeIn(100,
+				function(){
+					$('.password-modal')
+							.css('display', 'block') //
+							.animate({opacity: 1}, 100);
+				});
+
+	});
+
+	$('.enter-modal-btn').click( function(){
+		event.preventDefault();
+		$('#overlay').fadeIn(100,
+				function(){
+					$('.enter-modal')
+							.css('display', 'block') //
+							.animate({opacity: 1}, 100);
+				});
+
+	});
+
+
+
+	$('.close, #overlay').click( function(){
+		$('.modal')
+				.animate({opacity: 0, top: '45%'}, 100,
+						function(){
+							$(this).css('display', 'none');
+							$('#overlay').fadeOut(100);
+						}
+				);
+	});
 
 });

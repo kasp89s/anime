@@ -14,6 +14,7 @@ use Yii;
  * @property string $imageFileName
  * @property string $price
  * @property string $insurancePercent
+ * @property array $payments
  *
  * @property ShippingPaymentMethodRelation[] $shippingPaymentMethodRelations
  * @property PaymentMethod[] $paymentMethods
@@ -21,6 +22,8 @@ use Yii;
 class ShippingMethod extends \yii\db\ActiveRecord
 {
     public $file;
+
+    public $payments;
 
     /**
      * @inheritdoc
@@ -52,12 +55,13 @@ class ShippingMethod extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'countryCode' => 'Country Code',
-            'description' => 'Description',
-            'imageFileName' => 'Image File Name',
-            'price' => 'Price',
-            'insurancePercent' => 'Insurance Percent',
+            'name' => 'Название',
+            'countryCode' => 'Код страны',
+            'description' => 'Описание',
+            'imageFileName' => 'Картинка',
+            'payments' => 'Оплата',
+            'price' => 'Стоимость',
+            'insurancePercent' => 'Процент',
             'file' => 'Картинка',
         ];
     }

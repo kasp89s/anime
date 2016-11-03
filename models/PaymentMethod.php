@@ -52,12 +52,12 @@ class PaymentMethod extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'countryCode' => 'Country Code',
-            'description' => 'Description',
-            'imageFileName' => 'Image File Name',
-            'price' => 'Price',
-            'feePercent' => 'Fee Percent',
+            'name' => 'Название',
+            'countryCode' => 'Код страны',
+            'description' => 'Описание',
+            'imageFileName' => 'Картинка',
+            'price' => 'Стоимость',
+            'feePercent' => 'Процент',
             'file' => 'Картинка',
         ];
     }

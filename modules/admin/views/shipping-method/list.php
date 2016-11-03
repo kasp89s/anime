@@ -36,7 +36,7 @@ use yii\helpers\Html;
                         <thead>
                         <tr>
                             <?php foreach ($records[0]->attributeLabels() as $column => $label):?>
-                                <?php if(in_array($column, ['file'])) continue;?>
+                                <?php if(in_array($column, ['file', 'payments', 'imageFileName'])) continue;?>
                                 <th><?= $label?></th>
                             <?php endforeach;?>
                             <th><?= $records[0]->attributeLabels()['file']?></th>
@@ -47,7 +47,7 @@ use yii\helpers\Html;
                         <?php foreach($records as $record): ?>
                         <tr>
                             <?php foreach ($record->attributeLabels() as $column => $label):?>
-                                <?php if(in_array($column, ['file'])) continue;?>
+                                <?php if(in_array($column, ['file', 'payments', 'imageFileName'])) continue;?>
                                 <td><?= $record->{$column}?></td>
                             <?php endforeach;?>
                             <td>

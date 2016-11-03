@@ -5,6 +5,8 @@
  * @version 1.0
  */
 use yii\helpers\Url;
+use yii\widgets\ActiveForm;
+use yii\helpers\Html;
 ?>
 <header class="clearfix">
     <div class="logo col-xs-12 col-sm-4 col-md-2">
@@ -14,7 +16,7 @@ use yii\helpers\Url;
         <div class="account">
 						<span>
 							Личный кабинет
-							<a href="/" class="open-build-in" data-popup="#recover-password">Войдите в личный кабинет</a>
+							<a href="/" class="open-build-in" data-popup="#enter-modal">Войдите в личный кабинет</a>
 						</span>
             <div class="build-in-popup" id="recover-password">
                 <h2>Вход в anime line group</h2>
@@ -30,6 +32,48 @@ use yii\helpers\Url;
                         <a href=""><img src="/img/login-fb.png" alt=""></a>
                         <a href=""><img src="/img/login-vk.png" alt=""></a>
                         <a href="">Зарегестрироваться</a>
+                    </div>
+                </div>
+            </div>
+            <div class="build-in-popup" id="enter-modal">
+                <div class="close right open-build-in" data-popup="#enter-modal">
+                    <img src="img/remove-button.png" alt="">
+                </div>
+
+                <h2>Вход в anime line group</h2>
+                <div class="table">
+                    <?php $form = ActiveForm::begin([
+                            'action' => 'site/login',
+                            'enableAjaxValidation' => true,
+                            'fieldConfig' => [
+                                'template' => '{label}{input}{error}',
+                                'labelOptions' => ['class' => ''],
+                                'inputOptions' => ['class' => 'input'],
+                            ],
+                        ]); ?>
+                        <?= $form->field($this->params['login'], 'email') ?>
+
+                        <?= $form->field($this->params['login'], 'password')->input('password') ?>
+
+                        <a class="forgot-password open-build-in"  href="javascript:void()" data-popup="#recover-password">Напомнить пароль</a>
+
+                        <div class="enter-row">
+                            <?= Html::submitButton('ВОЙТИ', ['class' => 'button submit']) ?>
+                            <button class="cancel open-build-in" data-popup="#enter-modal">Отмена</button>
+                        </div>
+                    <?php ActiveForm::end(); ?>
+                    <div class="login">
+                        <a href="javascript:void()">Войдите как пользователь</a>
+                        <div class="social-enter">
+                            <a href="<?= $this->params['facebook']->getRedirectLoginHelper()->getLoginUrl('http://' . Yii::$app->getRequest()->serverName . '/social/facebook', ['email'])?>">
+                                <img src="img/login-fb.png" alt="">
+                            </a>
+                            <a href="<?= $this->params['vk']->getLoginUrl()?>">
+                                <img src="img/login-vk.png" alt="">
+                            </a>
+                        </div>
+
+                        <a class="registration" href="javascript:void()">Зарегестрироваться</a>
                     </div>
                 </div>
             </div>
@@ -59,75 +103,48 @@ use yii\helpers\Url;
     </button>
     <ul class="menu col-xs-12">
         <li>
-            <a href="">Новости</a>
+            <a href="<?= Url::to('/news')?>">Новости</a>
         </li>
-        <li>
-            <a href="">Все книги</a>
-            <div class="sub-menu">
-                <div class="table">
-                    <div class="category">
-                        <ul>
-                            <li><a href="">Категории</a></li>
-                            <li><a href="">Комиксы</a></li>
-                            <li><a href="">Манга</a></li>
-                            <li><a href="">Артбуки</a></li>
-                            <li><a href="">Книги</a></li>
-                        </ul>
-                        <ul>
-                            <li><a href="">Язык</a></li>
-                            <li><a href="">На русском</a></li>
-                            <li><a href="">На английском</a></li>
-                            <li><a href="">На японском</a></li>
-                        </ul>
-                        <ul>
-                            <li><a href="">Обложка</a></li>
-                            <li><a href="">Мягкий переплет</a></li>
-                            <li><a href="">Твердый переплет</a></li>
-                            <li><a href="">Синглы (журналы)</a></li>
-                        </ul>
-                        <ul>
-                            <li><a href="">Сеты книг</a></li>
-                            <li><a href="">Сеты комиксов</a></li>
-                            <li><a href="">Сеты манги</a></li>
-                            <li><a href="">Сеты книг</a></li>
-                        </ul>
-                    </div>
-                    <div class="interesting">
-                        <ul>
-                            <li><a href="">Интересное</a></li>
-                            <li><a href="">Абсолютные издания</a></li>
-                            <li><a href="">Ашет-коллекция</a></li>
-                            <li><a href="">Черепашки ниндзя</a></li>
-                            <li><a href="">Saga. Сага</a></li>
-                            <li><a href="">Скотт Пилигрим</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </li>
-        <li>
-            <a href="">Одежда</a>
-        </li>
-        <li>
-            <a href="">Аксессуары</a>
-        </li>
-        <li>
-            <a href="">Кружки</a>
-        </li>
-        <li>
-            <a href="">Игрушки</a>
-        </li>
-        <li>
-            <a href="">Еда</a>
-        </li>
-        <li>
-            <a href="">Все остальное</a>
-        </li>
-        <li>
-            <a href="">Новинки</a>
-        </li>
-        <li>
-            <a href="">Предзаказ</a>
-        </li>
+        <?php if(!empty($this->params['categories'])):?>
+            <?php foreach ($this->params['categories'] as $category):?>
+                <li>
+                    <a href="<?= Url::to('/category/' . $category->id)?>"><?= $category->name?></a>
+                    <?php if (!empty($category->categories) || !empty($category->options) || !empty($category->specifications)):?>
+                        <div class="sub-menu">
+                            <div class="table">
+                                <div class="category">
+                                    <?php if (!empty($category->categories)):?>
+                                    <ul>
+                                        <?php foreach ($category->categories as $subCategory):?>
+                                            <li><a href="<?= Url::to('/category/' . $subCategory->id)?>"><?= $subCategory->name?></a></li>
+                                        <? endforeach;?>
+                                    </ul>
+                                    <?php endif;?>
+                                    <?php if (!empty($category->options)):?>
+                                        <?php foreach ($category->options as $option):?>
+                                            <ul>
+                                                <li><a href="<?= Url::to('/option/' . $option->id)?>"><?= $option->name?></a></li>
+                                                <?php if (!empty($option->values)):?>
+                                                    <?php foreach ($option->values as $value):?>
+                                                        <li><a href="<?= Url::to('/option/value/' . $value->id)?>"><?= $value->name?></a></li>
+                                                    <? endforeach;?>
+                                                <?php endif;?>
+                                              </ul>
+                                        <? endforeach;?>
+                                    <?php endif;?>
+                                    <?php if (!empty($category->specifications)):?>
+                                    <ul>
+                                            <?php foreach ($category->specifications as $specification):?>
+                                                <li><a href="<?= Url::to('/specification/' . $specification->id)?>"><?= $specification->name?></a></li>
+                                            <? endforeach;?>
+                                     </ul>
+                                    <?php endif;?>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif;?>
+                </li>
+            <?php endforeach;?>
+        <?php endif;?>
     </ul>
 </header>

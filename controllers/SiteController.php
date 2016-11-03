@@ -6,6 +6,8 @@
  */
 namespace app\controllers;
 
+use app\models\Banner;
+use app\models\Category;
 use app\models\Tags;
 use Yii;
 use Facebook;
@@ -22,6 +24,8 @@ use app\models\AlbumImage;
 use app\models\LoginForm;
 use app\models\RegisterForm;
 use app\models\PasswordRecovery;
+use yii\web\Response;
+use yii\widgets\ActiveForm;
 
 $oAuth = Yii::getAlias('@app/vendor/yahoo5/OAuth/OAuth.php');
 $yahoo = Yii::getAlias('@app/vendor/yahoo5/Yahoo/YahooOAuthApplication.class.php');
@@ -71,14 +75,6 @@ class SiteController extends AbstractController
             'error' => [
                 'class' => 'yii\web\ErrorAction',
             ],
-            'captcha' => [
-                'class' => 'yii\captcha\CaptchaAction',
-                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-                'width' => 80,
-                'height' => 42,
-                'minLength' => 4,
-                'maxLength' => 4
-            ],
         ];
     }
 
@@ -118,6 +114,27 @@ class SiteController extends AbstractController
         Yii::$app->view->params['yahoo'] = $this->yahoo;
         Yii::$app->view->params['facebook'] = $this->facebook;
         Yii::$app->view->params['user'] = $this->user;
+
+        Yii::$app->view->params['categories'] = Category::find()
+            ->where(['isActive' => 1])
+            ->andWhere(['level' => 0])
+            ->orderBy('sortOrder', SORT_DESC)
+            ->all();
+
+        Yii::$app->view->params['login'] = new LoginForm();
+    }
+
+    public function actionLogin()
+    {
+        $model = new LoginForm();
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
+
+        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+
+        }
     }
 
     /**
@@ -127,8 +144,10 @@ class SiteController extends AbstractController
      */
     public function actionIndex()
     {
-        return $this->render('index', [
+        $slides = Banner::find()->where(['isActive' => 1])->all();
 
+        return $this->render('index', [
+            'slides' => $slides,
         ]);
     }
 

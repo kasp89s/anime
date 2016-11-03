@@ -56,7 +56,7 @@ use yii\helpers\Html;
                                 <?= Html::img('/uploads/banners/' . $record->id .'/' . $record->imageFileName, ['class' => 'img-rounded img-md']);?>
                             </td>
                             <td><?= $record->createUser->email?></td>
-                            <td><?= $record->updateUser->email?></td>
+                            <td><?= isset($record->updateUser->email) ? $record->updateUser->email : ''?></td>
                             <td>
                                 <?php if ($record->isActive):?>
                                 <span class="badge badge-primary">Активен</span>

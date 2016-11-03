@@ -207,6 +207,12 @@ body {
     margin-top: 0;
   }
 }
+.build-in-popup .login .social-enter a {
+  margin-bottom: 10px;
+}
+.build-in-popup .login .social-enter a:last-child {
+  margin-top: 0;
+}
 #up-header {
   background: #705e9c;
   color: #fff;
@@ -508,6 +514,15 @@ header .panel .account span,
 header .panel .cart span {
   font-size: 18px;
   display: block;
+}
+header .panel .account span.user-login,
+header .panel .cart span.user-login {
+  display: block;
+  font-size: 14px;
+  max-width: 167px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 header .panel .account span a,
 header .panel .cart span a {
@@ -3113,6 +3128,38 @@ footer h3 {
   }
 }
 /*=========== modal ==========*/
+.modal {
+  width: 465px;
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 100%;
+  max-height: 100%;
+  z-index: 1010;
+}
+.modal .build-in-popup {
+  display: block;
+  position: static;
+}
+.social-enter {
+  padding-bottom: 40px;
+}
+.enter-row {
+  padding: 24px 0 5px 0;
+}
+.cancel {
+  display: inline-block;
+  background: transparent;
+  padding: 4px 20px;
+  border: none;
+}
+.registration {
+  position: absolute;
+  bottom: 0;
+  left: 30px;
+}
 #overlay {
   z-index: 250;
   position: fixed;
@@ -3172,4 +3219,10 @@ footer h3 {
   color: transparent;
   background: #e1e1e1;
   border: none;
+}
+.hide {
+  display: none;
+}
+.show {
+  display: block;
 }

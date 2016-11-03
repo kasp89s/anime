@@ -16,7 +16,7 @@ AdminLoginAsset::register($this);
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Авторизация</title>
     <?= Html::csrfMetaTags() ?>
     <?php $this->head() ?>
 </head>

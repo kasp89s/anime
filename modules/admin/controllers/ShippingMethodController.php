@@ -2,6 +2,7 @@
 namespace app\modules\admin\controllers;
 
 use app\models\ShippingMethod;
+use app\models\ShippingPaymentMethodRelation;
 use Yii;
 use yii\data\Pagination;
 use yii\web\UploadedFile;
@@ -60,6 +61,15 @@ class ShippingMethodController extends AdminController {
                 $model->imageFileName = $photo;
             }
 
+            if (!empty($this->_post['ShippingMethod']['payments'])) {
+                foreach ($this->_post['ShippingMethod']['payments'] as $paymentId) {
+                    $shippingPaymentRelation = new ShippingPaymentMethodRelation();
+                    $shippingPaymentRelation->paymentMethodId = $paymentId;
+                    $shippingPaymentRelation->shippingMethodId = $model->id;
+                    $shippingPaymentRelation->save();
+                }
+            }
+
             $model->save();
             Yii::$app->response->redirect(array("admin/" . Yii::$app->controller->id . "/list"));
         }
@@ -81,6 +91,7 @@ class ShippingMethodController extends AdminController {
 
         if (empty($model))
             throw new \yii\web\NotFoundHttpException();
+        $model->payments = $model->paymentMethods;
         if ($model->load($this->_post) && $model->validate()) {
             $path = Yii::getAlias('@webroot') . '/uploads/shippingMethod/' . $model->id;
             if (!is_dir($path)) {
@@ -95,6 +106,16 @@ class ShippingMethodController extends AdminController {
                     $file->saveAs($path . '/' . $file->baseName . '.' . $file->extension);
                 }
                 $model->imageFileName = $photo;
+            }
+
+            if (!empty($this->_post['ShippingMethod']['payments'])) {
+                ShippingPaymentMethodRelation::deleteAll('shippingMethodId = :id', [':id' => $model->id]);
+                foreach ($this->_post['ShippingMethod']['payments'] as $paymentId) {
+                    $shippingPaymentRelation = new ShippingPaymentMethodRelation();
+                    $shippingPaymentRelation->paymentMethodId = $paymentId;
+                    $shippingPaymentRelation->shippingMethodId = $model->id;
+                    $shippingPaymentRelation->save();
+                }
             }
 
             $model->save();

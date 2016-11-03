@@ -4,45 +4,21 @@
  *
  * @version 1.0
  */
+use yii\helpers\Html;
 ?>
+<?php if (!empty($slides)):?>
 <div class="main-slider">
+    <?php foreach ($slides as $slide):?>
     <div>
         <div class="item">
             <div class="image">
-                <img src="/img/dummy-img1.png" alt="">
+                <?= Html::img('/uploads/banners/' . $slide->id .'/' . $slide->imageFileName);?>
             </div>
             <div class="text">
-                <small>Скотт снайдер, грег капулло, джонатан глейпион</small>
-                <h2>Бєтмен. книга 1. суд сов</h2>
-                <h3>Уже доступна</h3>
-                <a href="">Сделать заказ уже сейчас!</a>
+                <?= $slide->content?>
             </div>
         </div>
     </div>
-    <div>
-        <div class="item">
-            <div class="image">
-                <img src="/img/dummy-img1.png" alt="">
-            </div>
-            <div class="text">
-                <small>Скотт снайдер, грег капулло, джонатан глейпион</small>
-                <h2>Бєтмен. книга 1. суд сов</h2>
-                <h3>Уже доступна</h3>
-                <a href="">Сделать заказ уже сейчас!</a>
-            </div>
-        </div>
-    </div>
-    <div>
-        <div class="item">
-            <div class="image">
-                <img src="/img/dummy-img1.png" alt="">
-            </div>
-            <div class="text">
-                <small>Скотт снайдер, грег капулло, джонатан глейпион</small>
-                <h2>Бєтмен. книга 1. суд сов</h2>
-                <h3>Уже доступна</h3>
-                <a href="">Сделать заказ уже сейчас!</a>
-            </div>
-        </div>
-    </div>
+    <?php endforeach;?>
 </div>
+<?php endif;?>

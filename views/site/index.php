@@ -5,7 +5,7 @@
  * @version 1.0
  */
 ?>
-<?= $this->render('//site/block/main-slider'); ?>
+<?= $this->render('//site/block/main-slider', ['slides' => $slides]); ?>
 
 <?= $this->render('//site/block/publishers'); ?>
 

@@ -3,6 +3,10 @@ use yii\widgets\Breadcrumbs;
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 use yii\helpers\Url;
+$payments = [];
+foreach (\app\models\PaymentMethod::find()->asArray()->all() as $record) {
+    $payments[$record['id']] = $record['name'];
+}
 ?>
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
@@ -39,6 +43,8 @@ use yii\helpers\Url;
                     <?= $form->field($model, 'price') ?>
                     <div class="hr-line-dashed"></div>
                     <?= $form->field($model, 'insurancePercent') ?>
+                    <div class="hr-line-dashed"></div>
+                    <?= $form->field($model, 'payments')->dropDownList($payments, ['multiple'=>'multiple']);?>
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">
                         <?= Html::submitInput('Сохранить', ['class' => 'btn btn-primary']) ?>
