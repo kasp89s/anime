@@ -1,21 +1,21 @@
 <?php
 /**
- * Базовый контроллер сайта.
+ *
  *
  * @version 1.0
  */
 namespace app\controllers;
 
 use Yii;
-use app\models\Banner;
 use app\models\Category;
+use app\models\LoginForm;
 use \BW\Vkontakte as Vk;
 use yii\data\Pagination;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
-use app\models\LoginForm;
-
-class SiteController extends AbstractController
+use yii\web\Response;
+use yii\widgets\ActiveForm;
+class CabinetController extends AbstractController
 {
     public $layout = 'main';
 
@@ -78,6 +78,12 @@ class SiteController extends AbstractController
             ->all();
 
         Yii::$app->view->params['login'] = new LoginForm();
+
+        Yii::$app->view->params['breadcrumbs'][] = [
+            'template' => "<li>{link}</li>\n",
+            'label' => ' Мой кабинет',
+            'url' => ['/cabinet']
+        ];
     }
 
     /**
@@ -87,10 +93,26 @@ class SiteController extends AbstractController
      */
     public function actionIndex()
     {
-        $slides = Banner::find()->where(['isActive' => 1])->all();
+        Yii::$app->view->params['breadcrumbs'][] = [
+            'template' => "<li>{link}</li>\n",
+            'label' => ' Личные данные',
+            'url' => ['/cabinet']
+        ];
+
+        if (Yii::$app->request->isAjax && $this->user->load(Yii::$app->request->post()) && $this->user->address->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return array_merge(ActiveForm::validate($this->user), ActiveForm::validate($this->user->address));
+        }
+
+        if (
+            $this->user->load(Yii::$app->request->post()) && $this->user->validate() &&
+            $this->user->address->load(Yii::$app->request->post()) && $this->user->address->validate()
+        ) {
+            $this->user->save();
+            $this->user->address->save();
+        }
 
         return $this->render('index', [
-            'slides' => $slides,
         ]);
     }
 }

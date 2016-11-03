@@ -6,11 +6,14 @@
  */
 namespace app\controllers;
 
+use app\models\Customer;
+use app\models\CustomerAddress;
 use Yii;
 use yii\web\Controller;
-use app\models\User;
 use app\models\LoginForm;
 use app\models\RegisterForm;
+use yii\web\Response;
+use yii\widgets\ActiveForm;
 
 $phpMailer = Yii::getAlias('@app/vendor/phpmailer/PHPMailer.php');
 require_once($phpMailer);
@@ -30,34 +33,35 @@ class AbstractController extends Controller {
             $this->session->open();
         }
 
-		if (!\Yii::$app->user->isGuest) {
-			$this->user = User::find()->where(['id' => \Yii::$app->user->id])->one();
+		if (\Yii::$app->session->get('user')) {
+			$this->user = \Yii::$app->session->get('user');
 		}
+
+        Yii::$app->view->params['breadcrumbs'][] = [
+            'template' => "<li>{link}</li>\n",
+            'label' => 'Главная',
+            'url' => ['/']
+        ];
     }
 
     public function actionLogin()
     {
-        if (\Yii::$app->user->isGuest) {
+        if (!\Yii::$app->session->get('user')) {
             $model = new LoginForm();
+            if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                return ActiveForm::validate($model);
+            }
+
             if ($model->load(Yii::$app->request->post()) && $model->login()) {
                 return $this->goHome();
             }
-            echo \yii\helpers\BaseJson::encode($model->getErrors());
+
         }
 
-        Yii::$app->end();
+        return $this->goHome();
     }
 
-	public function actionCheck()
-    {
-		$model = new RegisterForm(['scenario' => RegisterForm::SCENARIO_CHECK]);
-		
-		if($model->load(Yii::$app->request->post()) && $model->validate()) {
-			Yii::$app->end();
-		}
-
-		echo \yii\helpers\BaseJson::encode($model->getErrors());
-	}
     public function actionRegister()
     {
         $model = new RegisterForm(['scenario' => RegisterForm::SCENARIO_REGISTER]);
@@ -92,7 +96,7 @@ class AbstractController extends Controller {
      */
     public function actionLogout()
     {
-        Yii::$app->user->logout(false);
+        \Yii::$app->session->remove('user');
 
         return $this->goHome();
     }

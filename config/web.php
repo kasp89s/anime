@@ -44,6 +44,7 @@ $config = [
 //                    'user/<username:\\w+>/favorites' => 'profile/favorites',
 //                    'user/<username:\\w+>/replies' => 'profile/replies',
 					'<controller>/<action>' => '<controller>/<action>',
+					'<controller>' => '<controller>/index',
 					'<module>/<controller>/<action>' => '<module>/<controller>/<action>',
 					'<module>/<controller>/<action>/<id:\d+>' => '<module>/<controller>/<action>',
 					'<module>' => '<module>/default/index',

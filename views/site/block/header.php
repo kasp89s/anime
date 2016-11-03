@@ -16,7 +16,13 @@ use yii\helpers\Html;
         <div class="account">
 						<span>
 							Личный кабинет
+                            <?php if (empty($this->params['user'])):?>
 							<a href="/" class="open-build-in" data-popup="#enter-modal">Войдите в личный кабинет</a>
+                            <?php else:?>
+                            <span class="user-login show">
+                                Привет, <?= !empty($this->params['user']->address->fullName) ? $this->params['user']->address->fullName : $this->params['user']->email?>
+                            </span>
+                            <?php endif;?>
 						</span>
             <div class="build-in-popup" id="recover-password">
                 <h2>Вход в anime line group</h2>
@@ -45,10 +51,15 @@ use yii\helpers\Html;
                     <?php $form = ActiveForm::begin([
                             'action' => 'site/login',
                             'enableAjaxValidation' => true,
+                            'options'=>['class'=>'row'],
                             'fieldConfig' => [
                                 'template' => '{label}{input}{error}',
+                                'errorOptions' => ['class' => 'error text-danger'],
                                 'labelOptions' => ['class' => ''],
                                 'inputOptions' => ['class' => 'input'],
+                                'options' => [
+                                    'tag' => 'div',
+                                ],
                             ],
                         ]); ?>
                         <?= $form->field($this->params['login'], 'email') ?>
@@ -117,7 +128,7 @@ use yii\helpers\Html;
                                     <ul>
                                         <?php foreach ($category->categories as $subCategory):?>
                                             <li><a href="<?= Url::to('/category/' . $subCategory->id)?>"><?= $subCategory->name?></a></li>
-                                        <? endforeach;?>
+                                        <?php endforeach;?>
                                     </ul>
                                     <?php endif;?>
                                     <?php if (!empty($category->options)):?>
@@ -127,16 +138,16 @@ use yii\helpers\Html;
                                                 <?php if (!empty($option->values)):?>
                                                     <?php foreach ($option->values as $value):?>
                                                         <li><a href="<?= Url::to('/option/value/' . $value->id)?>"><?= $value->name?></a></li>
-                                                    <? endforeach;?>
+                                                    <?php endforeach;?>
                                                 <?php endif;?>
                                               </ul>
-                                        <? endforeach;?>
+                                        <?php endforeach;?>
                                     <?php endif;?>
                                     <?php if (!empty($category->specifications)):?>
                                     <ul>
                                             <?php foreach ($category->specifications as $specification):?>
                                                 <li><a href="<?= Url::to('/specification/' . $specification->id)?>"><?= $specification->name?></a></li>
-                                            <? endforeach;?>
+                                            <?php endforeach;?>
                                      </ul>
                                     <?php endif;?>
                                 </div>

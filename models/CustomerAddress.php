@@ -59,8 +59,8 @@ class CustomerAddress extends \yii\db\ActiveRecord
             'city' => 'Гогод',
             'zip' => 'Индекс',
             'address' => 'Адрес',
-            'fullName' => 'Полное имя',
-            'phone1' => 'Телефон',
+            'fullName' => 'Имя Фамилия',
+            'phone1' => 'Моб. телефон',
             'phone2' => 'Доп. телефон',
             'isPrimary' => 'Is Primary',
         ];

@@ -108,7 +108,7 @@ class Customer extends \yii\db\ActiveRecord
      */
     public static function findByUsername($email)
     {
-        $user = User::find()->where(['email' => $email])->one();
+        $user = self::find()->where(['email' => $email])->one();
         if (!empty($user))
             return $user;
 
