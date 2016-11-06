@@ -32,7 +32,7 @@ use yii\helpers\Url;
                                 <thead>
                                 <tr>
                                     <?php foreach ($records[0]->attributeLabels() as $column => $label):?>
-                                        <?php if(in_array($column, ['content', 'formatedShortContent', 'formatedContent'])) continue;?>
+                                        <?php if(in_array($column, ['image','imageFileName','content', 'formatedShortContent', 'formatedContent'])) continue;?>
                                         <th><?= $label?></th>
                                     <?php endforeach;?>
                                     <th></th>
@@ -42,7 +42,7 @@ use yii\helpers\Url;
                                 <?php foreach($records as $record): ?>
                                     <tr>
                                         <?php foreach ($record->attributeLabels() as $column => $label):?>
-                                            <?php if(in_array($column, ['isActive', 'content', 'formatedShortContent', 'formatedContent', 'createUserId', 'updateUserId'])) continue;?>
+                                            <?php if(in_array($column, ['image','imageFileName','isActive', 'content', 'formatedShortContent', 'formatedContent', 'createUserId', 'updateUserId'])) continue;?>
                                             <td><?= $record->{$column}?></td>
                                         <?php endforeach;?>
                                         <td><?= $record->createUser->email ?></td>

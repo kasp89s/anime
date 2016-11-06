@@ -19,13 +19,15 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
-                    <?php $form = ActiveForm::begin(); ?>
+                    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
                     <?= $form->field($model, 'createUserId')->hiddenInput(['value' => \Yii::$app->user->id])->label(false) ?>
                     <?= $form->field($model, 'title') ?>
                     <div class="hr-line-dashed"></div>
-                    <?= $form->field($model, 'shortContent')->textArea(['rows' => '3']) ?>
+                    <?= $form->field($model, 'shortContent')->textArea(['rows' => '3', 'class' => 'summernote']) ?>
                     <div class="hr-line-dashed"></div>
                     <?= $form->field($model, 'content')->textArea(['rows' => '5', 'class' => 'summernote']) ?>
+                    <div class="hr-line-dashed"></div>
+                    <?= $form->field($model, 'image')->fileInput(['accept' => 'image/*'])?>
                     <div class="hr-line-dashed"></div>
                     <?= $form->field($model, 'isActive')->checkbox(['value' => 1]) ?>
                     <div class="hr-line-dashed"></div>

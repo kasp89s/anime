@@ -6,7 +6,7 @@ return [
     'username' => 'root',
     'password' => 'g65uerden',
     'charset' => 'utf8',
-    'enableSchemaCache' => true,
+    //'enableSchemaCache' => true,
 
     // Продолжительность кеширования схемы.
     'schemaCacheDuration' => 3600,

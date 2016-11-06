@@ -4,6 +4,8 @@ namespace app\modules\admin\controllers;
 use app\models\News;
 use Yii;
 use yii\data\Pagination;
+use yii\web\UploadedFile;
+use yii\helpers\BaseFileHelper;
 
 class NewsController extends AdminController {
 
@@ -45,7 +47,30 @@ class NewsController extends AdminController {
                 $this->_post['News']['publishTime'] = date('Y-m-d H:i:s', time());
             }
         }
-        return parent::actionCreate();
+        $model = new News();
+        if ($model->load($this->_post) && $model->validate()) {
+            $model->save();
+            $path = Yii::getAlias('@webroot') . '/uploads/news/' . $model->id;
+            if (!is_dir($path)) {
+                BaseFileHelper::createDirectory($path);
+            }
+            $uploadPhotos = UploadedFile::getInstances($model, 'image');
+
+            if (!empty($uploadPhotos)) {
+                foreach ($uploadPhotos as $file) {
+                    $photo = $file->baseName . '.' . $file->extension;
+                    $file->saveAs($path . '/' . $file->baseName . '.' . $file->extension);
+                }
+                $model->imageFileName = !empty($photo) ? $photo : null;
+            }
+            $model->save();
+
+            Yii::$app->response->redirect(array("admin/" . Yii::$app->controller->id . "/list"));
+        }
+
+        return $this->render(Yii::$app->controller->action->id, [
+            'model' => $model,
+        ]);
     }
 
     public function actionChange($id)
@@ -65,6 +90,30 @@ class NewsController extends AdminController {
             $this->_post['News']['updateUserId'] = \Yii::$app->user->id;
         }
 
-        return parent::actionChange($id);
+        $model = News::findOne($id);
+        if (empty($model))
+            throw new \yii\web\NotFoundHttpException();
+
+        if (!empty($model) && $model->load($this->_post) && $model->validate()) {
+            $path = Yii::getAlias('@webroot') . '/uploads/news/' . $model->id;
+            if (!is_dir($path)) {
+                BaseFileHelper::createDirectory($path);
+            }
+            $uploadPhotos = UploadedFile::getInstances($model, 'image');
+
+            if (!empty($uploadPhotos)) {
+                foreach ($uploadPhotos as $file) {
+                    $photo = $file->baseName . '.' . $file->extension;
+                    $file->saveAs($path . '/' . $file->baseName . '.' . $file->extension);
+                }
+                $model->imageFileName = !empty($photo) ? $photo : null;
+            }
+            $model->save();
+            Yii::$app->session->setFlash('save', 'Изменения успешно сохранены.');
+        }
+
+        return $this->render(Yii::$app->controller->action->id, [
+            'model' => $model,
+        ]);
     }
 }

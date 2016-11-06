@@ -13,75 +13,123 @@
     <?= $this->render('//cabinet/block/leftNavBar', []); ?>
     <div class="responsive-container left">
         <h3>
-            Редактирование личных данных
+            Личные данные
         </h3>
-        <div class="edit-form">
-            <?php $form = ActiveForm::begin([
-                'action' => '/cabinet',
-                'enableAjaxValidation' => true,
-                'options'=>['class'=>'row'],
-                'fieldConfig' => [
-                    'template' => '{label}<div class="info left">{input}</div>{error}',
-                    'errorOptions' => ['class' => 'error text-danger'],
-                    'labelOptions' => ['class' => 'label left'],
-                    'inputOptions' => ['class' => ''],
-                    'options' => [
-                        'tag' => 'div',
-                        'class' => 'form-row clearfix',
-                    ],
-                ],
-            ]); ?>
+        <?php if (!empty($this->params['user']->code)):?>
+        <div class="activate-email-block">
+            <p>
+                Ой, как же так, Вы не подтвердили свой E-mail:
+            </p>
+            <p class="confirm-email">
+                <?php echo $this->params['user']->email?>
+            </p>
 
-            <?= $form->field($this->params['user']->address, 'fullName') ?>
-
-            <?= $form->field($this->params['user'], 'email') ?>
-
-            <?= $form->field($this->params['user']->address, 'phone1') ?>
-
-            <?php if (empty($this->params['user']->address->phone2)):?>
-            <div class="form-row clearfix new-number">
-                <?= Html::activeTextInput($this->params['user']->address, 'phone2', ['placeholder' => 'Например, (066) 123-23-32']) ?>
-                <button class="remove-number-block">
-                    <img src="img/remove-button.png" alt="">
+            <div>
+                <button>
+                    Подтвердить
                 </button>
             </div>
-                <div class="form-row clearfix">
-                        <span class="add-number" onclick="$(this).closest('.form-row.clearfix').hide()">
-                            Добавить еще один +
-                        </span>
-                </div>
-                <?php else:?>
-                <?= $form->field($this->params['user']->address, 'phone2') ?>
-            <?php endif;?>
-
-            <?= $form->field($this->params['user']->address, 'address') ?>
-
-<!--            <div class="form-row clearfix new-address">
-                <label>
-                    <select>
-                        <option selected> Киев</option>
-                        <option>Чернигов</option>
-                        <option>Минск</option>
-                    </select>
-                </label>
-                <button class="remove-address-block">
-                    <img src="img/remove-button.png" alt="">
-                </button>
-                <div><input type="text" placeholder="Улица, дом, квартира, район, домофон, этаж..."></div>
-            </div>-->
-<!--            <div class="form-row clearfix">
-                        <span class="add-address">
-                            Добавить еще один +
-                        </span>
-            </div>-->
-            <div class="form-row control">
-                <?= Html::submitButton('Сохранить изменения', ['class' => 'save']) ?>
-<!--                <button class="cancel">-->
-<!--                    Отмена-->
-<!--                </button>-->
-            </div>
-            <?php ActiveForm::end(); ?>
         </div>
-
+        <?php endif;?>
+        <div class="discount-info">
+            <p>
+                        <span class="title">
+                            Ваша скидка:
+                        </span>
+                <span>
+                            <?php echo $this->params['user']->group->groupDiscount?>%
+                        </span>
+                <a href="#">
+                    Узнать подробнее о системе скидок!
+                </a>
+            </p>
+            <p>
+                        <span class="title">
+                            Общая сумма ваших заказов по программе
+                        </span>
+                <span>
+                            (накопительная скидка): {order_sum} грн.
+                        </span>
+            </p>
+        </div>
+        <div class="user-info">
+            <p>
+                        <span class="title">
+                            Имя:
+                        </span>
+                <span>
+                             <?php echo $this->params['user']->address->fullName ?>
+                        </span>
+            </p>
+            <p>
+                        <span class="title">
+                            E-mail:
+                        </span>
+                <span>
+                             <?php echo $this->params['user']->email?>
+                        </span>
+            </p>
+            <p>
+                        <span class="title">
+                            Телефоны:
+                        </span>
+                        <span>
+                             <?php echo $this->params['user']->address->phone1?><?php
+                                echo (!empty($this->params['user']->address->phone2)) ? ', ' . $this->params['user']->address->phone2 : '';
+                             ?>
+                        </span>
+            </p>
+            <p>
+                        <span class="title">
+                            Адрес доставки:
+                        </span>
+                <span>
+                             <?php echo $this->params['user']->address->address?>
+                        </span>
+            </p>
+        </div>
+        <a href="<?= Url::to('/'. Yii::$app->controller->id .'/change')?>" class="edit">
+            РЕДАКТИРОВАТЬ
+        </a>
+        <div class="help-block">
+            <p>
+                Помогите сделать наш сервис лучше!
+            </p>
+            <span>
+                        Оставьте отзыв о купленных товарах
+                    </span>
+        </div>
+        <div class="random-product ">
+            <div class="product">
+                <a href="#"><img src="img/ran-item1.png" alt=""></a>
+            </div>
+            <div class="product">
+                <a href="#"><img src="img/ran-item2.png" alt=""></a>
+            </div>
+            <div class="product">
+                <a href="#"><img src="img/ran-item3.png" alt=""></a>
+            </div>
+            <div class="product">
+                <a href="#"><img src="img/ran-item5.png" alt=""></a>
+            </div>
+            <div class="product">
+                <a href="#"><img src="img/ran-item2.png" alt=""></a>
+            </div>
+            <div class="product">
+                <a href="#"><img src="img/ran-item1.png" alt=""></a>
+            </div>
+            <div class="product">
+                <a href="#"><img src="img/ran-item3.png" alt=""></a>
+            </div>
+            <div class="product">
+                <a href="#"><img src="img/ran-item1.png" alt=""></a>
+            </div>
+            <div class="product">
+                <a href="#"><img src="img/ran-item2.png" alt=""></a>
+            </div>
+            <div class="product">
+                <a href="#"><img src="img/ran-item3.png" alt=""></a>
+            </div>
+        </div>
     </div>
 </div>

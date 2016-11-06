@@ -25,6 +25,8 @@ use Yii;
  */
 class News extends \yii\db\ActiveRecord
 {
+    public $image;
+
     /**
      * @inheritdoc
      */
@@ -43,7 +45,8 @@ class News extends \yii\db\ActiveRecord
             [['shortContent', 'content', 'formatedShortContent', 'formatedContent'], 'string'],
             [['isActive', 'createUserId', 'updateUserId'], 'integer'],
             [['publishTime', 'createTime', 'updateTime'], 'safe'],
-            [['title'], 'string', 'max' => 255],
+            [['title', 'imageFileName'], 'string', 'max' => 255],
+            [['image'], 'file', 'extensions' => 'gif, jpg, png'],
             [['updateUserId'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updateUserId' => 'id']],
             [['createUserId'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['createUserId' => 'id']],
         ];
@@ -59,6 +62,8 @@ class News extends \yii\db\ActiveRecord
             'title' => 'Заголовок',
             'shortContent' => 'Короткий контент',
             'content' => 'Контент',
+            'imageFileName' => 'Картинка',
+            'image' => 'Картинка',
             'formatedShortContent' => 'Форматированый короткий контент',
             'formatedContent' => 'Форматированый контент',
             'publishTime' => 'Время публикации',

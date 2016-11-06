@@ -6,6 +6,7 @@
  */
 namespace app\controllers;
 
+use app\models\News;
 use Yii;
 use app\models\Category;
 use app\models\LoginForm;
@@ -15,7 +16,7 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
-class CabinetController extends AbstractController
+class NewsController extends AbstractController
 {
     public $layout = 'main';
 
@@ -81,8 +82,8 @@ class CabinetController extends AbstractController
 
         Yii::$app->view->params['breadcrumbs'][] = [
             'template' => "<li>{link}</li>\n",
-            'label' => ' Мой кабинет',
-            'url' => ['/cabinet']
+            'label' => ' Новости',
+            'url' => ['/news']
         ];
     }
 
@@ -95,36 +96,40 @@ class CabinetController extends AbstractController
     {
         Yii::$app->view->params['breadcrumbs'][] = [
             'template' => "<li>{link}</li>\n",
-            'label' => ' Личные данные',
-            'url' => ['/cabinet']
+            'label' => ' Архив',
+            'url' => false
         ];
 
+        $query = News::find()->where(['isActive' => 1]);
+        $countQuery = clone $query;
+        $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 1]);
+        $pages->pageSizeParam = false;
+        $records = $query->offset($pages->offset)
+            ->limit($pages->limit)
+            ->orderBy('publishTime desc')
+            ->all();
+
         return $this->render(Yii::$app->controller->action->id, [
+            'records' => $records,
+            'pages' => $pages,
         ]);
     }
 
-    public function actionChange()
+    public function actionArticle($id)
     {
+        $record = News::findOne($id);
+
+        if (empty($record))
+            throw new \yii\web\NotFoundHttpException();
+
         Yii::$app->view->params['breadcrumbs'][] = [
             'template' => "<li>{link}</li>\n",
-            'label' => ' Личные данные',
-            'url' => ['/cabinet']
+            'label' => ' ' . $record->title,
+            'url' => false
         ];
 
-        if (Yii::$app->request->isAjax && $this->user->load(Yii::$app->request->post()) && $this->user->address->load(Yii::$app->request->post())) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return array_merge(ActiveForm::validate($this->user), ActiveForm::validate($this->user->address));
-        }
-
-        if (
-            $this->user->load(Yii::$app->request->post()) && $this->user->validate() &&
-            $this->user->address->load(Yii::$app->request->post()) && $this->user->address->validate()
-        ) {
-            $this->user->save();
-            $this->user->address->save();
-        }
-
         return $this->render(Yii::$app->controller->action->id, [
+            'record' => $record
         ]);
     }
 }

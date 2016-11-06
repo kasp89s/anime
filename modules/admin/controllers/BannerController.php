@@ -31,7 +31,7 @@ class BannerController extends AdminController {
             ->orderBy('id desc')
             ->all();
 
-        return $this->render('list',
+        return $this->render(Yii::$app->controller->action->id,
             [
                 'records' => $records,
                 'pages' => $pages,
