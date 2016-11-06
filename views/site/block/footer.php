@@ -4,6 +4,7 @@
  *
  * @version 1.0
  */
+use yii\helpers\Url;
 ?>
 <footer>
     <div class="clearfix">
@@ -12,45 +13,27 @@
                 <h3>
                     Магазин
                 </h3>
+                <?php if(!empty($this->params['categories'])):?>
                 <ul class="shop">
+                    <?php foreach ($this->params['categories'] as $category):?>
                     <li>
-                        <a href="#">Все книги</a>
+                        <a href="<?= Url::to('/category/' . $category->id)?>"><?= $category->name?></a>
                     </li>
-                    <li>
-                        <a href="#">Одежда</a>
-                    </li>
-                    <li>
-                        <a href="#">Аксессуары</a>
-                    </li>
-                    <li>
-                        <a href="#">Косплей</a>
-                    </li>
-                    <li>
-                        <a href="#">Игрушки</a>
-                    </li>
-                    <li>
-                        <a href="#">Все остальное</a>
-                    </li>
+                    <?php endforeach;?>
                 </ul>
+                <?php endif;?>
             </div>
             <div>
                 <h3>
                     Помощь
                 </h3>
+                <?php if ($this->params['pages']):?>
                 <ul class="shop">
-                    <li>
-                        <a href="#">Доставка и оплата</a>
-                    </li>
-                    <li>
-                        <a href="#">Как сделать заказ</a>
-                    </li>
-                    <li>
-                        <a href="#">Вопрос-ответ</a>
-                    </li>
-                    <li>
-                        <a href="#">Контакты</a>
-                    </li>
+                    <?php foreach ($this->params['pages'] as $page):?>
+                        <li><a href="<?= Url::to('/page/'. $page->code)?>"><?= $page->title ?></a></li>
+                    <?php endforeach;?>
                 </ul>
+                <?php endif;?>
             </div>
 
         </div>
@@ -60,19 +43,19 @@
             </h3>
             <ul class="clearfix">
                 <li>
-                    <a href="#" class="fb"></a>
+                    <a href="<?= Yii::$app->params['social']['facebook']['link']?>" class="fb"></a>
                 </li>
                 <li>
-                    <a href="#" class="vk"></a>
+                    <a href="<?= Yii::$app->params['social']['vk']['link']?>" class="vk"></a>
                 </li>
                 <li>
-                    <a href="#" class="twiter"></a>
+                    <a href="<?= Yii::$app->params['social']['twitter']['link']?>" class="twiter"></a>
                 </li>
                 <li>
-                    <a href="#"  class="instagram"></a>
+                    <a href="<?= Yii::$app->params['social']['in']['link']?>"  class="instagram"></a>
                 </li>
                 <li>
-                    <a href="#" class="youtube"></a>
+                    <a href="<?= Yii::$app->params['social']['youtube']['link']?>" class="youtube"></a>
                 </li>
             </ul>
             <p>

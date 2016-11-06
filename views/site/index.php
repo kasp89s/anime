@@ -4,6 +4,8 @@
  *
  * @version 1.0
  */
+use yii\helpers\Url;
+use yii\helpers\Html;
 ?>
 <?= $this->render('//site/block/main-slider', ['slides' => $slides]); ?>
 
@@ -249,46 +251,23 @@
     <div class="container type2">
         <div class="panel clearfix">
             <h2>Новости магазина</h2>
-            <a href="/" class="show-all">показать все</a>
+            <a href="<?= Url::to('/news')?>" class="show-all">показать все</a>
         </div>
+        <?php if (!empty($news)):?>
         <div class="list large owl-catalog-2">
+            <?php foreach ($news as $record):?>
             <div class="item">
-                <a class="link">
-                    <div class="image corner-message" message="Скидка - 25%">
-                        <img src="/img/news5.png" alt="">
+                <a href="<?= Url::to('/news/article/' . $record->id)?>" class="link">
+                    <div class="image corner-message">
+                        <?= Html::img('/uploads/news/' . $record->id .'/' . $record->imageFileName, []);?>
                     </div>
-                    <h3>Бэтмен. Суд Сов. Том 1</h3>
-                    <span class="date">25.06.2015</span>
+                    <h3><?= $record->title?></h3>
+                    <span class="date"><?= date('d.m.Y', strtotime($record->publishTime))?></span>
                 </a>
             </div>
-            <div class="item">
-                <a class="link">
-                    <div class="image corner-message" message="Скидка - 25%">
-                        <img src="/img/news2.png" alt="">
-                    </div>
-                    <h3>Бэтмен. Суд Сов. Том 1</h3>
-                    <span class="date"></span>
-                </a>
-            </div>
-            <div class="item">
-                <a class="link">
-                    <div class="image corner-message" message="Скидка - 25%">
-                        <img src="/img/news3.png" alt="">
-                    </div>
-                    <h3>Бэтмен. Суд Сов. Том 1</h3>
-                    <span class="date"></span>
-                </a>
-            </div>
-            <div class="item">
-                <a class="link">
-                    <div class="image corner-message" message="Скидка - 25%">
-                        <img src="/img/news5.png" alt="">
-                    </div>
-                    <h3>Бэтмен. Суд Сов. Том 1</h3>
-                    <span class="date"></span>
-                </a>
-            </div>
+            <?php endforeach;?>
         </div>
+        <?php endif;?>
     </div>
 </div>
 <div class="catalog">

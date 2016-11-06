@@ -2,7 +2,6 @@
 use yii\widgets\Breadcrumbs;
 use yii\widgets\LinkPager;
 use yii\helpers\Url;
-use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 ?>
 <div class="breadcrumbs-block clearfix">
@@ -58,7 +57,7 @@ use yii\helpers\Html;
             </div>
             <div class="right">
                         <span class="result">
-                            Найденно <?= count($records)?> новостей
+                            Найденно <?= $count?> новостей
                         </span>
             </div>
         </div>

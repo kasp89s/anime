@@ -6,6 +6,10 @@
  */
 namespace app\controllers;
 
+use app\models\InfoPage;
+use app\models\News;
+use app\models\Product;
+use app\models\ProductCategoryRelation;
 use Yii;
 use app\models\Banner;
 use app\models\Category;
@@ -88,9 +92,64 @@ class SiteController extends AbstractController
     public function actionIndex()
     {
         $slides = Banner::find()->where(['isActive' => 1])->all();
+        $news = News::find()->where(['isActive' => 1])->limit(4)->orderBy('publishTime desc')->all();
 
-        return $this->render('index', [
+        return $this->render(Yii::$app->controller->action->id, [
             'slides' => $slides,
+            'news' => $news,
+        ]);
+    }
+
+    public function actionCategory($id)
+    {
+        $category = Category::findOne($id);
+        if (empty($category))
+            throw new \yii\web\NotFoundHttpException();
+
+//        $productsRelation = ProductCategoryRelation::find()->all();
+
+        $query = Product::find();
+        $query->joinWith('categoryRelation');
+        $query->joinWith('marker');
+        $query->where(['productcategoryrelation.productCategoryId' => $id]);
+        $query->andWhere('productmarker.isActive = 1 AND productmarker.isSale = 1');
+        $countQuery = clone $query;
+        $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 5]);
+        $pages->pageSizeParam = false;
+        $products = $query->offset($pages->offset)
+            ->limit($pages->limit)
+//            ->orderBy('publishTime desc')
+            ->all();
+
+        Yii::$app->view->params['breadcrumbs'][] = [
+            'template' => "<li>{link}</li>\n",
+            'label' => " {$category->name}",
+            'url' => false
+        ];
+
+        return $this->render(Yii::$app->controller->action->id, [
+            'category' => $category,
+            'products' => $products,
+            'pages' => $pages,
+        ]);
+    }
+
+    public function actionStatic($url)
+    {
+        $page = InfoPage::find()->where(['code' => $url])->one();
+
+        if (empty($page))
+            throw new \yii\web\NotFoundHttpException();
+
+        Yii::$app->view->params['breadcrumbs'][] = [
+            'template' => "<li>{link}</li>\n",
+            'label' => " {$page->title}",
+            'url' => false
+        ];
+
+
+        return $this->render(Yii::$app->controller->action->id, [
+            'page' => $page
         ]);
     }
 }

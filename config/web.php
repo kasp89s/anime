@@ -43,13 +43,14 @@ $config = [
 //                    'user/<username:\\w+>/comments' => 'profile/comments',
 //                    'user/<username:\\w+>/favorites' => 'profile/favorites',
 //                    'user/<username:\\w+>/replies' => 'profile/replies',
-                   '<controller>/<action>/<id:\d+>' => '<controller>/<action>',
+                    'page/<url:\\w+>' => 'site/static',
+                    'category/<id:\d+>' => 'site/category',
+                    '<controller>' => '<controller>/index',
+                    '<controller>/<action>/<id:\d+>' => '<controller>/<action>',
 					'<controller>/<action>' => '<controller>/<action>',
-					'<controller>' => '<controller>/index',
 					'<module>/<controller>/<action>' => '<module>/<controller>/<action>',
 					'<module>/<controller>/<action>/<id:\d+>' => '<module>/<controller>/<action>',
 					'<module>' => '<module>/default/index',
-
 //					'user' => 'user/login',
 //					'search' => 'site/search',
 //					'rules' => 'site/rules',
@@ -69,7 +70,6 @@ $config = [
 //					'recovery' => 'site/password',
 //					'recoverysend' => 'site/password2',
 					'/' => 'site/index',
-//					'<url:\\w+>' => 'site/image',
 			    ]
 		],
 

@@ -8,6 +8,7 @@ namespace app\controllers;
 
 use app\models\Customer;
 use app\models\CustomerAddress;
+use app\models\InfoPage;
 use Yii;
 use yii\web\Controller;
 use app\models\LoginForm;
@@ -36,6 +37,10 @@ class AbstractController extends Controller {
 		if (\Yii::$app->session->get('user')) {
 			$this->user = \Yii::$app->session->get('user');
 		}
+
+		foreach (InfoPage::find()->all() as $page) {
+            Yii::$app->view->params['pages'][$page->code] = $page;
+        }
 
         Yii::$app->view->params['breadcrumbs'][] = [
             'template' => "<li>{link}</li>\n",

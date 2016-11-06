@@ -10,7 +10,7 @@ use yii\helpers\Html;
 ?>
 <header class="clearfix">
     <div class="logo col-xs-12 col-sm-4 col-md-2">
-        <img src="/img/logo.png" alt="">
+        <a href="/"><img src="/img/logo.png" alt=""></a>
     </div>
     <div class="panel col-xs-12 col-sm-8 col-md-3 col-lg-4">
         <div class="account">
@@ -43,7 +43,7 @@ use yii\helpers\Html;
             </div>
             <div class="build-in-popup" id="enter-modal">
                 <div class="close right open-build-in" data-popup="#enter-modal">
-                    <img src="img/remove-button.png" alt="">
+                    <img src="/img/remove-button.png" alt="">
                 </div>
 
                 <h2>Вход в anime line group</h2>
@@ -77,10 +77,10 @@ use yii\helpers\Html;
                         <a href="javascript:void()">Войдите как пользователь</a>
                         <div class="social-enter">
                             <a href="<?= $this->params['facebook']->getRedirectLoginHelper()->getLoginUrl('http://' . Yii::$app->getRequest()->serverName . '/social/facebook', ['email'])?>">
-                                <img src="img/login-fb.png" alt="">
+                                <img src="/img/login-fb.png" alt="">
                             </a>
                             <a href="<?= $this->params['vk']->getLoginUrl()?>">
-                                <img src="img/login-vk.png" alt="">
+                                <img src="/img/login-vk.png" alt="">
                             </a>
                         </div>
 
@@ -98,7 +98,8 @@ use yii\helpers\Html;
     </div>
     <div class="info col-xs-12 col-md-7 col-lg-6">
         <div class="worktime">
-            Время работы: пн-вс. с 10:00 до 18:00 / +38 (063) <span>467-27-36</span> <a href="">все контакты</a>
+            Время работы: пн-вс. с 10:00 до 18:00 / +38 (063) <span>467-27-36</span>
+            <a href="<?= Url::to('/'. $this->params['pages']['contacts']->code)?>">все контакты</a>
         </div>
         <form action="" class="search">
             <input type="text" name="s" placeholder="ПОИСК ПО САЙТУ">
@@ -134,7 +135,7 @@ use yii\helpers\Html;
                                     <?php if (!empty($category->options)):?>
                                         <?php foreach ($category->options as $option):?>
                                             <ul>
-                                                <li><a href="<?= Url::to('/option/' . $option->id)?>"><?= $option->name?></a></li>
+                                                <li><a href="javascript:void(0)"><?= $option->name?></a></li>
                                                 <?php if (!empty($option->values)):?>
                                                     <?php foreach ($option->values as $value):?>
                                                         <li><a href="<?= Url::to('/option/value/' . $value->id)?>"><?= $value->name?></a></li>
@@ -143,13 +144,13 @@ use yii\helpers\Html;
                                               </ul>
                                         <?php endforeach;?>
                                     <?php endif;?>
-                                    <?php if (!empty($category->specifications)):?>
+         <!--                           <?php /*if (!empty($category->specifications)):*/?>
                                     <ul>
-                                            <?php foreach ($category->specifications as $specification):?>
-                                                <li><a href="<?= Url::to('/specification/' . $specification->id)?>"><?= $specification->name?></a></li>
-                                            <?php endforeach;?>
+                                            <?php /*foreach ($category->specifications as $specification):*/?>
+                                                <li><a href="<?/*= Url::to('/specification/' . $specification->id)*/?>"><?/*= $specification->name*/?></a></li>
+                                            <?php /*endforeach;*/?>
                                      </ul>
-                                    <?php endif;?>
+                                    --><?php /*endif;*/?>
                                 </div>
                             </div>
                         </div>

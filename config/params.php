@@ -13,13 +13,21 @@ return [
         'description' => '',
     ],
     'social' => [
+        'youtube' => [
+            'link' => 'https://www.youtube.com/',
+        ],
+        'in' => [
+            'link' => 'https://www.instagram.com',
+        ],
         'twitter' => [
             'twitterKey' => '',
             'twitterSecret' => '',
+            'link' => 'https://twitter.com',
         ],
         'vk' => [
             'id' => '5502193',
             'secret' => 'sdtJaR3vwe2YHdTedIA4',
+            'link' => 'https://vk.com',
         ],
         'google' => [
             'apiKey' => 'HvWQGOnpB7xDPPOjlYITLt41',
@@ -32,6 +40,7 @@ return [
         'facebook' => [
             'id' => '527659790751462',
             'secret' => 'f27475e7bf861149ff8a8a2e567cd207',
+            'link' => 'https://www.facebook.com',
         ],
         'yahoo' => [
             'applicationId' => 'vleaNF7a',

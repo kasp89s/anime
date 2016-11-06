@@ -2,9 +2,9 @@
 
 return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=localhost;dbname=anime_line',
-    'username' => 'root',
-    'password' => 'g65uerden',
+    'dsn' => 'mysql:host=mf237589.mysql.ukraine.com.ua;dbname=mf237589_anime',
+    'username' => 'mf237589_anime',
+    'password' => '4kdn9p7r',
     'charset' => 'utf8',
     //'enableSchemaCache' => true,
 

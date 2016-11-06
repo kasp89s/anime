@@ -102,7 +102,7 @@ class NewsController extends AbstractController
 
         $query = News::find()->where(['isActive' => 1]);
         $countQuery = clone $query;
-        $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 1]);
+        $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 5]);
         $pages->pageSizeParam = false;
         $records = $query->offset($pages->offset)
             ->limit($pages->limit)
@@ -112,6 +112,7 @@ class NewsController extends AbstractController
         return $this->render(Yii::$app->controller->action->id, [
             'records' => $records,
             'pages' => $pages,
+            'count' => $query->count(),
         ]);
     }
 
