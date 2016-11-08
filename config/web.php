@@ -45,6 +45,7 @@ $config = [
 //                    'user/<username:\\w+>/replies' => 'profile/replies',
                     'page/<url:\\w+>' => 'site/static',
                     'category/<id:\d+>' => 'site/category',
+                    'product/<id:\d+>' => 'site/product',
                     '<controller>' => '<controller>/index',
                     '<controller>/<action>/<id:\d+>' => '<controller>/<action>',
 					'<controller>/<action>' => '<controller>/<action>',

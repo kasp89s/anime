@@ -194,7 +194,7 @@ use yii\helpers\Html;
                     <div class="price">
                         <div class="new-price-block">
                             <span class="old-price"><?= number_format($product->price, 0, '', ' ')?> <?= $product->currencyCode?>.</span>
-                            <b class="new-price">1 225 грн.</b>
+                            <b class="new-price"><?= number_format($product->realPrice, 0, '', ' ')?> <?= $product->currencyCode?>.</b>
                         </div>
 
                         <button class="button">В КОРЗИНУ</button>

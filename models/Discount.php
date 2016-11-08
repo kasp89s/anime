@@ -18,6 +18,11 @@ use Yii;
  */
 class Discount extends \yii\db\ActiveRecord
 {
+
+    const TYPE_VALUE = 'value';
+
+    const TYPE_PERCENT = 'percent';
+
     /**
      * @inheritdoc
      */

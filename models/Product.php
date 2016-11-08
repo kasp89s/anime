@@ -210,6 +210,17 @@ class Product extends \yii\db\ActiveRecord
         return $this->hasMany(Specification::className(), ['id' => 'productSpecificationId'])->viaTable('productproductspecificationrelation', ['productId' => 'id']);
     }
 
+    public function getRealPrice()
+    {
+        if (!empty($this->discount) && (strtotime($this->discount->startTime) < time()) && (time() < strtotime($this->discount->endTime))){
+            if ($this->discount->type == Discount::TYPE_VALUE){
+                return round($this->price - $this->discount->value);
+            }
 
+            if ($this->discount->type == Discount::TYPE_PERCENT){
+                return round($this->price - ($this->price / 100 * $this->discount->value));
+            }
+        }
+    }
 
 }

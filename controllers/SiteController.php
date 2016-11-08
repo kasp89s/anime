@@ -118,7 +118,6 @@ class SiteController extends AbstractController
         $pages->pageSizeParam = false;
         $products = $query->offset($pages->offset)
             ->limit($pages->limit)
-//            ->orderBy('publishTime desc')
             ->all();
 
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -131,6 +130,29 @@ class SiteController extends AbstractController
             'category' => $category,
             'products' => $products,
             'pages' => $pages,
+        ]);
+    }
+
+    public function actionProduct($id)
+    {
+        $product = Product::findOne($id);
+        if (empty($product))
+            throw new \yii\web\NotFoundHttpException();
+
+        Yii::$app->view->params['breadcrumbs'][] = [
+            'template' => "<li>{link}</li>\n",
+            'label' => " {$product->categories[0]->name}",
+            'url' => ['/category/' . $product->categories[0]->id]
+        ];
+
+        Yii::$app->view->params['breadcrumbs'][] = [
+            'template' => "<li>{link}</li>\n",
+            'label' => " {$product->name}",
+            'url' => false
+        ];
+
+        return $this->render(Yii::$app->controller->action->id, [
+            'product' => $product
         ]);
     }
 
