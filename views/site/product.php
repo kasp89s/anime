@@ -117,7 +117,7 @@ use yii\helpers\Html;
         <h4>
             Описание: <span><?php echo $product->name?> (<?php echo $product->sku?>)</span>
         </h4>
-        <?php echo $product->name?>
+        <?php echo $product->description?>
     </div>
     <div class="product-row clearfix">
         <div class="last-comments left">

@@ -29,6 +29,7 @@ use Yii;
  * @property string $categoriesMultiple
  *
  * @property BasketProduct[] $basketProducts
+ * @property Comment[] $comments
  * @property Manufacture $manufacture
  * @property Discount $discount
  * @property Attribute[] $productAttributes
@@ -208,6 +209,14 @@ class Product extends \yii\db\ActiveRecord
     public function getSpecifications()
     {
         return $this->hasMany(Specification::className(), ['id' => 'productSpecificationId'])->viaTable('productproductspecificationrelation', ['productId' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getComments()
+    {
+        return $this->hasMany(Comment::className(), ['productId' => 'id']);
     }
 
     public function getRealPrice()

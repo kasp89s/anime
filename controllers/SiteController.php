@@ -177,7 +177,6 @@ class SiteController extends AbstractController
             'url' => false
         ];
 
-
         return $this->render(Yii::$app->controller->action->id, [
             'page' => $page
         ]);
