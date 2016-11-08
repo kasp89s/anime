@@ -8,8 +8,10 @@ namespace app\controllers;
 
 use app\models\InfoPage;
 use app\models\News;
+use app\models\PaymentMethod;
 use app\models\Product;
 use app\models\ProductCategoryRelation;
+use app\models\ShippingMethod;
 use Yii;
 use app\models\Banner;
 use app\models\Category;
@@ -151,8 +153,14 @@ class SiteController extends AbstractController
             'url' => false
         ];
 
+        $shippingMethods = ShippingMethod::find()->all();
+
+        $paymentMethods = PaymentMethod::find()->all();
+
         return $this->render(Yii::$app->controller->action->id, [
-            'product' => $product
+            'product' => $product,
+            'shippingMethods' => $shippingMethods,
+            'paymentMethods' => $paymentMethods,
         ]);
     }
 

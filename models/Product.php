@@ -38,7 +38,7 @@ use Yii;
  * @property ProductCategoryRelation[] $categoryRelation
  * @property IncomingPrice $incomingPrice
  * @property ProductMarker[] $marker
- * @property ProductSpecificationRelation[] $productSpecificationRelations
+ * @property ProductSpecificationRelation[] $specificationRelations
  */
 class Product extends \yii\db\ActiveRecord
 {
@@ -197,7 +197,7 @@ class Product extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSpecificationsRelation()
+    public function getSpecificationRelations()
     {
         return $this->hasMany(ProductSpecificationRelation::className(), ['productId' => 'id']);
     }

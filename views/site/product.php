@@ -32,15 +32,15 @@ use yii\helpers\Html;
         <div class="main-product-description left">
             <div class="about-product left">
                 <p class="about-product-title">
-                    Бэтмен. Книга 1. Суд Сов
+                    <?php echo $product->name?>
                 </p>
                 <p class="about-product-code">
-                    Код товара: KO1016
+                    Код товара: <?php echo $product->sku?>
                 </p>
                 <p class="product-price-info">
-                    250 грн.
+                    <?php echo $product->realPrice?> <?php echo $product->currencyCode?>.
                     <span>
-                                В наличии 7 шт.
+                                В наличии <?php echo $product->quantityInStock?> шт.
                             </span>
                 </p>
                 <button class="add-product">
@@ -62,79 +62,62 @@ use yii\helpers\Html;
                             </span>
                 </div>
                 <ul class="description-list">
-                    <li>
-                        Автор: <a href="#">Скотт Снайдер</a>
-                    </li>
-                    <li>
-                        Художник: <a href="#">Грег Капулло</a>
-                    </li>
-                    <li>
-                        Издатель: <a href="#">Азбука</a>, 2015
-                    </li>
-                    <li>
-                        Переплет: <a href="#">Твердый переплет</a>
-                    </li>
-                    <li>
-                        Язык: <a href="#">на русском</a>
-                    </li>
-                    <li>
-                        Страниц: <span>192</span>
-                    </li>
-                    <li>
-                        Формат: <span>26 х 17 см</span>
-                    </li>
+                    <?php if(!empty($product->productAttributes)):?>
+                        <?php foreach ($product->productAttributes as $attribute):?>
+                        <li>
+                            <?= $attribute->option->name?>:
+                            <a href="<?= Url::to('/option/value/' . $attribute->optionValue->id)?>"><?= $attribute->optionValue->name?></a>
+                        </li>
+                        <?php endforeach;?>
+                    <?php endif;?>
+                    <?php if (!empty($product->specificationRelations)):?>
+                        <?php foreach ($product->specificationRelations as $relation):?>
+                            <li>
+                                <?= $relation->specification->name?>: <span><?= $relation->value?></span>
+                            </li>
+                         <?php endforeach;?>
+                    <?php endif;?>
                 </ul>
                 <div class="horizontal-share">
                     <img src="/img/horizonyal-share.png" alt="">
                 </div>
             </div>
+
             <div class="product-delivery left">
+                <?php if (!empty($shippingMethods)):?>
                 <p>
-                            <span>
-                                Самовывоз - бесплатно
-                            </span>
-                    <br>
-                    <span>
-                                Курьер по Киеву - 30 грн
-                            </span>
+                    <?php foreach ($shippingMethods as $method):?>
+                        <span><?= $method->name?> - <?= ($method->price) ? round($method->price) . ' ' . $method->countryCode : 'бесплатно'?></span><br>
+                    <?php endforeach;?>
                 </p>
+                <?php endif;?>
                 <p>
                     <span>«Транспортные компании»</span>
                     - Стоимость доставки расчитывается по тарифам транспортной компании.
                     Расчёт идёт при получении заказа в отделении транспортной компании.
                 </p>
                 <p>
-                    <a href="#">
+                    <a href="<?= Url::to('/'. $this->params['pages']['delivery']->code)?>">
                         Читать подробнее...
                     </a>
                 </p>
+                <?php if (!empty($paymentMethods)):?>
                 <ul class="product-payment">
+                    <?php foreach ($paymentMethods as $method):?>
                     <li>
                         <a class="visa" href="#"></a>
                     </li>
-                    <li>
-                        <a class="master" href="#"></a>
-                    </li>
-                    <li>
-                        <a class="privat" href="#"></a>
-                    </li>
+                    <?php endforeach;?>
                 </ul>
+                <?php endif;?>
             </div>
         </div>
     </div>
     <div class="product-row description-row">
         <h4>
-            Описание: <span>Бэтмен. Книга 1. Суд Сов (KO1016)</span>
+            Описание: <span><?php echo $product->name?> (<?php echo $product->sku?>)</span>
         </h4>
-        <p>
-            Одна из лучших работ Скотта Снайдера, блестящая графика от Грега Капулло. Первый том перезапущенной вселенной New 52!
-        </p>
-        <p>
-            Двор Сов… Бэтмен слышал о нем. Все слышали, каждый ребенок знает стишок: «Берегись: Двор Совиный неустанно следит…». Говорят, Совы — настоящие хозяева Готэма, хоть никто их и не видел. Говорят, они вершат свой суд над неугодными. Говорят, от них не скроешься. Много чего говорят… Темный рыцарь не верит в эти слухи. Что бы там ни говорили, считает он, Готэм — город Бэтмена. Но вскоре ему предстоит понять, как глубоко он заблуждался.
-        </p>
-        <p>
-            Мрачные легенды не лгут: Готэмом втайне правят могущественные хищники, и гнезда их повсюду…
-        </p>
+        <?php echo $product->name?>
     </div>
     <div class="product-row clearfix">
         <div class="last-comments left">
