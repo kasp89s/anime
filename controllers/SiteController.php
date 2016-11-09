@@ -20,6 +20,9 @@ use yii\data\Pagination;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
+use app\models\Comment;
+use yii\web\Response;
+use yii\widgets\ActiveForm;
 
 class SiteController extends AbstractController
 {
@@ -99,6 +102,7 @@ class SiteController extends AbstractController
         return $this->render(Yii::$app->controller->action->id, [
             'slides' => $slides,
             'news' => $news,
+            'viewProductList' => $this->getLastViewListProduct(),
         ]);
     }
 
@@ -137,9 +141,21 @@ class SiteController extends AbstractController
 
     public function actionProduct($id)
     {
+        $comment = new Comment();
+        if (Yii::$app->request->isAjax && $comment->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($comment);
+        }
+
+        if ($comment->load(Yii::$app->request->post()) && $comment->validate()) {
+            $comment->save();
+        }
+
         $product = Product::findOne($id);
         if (empty($product))
             throw new \yii\web\NotFoundHttpException();
+
+        $this->setLastViewProduct($id);
 
         Yii::$app->view->params['breadcrumbs'][] = [
             'template' => "<li>{link}</li>\n",
@@ -159,6 +175,7 @@ class SiteController extends AbstractController
 
         return $this->render(Yii::$app->controller->action->id, [
             'product' => $product,
+            'viewProductList' => $this->getLastViewListProduct(),
             'shippingMethods' => $shippingMethods,
             'paymentMethods' => $paymentMethods,
         ]);

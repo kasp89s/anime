@@ -33,10 +33,11 @@ class Comment extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['productId'], 'required'],
+            [['productId', 'userName', 'userEmail', 'message'], 'required'],
             [['productId', 'rating'], 'integer'],
             [['message'], 'string'],
             [['date'], 'safe'],
+            ['userEmail', 'email', 'message' => 'Поле должно содержать корректный E-mail'],
             [['userName', 'userEmail'], 'string', 'max' => 255],
             [['productId'], 'exist', 'skipOnError' => true, 'targetClass' => Product::className(), 'targetAttribute' => ['productId' => 'id']],
         ];
@@ -50,10 +51,10 @@ class Comment extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'productId' => 'Product ID',
-            'userName' => 'User Name',
-            'userEmail' => 'User Email',
+            'userName' => 'Ваше имя',
+            'userEmail' => 'E-mail',
             'rating' => 'Rating',
-            'message' => 'Message',
+            'message' => 'Текст отзыва',
             'date' => 'Date',
         ];
     }
@@ -64,5 +65,35 @@ class Comment extends \yii\db\ActiveRecord
     public function getProduct()
     {
         return $this->hasOne(Product::className(), ['id' => 'productId']);
+    }
+
+    /**
+     * Возвращает форматированую дату.
+     *
+     * @param string $date
+     *
+     * @return bool|string
+     */
+    public static function getDate($date)
+    {
+        $time = strtotime($date);
+        $monthData = [
+            '01' => 'Января',
+            '02' => 'Февраля',
+            '03' => 'Марта',
+            '04' => 'Апреля',
+            '05' => 'Мая',
+            '06' => 'Июня',
+            '07' => 'Июля',
+            '08' => 'Августа',
+            '09' => 'Сентября',
+            '10' => 'Октября',
+            '11' => 'Ноября',
+            '12' => 'Декабря'
+        ];
+
+        $month = $monthData[date('m', $time)];
+
+        return date("d {$month} Y в H:i", $time);
     }
 }

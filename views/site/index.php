@@ -274,58 +274,9 @@ use yii\helpers\Html;
     <div class="container type2">
         <div class="panel clearfix">
             <h2>Последние просмотренные товары</h2>
-            <a href="/" class="show-all">показать все</a>
+            <a href="<?= Url::to('/cabinet/viewed')?>" class="show-all">показать все</a>
         </div>
-        <div class="list owl-catalog-1">
-            <div class="item">
-                <a class="link">
-                    <div class="image corner-message" message="Скидка - 25%">
-                        <img src="/img/last1.png" alt="">
-                    </div>
-                    <h3>Бэтмен. Суд Сов. Том 1</h3>
-                </a>
-            </div>
-            <div class="item">
-                <a class="link">
-                    <div class="image corner-message" message="Скидка - 25%">
-                        <img src="/img/last2.png" alt="">
-                    </div>
-                    <h3>Бэтмен. Суд Сов. Том 1</h3>
-                </a>
-            </div>
-            <div class="item">
-                <a class="link">
-                    <div class="image corner-message" message="Скидка - 25%">
-                        <img src="/img/last3.png" alt="">
-                    </div>
-                    <h3>Бэтмен. Суд Сов. Том 1</h3>
-                </a>
-            </div>
-            <div class="item">
-                <a class="link">
-                    <div class="image corner-message" message="Скидка - 25%">
-                        <img src="/img/last4.png" alt="">
-                    </div>
-                    <h3>Бэтмен. Суд Сов. Том 1</h3>
-                </a>
-            </div>
-            <div class="item">
-                <a class="link">
-                    <div class="image corner-message" message="Скидка - 25%">
-                        <img src="/img/last5.png" alt="">
-                    </div>
-                    <h3>Бэтмен. Суд Сов. Том 1</h3>
-                </a>
-            </div>
-            <div class="item">
-                <a class="link">
-                    <div class="image corner-message" message="Скидка - 25%">
-                        <img src="/img/last6.png" alt="">
-                    </div>
-                    <h3>Бэтмен. Суд Сов. Том 1</h3>
-                </a>
-            </div>
-        </div>
+        <?= \app\components\LastViewWidget::widget(['models' => $viewProductList]) ?>
     </div>
 </div>
 <div class="text-info">

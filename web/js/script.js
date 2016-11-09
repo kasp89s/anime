@@ -275,4 +275,13 @@ $(document).ready(function(){
 				);
 	});
 
+    $('ul.rating li').mouseover(
+        function () {
+            $(this).addClass('active');
+            var count = $(this).prevAll("li").addClass('active').length;
+            $(this).nextAll("li").removeClass('active');
+
+            $('[name="Comment[rating]"]').val(count + 1);
+        }
+    );
 });

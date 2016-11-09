@@ -1,8 +1,8 @@
 <?php
 use yii\widgets\Breadcrumbs;
-use yii\widgets\LinkPager;
 use yii\helpers\Url;
 use yii\helpers\Html;
+use app\components\CommentWidget;
 ?>
 <div class="breadcrumbs-block clearfix">
     <ul>
@@ -120,185 +120,20 @@ use yii\helpers\Html;
         <?php echo $product->description?>
     </div>
     <div class="product-row clearfix">
-        <div class="last-comments left">
-            <h4>
-                Последние отзывы
-            </h4>
-            <div class="comments-row">
-                <div class="comments-row-info">
-                            <span class="name">
-                                Евгений
-                            </span>
-                    <ul class="rating">
-                        <li class="active"></li>
-                        <li class="active"></li>
-                        <li class="active"></li>
-                        <li class="active"></li>
-                        <li class="active"></li>
-                    </ul>
-                    <span class="time">
-                                17 июля 2015 в 10:40
-                            </span>
-                    <p>
-                        Отличный комикс!!!
-                    </p>
-                    <a href="#" class="answer">
-                        Ответить
-                    </a>
-                </div>
-
-            </div>
-            <div class="comments-row">
-                <div class="comments-row-info">
-                            <span class="name">
-                                Евгений
-                            </span>
-                    <ul class="rating">
-                        <li class="active"></li>
-                        <li class="active"></li>
-                        <li class="active"></li>
-                        <li class="active"></li>
-                        <li class="active"></li>
-                    </ul>
-                    <span class="time">
-                                17 июля 2015 в 10:40
-                            </span>
-                    <p>
-                        Лучшее, что я читал. Отличный комикс на все времена.
-                    </p>
-                    <a href="#" class="answer">
-                        Ответить
-                    </a>
-                </div>
-
-            </div>
-            <div class="comments-row">
-                <div class="comments-row-info">
-                            <span class="name">
-                                Евгений
-                            </span>
-                    <ul class="rating">
-                        <li class="active"></li>
-                        <li class="active"></li>
-                        <li class="active"></li>
-                        <li class="active"></li>
-                        <li class="active"></li>
-                    </ul>
-                    <span class="time">
-                                17 июля 2015 в 10:40
-                            </span>
-                    <p>
-                        Скотт Снайдер дал Бэтсу новую жизнь. Просто отлично, рекомендую всем к прочтению.
-                    </p>
-                    <a href="#" class="answer">
-                        Ответить
-                    </a>
-                </div>
-
-            </div>
-        </div>
-        <div class="add-comments right">
-            <h4>
-                Напишите свой отзыв
-            </h4>
-            <textarea>
-
-                    </textarea>
-            <p>
-                Ваше имя
-            </p>
-            <input type="text">
-            <p>
-                E-mail
-            </p>
-            <input type="text">
-            <div class="comments-control clearfix">
-                <div class="left">
-                            <span>
-                                Оценка
-                            </span>
-                    <ul class="rating">
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                </div>
-                <button class="add right">
-                    Добавить отзыв
-                </button>
-            </div>
-        </div>
+        <?= CommentWidget::widget(['model' => $product]) ?>
     </div>
+
     <div class="product-row">
         <div class="last-view clearfix">
             <h4 class="left">
                 Последние просмотренные товары
             </h4>
             <div class="show-all-last right">
-                <a href="#">
+                <a href="<?= Url::to('/cabinet/viewed')?>">
                     Показать все
                 </a>
             </div>
         </div>
-        <div class="list owl-catalog-1">
-            <div class="item">
-                <a class="link">
-                    <div class="image corner-message" message="Скидка - 25%">
-                        <img src="/img/news2.png" alt="">
-                    </div>
-                    <h3>Бэтмен. Суд Сов. Том 1</h3>
-                </a>
-            </div>
-            <div class="item">
-                <a class="link">
-                    <div class="image corner-message" message="Скидка - 25%">
-                        <img src="/img/dummy-img1.png" alt="">
-                    </div>
-                    <h3>Бэтмен. Суд Сов. Том 1  Бэтмен. Суд Сов. Том 1 </h3>
-                </a>
-            </div>
-            <div class="item">
-                <a class="link">
-                    <div class="image corner-message" message="Скидка - 25%">
-                        <img src="/img/dummy-img1.png" alt="">
-                    </div>
-                    <h3>Бэтмен. Суд Сов. Том 1</h3>
-                </a>
-            </div>
-            <div class="item">
-                <a class="link">
-                    <div class="image corner-message" message="Скидка - 25%">
-                        <img src="/img/dummy-img1.png" alt="">
-                    </div>
-                    <h3>Бэтмен. Суд Сов. Том 1</h3>
-                </a>
-            </div>
-            <div class="item">
-                <a class="link">
-                    <div class="image corner-message" message="Скидка - 25%">
-                        <img src="/img/dummy-img1.png" alt="">
-                    </div>
-                    <h3>Бэтмен. Суд Сов. Том 1</h3>
-                </a>
-            </div>
-            <div class="item">
-                <a class="link">
-                    <div class="image corner-message" message="Скидка - 25%">
-                        <img src="/img/dummy-img1.png" alt="">
-                    </div>
-                    <h3>Бэтмен. Суд Сов. Том 1</h3>
-                </a>
-            </div>
-            <div class="item">
-                <a class="link">
-                    <div class="image corner-message" message="Скидка - 25%">
-                        <img src="/img/dummy-img1.png" alt="">
-                    </div>
-                    <h3>Бэтмен. Суд Сов. Том 1</h3>
-                </a>
-            </div>
-        </div>
+        <?= \app\components\LastViewWidget::widget(['models' => $viewProductList]) ?>
     </div>
 </div>

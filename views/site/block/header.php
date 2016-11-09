@@ -49,7 +49,7 @@ use yii\helpers\Html;
                 <h2>Вход в anime line group</h2>
                 <div class="table">
                     <?php $form = ActiveForm::begin([
-                            'action' => 'site/login',
+                            'action' => '/site/login',
                             'enableAjaxValidation' => true,
                             'options'=>['class'=>'row'],
                             'fieldConfig' => [

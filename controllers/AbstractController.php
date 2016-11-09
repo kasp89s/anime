@@ -12,7 +12,7 @@ use app\models\InfoPage;
 use Yii;
 use yii\web\Controller;
 use app\models\LoginForm;
-use app\models\RegisterForm;
+use app\models\Product;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
 
@@ -104,5 +104,45 @@ class AbstractController extends Controller {
         \Yii::$app->session->remove('user');
 
         return $this->goHome();
+    }
+
+
+    /**
+     * Устанавливает продукт как просмотреный.
+     *
+     * @param $productId Иедентификатор продукта.
+     */
+    protected function setLastViewProduct($productId)
+    {
+        $currentList = json_decode(Yii::$app->request->cookies->getValue('LastView'), true);
+
+        if (empty($currentList)) {
+            $currentList = json_encode([$productId => $productId]);
+        } else {
+            $currentList[$productId] = $productId;
+            $currentList = json_encode($currentList);
+        }
+
+        Yii::$app->response->cookies->add(new \yii\web\Cookie([
+                'name' => 'LastView',
+                'value' => $currentList,
+            ]));
+    }
+
+    /**
+     * Возвращает последние просмотреные продукты.
+     *
+     * @return $this|array
+     */
+    protected function getLastViewListProduct()
+    {
+        $currentList = json_decode(Yii::$app->request->cookies->getValue('LastView'), true);
+
+        if (empty($currentList))
+            return [];
+
+        $models = Product::find()->where(['id' => $currentList])->all();
+
+        return $models;
     }
 }
