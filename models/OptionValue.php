@@ -70,6 +70,14 @@ class OptionValue extends \yii\db\ActiveRecord
     }
 
     /**
+     * @return integer
+     */
+    public function getOptionAttributesCount()
+    {
+        return $this->hasMany(Attribute::className(), ['productOptionValueId' => 'id'])->count();
+    }
+
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getProductOption()

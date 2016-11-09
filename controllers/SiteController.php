@@ -12,6 +12,7 @@ use app\models\PaymentMethod;
 use app\models\Product;
 use app\models\ProductCategoryRelation;
 use app\models\ShippingMethod;
+use app\models\WishList;
 use Yii;
 use app\models\Banner;
 use app\models\Category;
@@ -99,28 +100,36 @@ class SiteController extends AbstractController
         $slides = Banner::find()->where(['isActive' => 1])->all();
         $news = News::find()->where(['isActive' => 1])->limit(4)->orderBy('publishTime desc')->all();
 
+        $newProducts = Product::find()->joinWith('marker')
+            ->where('productmarker.isActive = 1 AND productmarker.isSale = 1 AND productmarker.isNew = 1')
+            ->orderBy('id desc')
+            ->limit(10)
+            ->all();
+        $popularProducts = [];
+        $overstock = [];
         return $this->render(Yii::$app->controller->action->id, [
             'slides' => $slides,
             'news' => $news,
+            'newProducts' => $newProducts,
             'viewProductList' => $this->getLastViewListProduct(),
         ]);
     }
 
     public function actionCategory($id)
     {
+        //Yii::$app->cache
         $category = Category::findOne($id);
         if (empty($category))
             throw new \yii\web\NotFoundHttpException();
-
-//        $productsRelation = ProductCategoryRelation::find()->all();
 
         $query = Product::find();
         $query->joinWith('categoryRelation');
         $query->joinWith('marker');
         $query->where(['productcategoryrelation.productCategoryId' => $id]);
         $query->andWhere('productmarker.isActive = 1 AND productmarker.isSale = 1');
+        $query->orderBy('id desc');
         $countQuery = clone $query;
-        $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 5]);
+        $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 20]);
         $pages->pageSizeParam = false;
         $products = $query->offset($pages->offset)
             ->limit($pages->limit)
@@ -134,7 +143,7 @@ class SiteController extends AbstractController
 
         return $this->render(Yii::$app->controller->action->id, [
             'category' => $category,
-            'products' => $products,
+            'productBlocks' => array_chunk($products, 5),
             'pages' => $pages,
         ]);
     }
@@ -173,8 +182,17 @@ class SiteController extends AbstractController
 
         $paymentMethods = PaymentMethod::find()->all();
 
+        $isWish = false;
+        if (!empty($this->user->id)) {
+            $isWish = WishList::find()->where([
+                'productId' => $product->id,
+                'customerId' => $this->user->id,
+            ])->count();
+        }
+
         return $this->render(Yii::$app->controller->action->id, [
             'product' => $product,
+            'isWish' => $isWish,
             'viewProductList' => $this->getLastViewListProduct(),
             'shippingMethods' => $shippingMethods,
             'paymentMethods' => $paymentMethods,

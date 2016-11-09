@@ -125,4 +125,12 @@ class Category extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Product::className(), ['id' => 'productId'])->viaTable('productcategoryrelation', ['productCategoryId' => 'id']);
     }
+
+    /**
+     * @return int
+     */
+    public function getProductsCount()
+    {
+        return $this->hasMany(Product::className(), ['id' => 'productId'])->viaTable('productcategoryrelation', ['productCategoryId' => 'id'])->count();
+    }
 }

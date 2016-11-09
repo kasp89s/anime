@@ -2,7 +2,9 @@
 
 namespace app\controllers;
 
+use app\models\WishList;
 use Yii;
+use yii\web\Response;
 
 class AjaxController extends AbstractController
 {
@@ -19,8 +21,25 @@ class AjaxController extends AbstractController
 		$this->_post = Yii::$app->request->post();
 	}
 
-	public function actionFavorite()
+	public function actionAddWish()
 	{
-		Yii::$app->end();
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+	    $wish = WishList::find()->where([
+	        'productId' => $this->_post['productId'],
+	        'customerId' => $this->user->id,
+        ])->one();
+
+        if (!empty($wish)) {
+            $wish->delete();
+            return ['success' => 'remove'];
+        }
+
+        $wish = new WishList();
+        $wish->customerId = $this->user->id;
+        $wish->productId = $this->_post['productId'];
+        $wish->save();
+
+        return ['success' => 'add'];
 	}
 }

@@ -33,9 +33,9 @@ use yii\helpers\Url;
                     <div class="hr-line-dashed"></div>
                     <?= $form->field($model, 'value') ?>
                     <div class="hr-line-dashed"></div>
-                    <?= $form->field($model, 'startTime')->textInput(['class' => 'form-control datepicker', 'value' => date('Y-m-d', time())]) ?>
+                    <?= $form->field($model, 'startTime')->textInput(['class' => 'form-control datepicker']) ?>
                     <div class="hr-line-dashed"></div>
-                    <?= $form->field($model, 'endTime')->textInput(['class' => 'form-control datepicker', 'value' => date('Y-m-d', time())]) ?>
+                    <?= $form->field($model, 'endTime')->textInput(['class' => 'form-control datepicker']) ?>
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">
                         <?= Html::submitInput('Сохранить', ['class' => 'btn btn-primary']) ?>

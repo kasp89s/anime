@@ -19,7 +19,7 @@ use yii\helpers\Html;
             <?php foreach ($category->categories as $subCategory):?>
             <li>
                 <a href="<?= Url::to('/category/' . $subCategory->id)?>">
-                    <?= $subCategory->name?> <span>(<?= $subCategory->products->count()?>)</span>
+                    <?= $subCategory->name?> <span>(<?= $subCategory->productsCount?>)</span>
                 </a>
             </li>
             <?php endforeach;?>
@@ -35,7 +35,7 @@ use yii\helpers\Html;
                 <?php foreach ($option->values as $value):?>
                 <li>
                     <a href="<?= Url::to('/option/value/' . $value->id)?>">
-                        <?= $value->name?><span>(??)</span>
+                        <?= $value->name?> <span>(<?php echo $value->optionAttributesCount?>)</span>
                     </a>
                 </li>
                 <?php endforeach;?>
@@ -181,12 +181,13 @@ use yii\helpers\Html;
             </div>
         </div>
         <div class="catalog-block">
+            <?php foreach ($productBlocks as $products):?>
             <div class="catalog-row list random-product  clearfix">
                 <?php if (!empty($products)):?>
                     <?php foreach ($products as $product):?>
                         <div class="item">
                     <a href="<?= Url::to('/product/' . $product->id)?>" class="link">
-                        <div class="image corner-message" message="<?= $product->discount->description?>">
+                        <div class="image <?= ($product->discount->value != 0) ? 'corner-message' : ''?>" message="<?= $product->discount->description?>">
                             <?= Html::img('/uploads/product/' . $product->id .'/' . $product->imageFileName, ['class' => 'image corner-message']);?>
                         </div>
                         <h3><?= $product->name?></h3>
@@ -203,6 +204,7 @@ use yii\helpers\Html;
                     <?php endforeach;?>
                 <?php endif;?>
             </div>
+            <?php endforeach;?>
             <div class="pagination clearfix">
                 <div class="show-all left">
                     <a href="#">

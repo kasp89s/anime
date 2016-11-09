@@ -173,10 +173,6 @@ $(document).ready(function(){
 		$('.order-comment').toggleClass("active");
 	});
 
-	$(".add-wish").click(function(){
-		$(this).toggleClass("active");
-	});
-
 	//==== product-slider =====
 	$('.big-slider-product').slick({
 		slidesToShow: 1,
@@ -284,4 +280,28 @@ $(document).ready(function(){
             $('[name="Comment[rating]"]').val(count + 1);
         }
     );
+
+	$('.add-wish').on('click', function () {
+		var element = $(this);
+		$.post(
+			'/ajax/add-wish',
+			{productId: element.data('id'), _csrf: $('[name="_csrf"]').val()},
+			function (response) {
+				element.toggleClass("active");
+			},
+			'json'
+		);
+	});
+
+	$('.remove-favorite').on('click', function () {
+		var element = $(this);
+		$.post(
+			'/ajax/add-wish',
+			{productId: element.data('id'), _csrf: $('[name="_csrf"]').val()},
+			function () {
+				location.reload();
+			},
+			'json'
+		);
+	});
 });

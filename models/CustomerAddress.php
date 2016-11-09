@@ -36,7 +36,7 @@ class CustomerAddress extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customerId', 'countryCode', 'city', 'address', 'fullName', 'phone1'], 'required'],
+            [['customerId', 'address', 'fullName', 'phone1'], 'required'],
             [['customerId', 'isPrimary'], 'integer'],
             [['countryCode'], 'string', 'max' => 3],
             [['city'], 'string', 'max' => 100],

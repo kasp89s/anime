@@ -2,11 +2,11 @@
 
 return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=mf237589.mysql.ukraine.com.ua;dbname=mf237589_anime',
-    'username' => 'mf237589_anime',
-    'password' => '4kdn9p7r',
+    'dsn' => 'mysql:host=193.111.140.87;dbname=orion',
+    'username' => 'orion',
+    'password' => 'W6x1F4i1',
     'charset' => 'utf8',
-    //'enableSchemaCache' => true,
+    'enableSchemaCache' => true,
 
     // Продолжительность кеширования схемы.
     'schemaCacheDuration' => 3600,

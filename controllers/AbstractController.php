@@ -141,7 +141,7 @@ class AbstractController extends Controller {
         if (empty($currentList))
             return [];
 
-        $models = Product::find()->where(['id' => $currentList])->all();
+        $models = Product::find()->where(['id' => $currentList])->limit(6)->all();
 
         return $models;
     }

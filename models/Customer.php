@@ -19,6 +19,8 @@ use Yii;
  *
  * @property Customergroup $customerGroup
  * @property Customeraddress[] $customeraddresses
+ * @property WishList[] $wishes
+ * @property Product[] $wishProducts
  */
 class Customer extends \yii\db\ActiveRecord
 {
@@ -88,6 +90,21 @@ class Customer extends \yii\db\ActiveRecord
         return $this->hasOne(CustomerAddress::className(), ['customerId' => 'id']);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getWishes()
+    {
+        return $this->hasMany(WishList::className(), ['customerId' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getWishProducts()
+    {
+        return $this->hasMany(Product::className(), ['id' => 'productId'])->viaTable('wishlist', ['customerId' => 'id']);
+    }
 
     /**
      * Validates password

@@ -92,7 +92,7 @@ use yii\helpers\Html;
         <div class="cart">
 						<span>
 							Моя корзина
-							<a href="">Ваша корзина пуста</a>
+							<a href="<?= Url::to('/cabinet/basket')?>">Ваша корзина пуста</a>
 						</span>
         </div>
     </div>
@@ -127,6 +127,7 @@ use yii\helpers\Html;
                                 <div class="category">
                                     <?php if (!empty($category->categories)):?>
                                     <ul>
+                                        <li><a href="javascript:void(0)">Категории</a></li>
                                         <?php foreach ($category->categories as $subCategory):?>
                                             <li><a href="<?= Url::to('/category/' . $subCategory->id)?>"><?= $subCategory->name?></a></li>
                                         <?php endforeach;?>

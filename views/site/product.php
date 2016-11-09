@@ -47,9 +47,11 @@ use app\components\CommentWidget;
                     Добавить в корзину
                 </button>
                 <div class="rating-info">
-                    <button class="add-wish">
+                    <?php if (!empty($this->params['user']->id)):?>
+                    <button class="add-wish<?= ($isWish) ? ' active' : ''?>" data-id="<?php echo $product->id?>">
                         в избранное
                     </button>
+                    <?php endif;?>
                     <ul class="rating">
                         <li class="active"></li>
                         <li class="active"></li>
@@ -122,7 +124,7 @@ use app\components\CommentWidget;
     <div class="product-row clearfix">
         <?= CommentWidget::widget(['model' => $product]) ?>
     </div>
-
+    <?php if (!empty($viewProductList)):?>
     <div class="product-row">
         <div class="last-view clearfix">
             <h4 class="left">
@@ -136,4 +138,5 @@ use app\components\CommentWidget;
         </div>
         <?= \app\components\LastViewWidget::widget(['models' => $viewProductList]) ?>
     </div>
+    <?php endif;?>
 </div>

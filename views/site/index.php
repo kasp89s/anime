@@ -23,226 +23,58 @@ use yii\helpers\Html;
         </div>
         <div class="switch-list">
             <div class="list list1 owl-catalog-1">
-                <div class="item">
-                    <a class="link">
-                        <div class="image corner-message" message="Скидка - 25%">
-                            <img src="/img/dummy-img1.png" alt="">
+                <?php if (!empty($newProducts)):?>
+                    <?php foreach ($newProducts as $product):?>
+                    <div class="item">
+                        <a href="<?= Url::to('/product/' . $product->id)?>" class="link">
+                            <div class="image <?= ($product->discount->value != 0) ? 'corner-message' : ''?>" message="<?= $product->discount->description?>">
+                                <?= Html::img('/uploads/product/' . $product->id .'/' . $product->imageFileName, []);?>
+                            </div>
+                            <h3><?= $product->name?></h3>
+                        </a>
+                        <div class="price">
+                            <b><?= number_format($product->realPrice, 0, '', ' ')?> <?= $product->currencyCode?>.</b>
+                            <button class="button">В КОРЗИНУ</button>
                         </div>
-                        <h3>Бэтмен. Суд Сов. Том 1</h3>
-                    </a>
-                    <div class="price">
-                        <b>1 225 грн.</b>
-                        <button class="button">В КОРЗИНУ</button>
                     </div>
-                </div>
-                <div class="item">
-                    <a class="link">
-                        <div class="image corner-message" message="Скидка - 25%">
-                            <img src="/img/item2.png" alt="">
-                        </div>
-                        <h3>Бэтмен. Суд Сов. Том 1</h3>
-                    </a>
-                    <div class="price">
-                        <b>1 225 грн.</b>
-                        <button class="button">В КОРЗИНУ</button>
-                    </div>
-                </div>
-                <div class="item">
-                    <a class="link">
-                        <div class="image corner-message" message="Скидка - 25%">
-                            <img src="/img/item3.png" alt="">
-                        </div>
-                        <h3>Бэтмен. Суд Сов. Том 1</h3>
-                    </a>
-                    <div class="price">
-                        <b>1 225 грн.</b>
-                        <button class="button">В КОРЗИНУ</button>
-                    </div>
-                </div>
-                <div class="item">
-                    <a class="link">
-                        <div class="image corner-message" message="Скидка - 25%">
-                            <img src="/img/item4.png" alt="">
-                        </div>
-                        <h3>Бэтмен. Суд Сов. Том 1</h3>
-                    </a>
-                    <div class="price">
-                        <b>1 225 грн.</b>
-                        <button class="button">В КОРЗИНУ</button>
-                    </div>
-                </div>
-                <div class="item">
-                    <a class="link">
-                        <div class="image corner-message" message="Скидка - 25%">
-                            <img src="/img/item5.png" alt="">
-                        </div>
-                        <h3>Бэтмен. Суд Сов. Том 1</h3>
-                    </a>
-                    <div class="price">
-                        <b>1 225 грн.</b>
-                        <button class="button">В КОРЗИНУ</button>
-                    </div>
-                </div>
-                <div class="item">
-                    <a class="link">
-                        <div class="image corner-message" message="Скидка - 25%">
-                            <img src="/img/item6.png" alt="">
-                        </div>
-                        <h3>Бэтмен. Суд Сов. Том 1</h3>
-                    </a>
-                    <div class="price">
-                        <b>1 225 грн.</b>
-                        <button class="button">В КОРЗИНУ</button>
-                    </div>
-                </div>
+                    <?php endforeach;?>
+                <?php endif;?>
             </div>
             <div class="list list2 owl-catalog-1">
-                <div class="item">
-                    <a class="link">
-                        <div class="image corner-message" message="Скидка - 25%">
-                            <img src="/img/news2.png" alt="">
+                <?php if (!empty($popularProducts)):?>
+                    <?php foreach ($popularProducts as $product):?>
+                        <div class="item">
+                            <a href="<?= Url::to('/product/' . $product->id)?>" class="link">
+                                <div class="image <?= ($product->discount->value != 0) ? 'corner-message' : ''?>" message="<?= $product->discount->description?>">
+                                    <?= Html::img('/uploads/product/' . $product->id .'/' . $product->imageFileName, []);?>
+                                </div>
+                                <h3><?= $product->name?></h3>
+                            </a>
+                            <div class="price">
+                                <b><?= number_format($product->realPrice, 0, '', ' ')?> <?= $product->currencyCode?>.</b>
+                                <button class="button">В КОРЗИНУ</button>
+                            </div>
                         </div>
-                        <h3>Бэтмен. Суд Сов. Том 1</h3>
-                    </a>
-                    <div class="price">
-                        <b>1 225 грн.</b>
-                        <button class="button">В КОРЗИНУ</button>
-                    </div>
-                </div>
-                <div class="item">
-                    <a class="link">
-                        <div class="image corner-message" message="Скидка - 25%">
-                            <img src="/img/dummy-img1.png" alt="">
-                        </div>
-                        <h3>Бэтмен. Суд Сов. Том 1</h3>
-                    </a>
-                    <div class="price">
-                        <b>1 225 грн.</b>
-                        <button class="button">В КОРЗИНУ</button>
-                    </div>
-                </div>
-                <div class="item">
-                    <a class="link">
-                        <div class="image corner-message" message="Скидка - 25%">
-                            <img src="/img/dummy-img1.png" alt="">
-                        </div>
-                        <h3>Бэтмен. Суд Сов. Том 1</h3>
-                    </a>
-                    <div class="price">
-                        <b>1 225 грн.</b>
-                        <button class="button">В КОРЗИНУ</button>
-                    </div>
-                </div>
-                <div class="item">
-                    <a class="link">
-                        <div class="image corner-message" message="Скидка - 25%">
-                            <img src="/img/dummy-img1.png" alt="">
-                        </div>
-                        <h3>Бэтмен. Суд Сов. Том 1</h3>
-                    </a>
-                    <div class="price">
-                        <b>1 225 грн.</b>
-                        <button class="button">В КОРЗИНУ</button>
-                    </div>
-                </div>
-                <div class="item">
-                    <a class="link">
-                        <div class="image corner-message" message="Скидка - 25%">
-                            <img src="/img/dummy-img1.png" alt="">
-                        </div>
-                        <h3>Бэтмен. Суд Сов. Том 1</h3>
-                    </a>
-                    <div class="price">
-                        <b>1 225 грн.</b>
-                        <button class="button">В КОРЗИНУ</button>
-                    </div>
-                </div>
-                <div class="item">
-                    <a class="link">
-                        <div class="image corner-message" message="Скидка - 25%">
-                            <img src="/img/dummy-img1.png" alt="">
-                        </div>
-                        <h3>Бэтмен. Суд Сов. Том 1</h3>
-                    </a>
-                    <div class="price">
-                        <b>1 225 грн.</b>
-                        <button class="button">В КОРЗИНУ</button>
-                    </div>
-                </div>
+                    <?php endforeach;?>
+                <?php endif;?>
             </div>
             <div class="list list3 owl-catalog-1">
-                <div class="item">
-                    <a class="link">
-                        <div class="image corner-message" message="Скидка - 25%">
-                            <img src="/img/dummy-img1.png" alt="">
+                <?php if (!empty($overstock)):?>
+                    <?php foreach ($overstock as $product):?>
+                        <div class="item">
+                            <a href="<?= Url::to('/product/' . $product->id)?>" class="link">
+                                <div class="image <?= ($product->discount->value != 0) ? 'corner-message' : ''?>" message="<?= $product->discount->description?>">
+                                    <?= Html::img('/uploads/product/' . $product->id .'/' . $product->imageFileName, []);?>
+                                </div>
+                                <h3><?= $product->name?></h3>
+                            </a>
+                            <div class="price">
+                                <b><?= number_format($product->realPrice, 0, '', ' ')?> <?= $product->currencyCode?>.</b>
+                                <button class="button">В КОРЗИНУ</button>
+                            </div>
                         </div>
-                        <h3>Бэтмен. Суд Сов. Том 1</h3>
-                    </a>
-                    <div class="price">
-                        <b>1 225 грн.</b>
-                        <button class="button">В КОРЗИНУ</button>
-                    </div>
-                </div>
-                <div class="item">
-                    <a class="link">
-                        <div class="image corner-message" message="Скидка - 25%">
-                            <img src="/img/dummy-img1.png" alt="">
-                        </div>
-                        <h3>Бэтмен. Суд Сов. Том 1</h3>
-                    </a>
-                    <div class="price">
-                        <b>1 225 грн.</b>
-                        <button class="button">В КОРЗИНУ</button>
-                    </div>
-                </div>
-                <div class="item">
-                    <a class="link">
-                        <div class="image corner-message" message="Скидка - 25%">
-                            <img src="/img/dummy-img1.png" alt="">
-                        </div>
-                        <h3>Бэтмен. Суд Сов. Том 1</h3>
-                    </a>
-                    <div class="price">
-                        <b>1 225 грн.</b>
-                        <button class="button">В КОРЗИНУ</button>
-                    </div>
-                </div>
-                <div class="item">
-                    <a class="link">
-                        <div class="image corner-message" message="Скидка - 25%">
-                            <img src="/img/dummy-img1.png" alt="">
-                        </div>
-                        <h3>Бэтмен. Суд Сов. Том 1</h3>
-                    </a>
-                    <div class="price">
-                        <b>1 225 грн.</b>
-                        <button class="button">В КОРЗИНУ</button>
-                    </div>
-                </div>
-                <div class="item">
-                    <a class="link">
-                        <div class="image corner-message" message="Скидка - 25%">
-                            <img src="/img/dummy-img1.png" alt="">
-                        </div>
-                        <h3>Бэтмен. Суд Сов. Том 1</h3>
-                    </a>
-                    <div class="price">
-                        <b>1 225 грн.</b>
-                        <button class="button">В КОРЗИНУ</button>
-                    </div>
-                </div>
-                <div class="item">
-                    <a class="link">
-                        <div class="image corner-message" message="Скидка - 25%">
-                            <img src="/img/dummy-img1.png" alt="">
-                        </div>
-                        <h3>Бэтмен. Суд Сов. Том 1</h3>
-                    </a>
-                    <div class="price">
-                        <b>1 225 грн.</b>
-                        <button class="button">В КОРЗИНУ</button>
-                    </div>
-                </div>
+                    <?php endforeach;?>
+                <?php endif;?>
             </div>
         </div>
     </div>
@@ -270,6 +102,7 @@ use yii\helpers\Html;
         <?php endif;?>
     </div>
 </div>
+<?php if (!empty($viewProductList)):?>
 <div class="catalog">
     <div class="container type2">
         <div class="panel clearfix">
@@ -279,6 +112,7 @@ use yii\helpers\Html;
         <?= \app\components\LastViewWidget::widget(['models' => $viewProductList]) ?>
     </div>
 </div>
+<?php endif;?>
 <div class="text-info">
     <div class="container type2">
         <h2>Первый в Украине супермаркет аниме, манги и комиксов!</h2>

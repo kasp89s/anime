@@ -6,6 +6,8 @@
  */
 namespace app\controllers;
 
+use app\models\Customer;
+use app\models\User;
 use Yii;
 use app\models\Category;
 use app\models\LoginForm;
@@ -111,20 +113,103 @@ class CabinetController extends AbstractController
             'url' => ['/cabinet']
         ];
 
-        if (Yii::$app->request->isAjax && $this->user->load(Yii::$app->request->post()) && $this->user->address->load(Yii::$app->request->post())) {
+        $model = Customer::findOne($this->user->id);
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post()) && $model->address->load(Yii::$app->request->post())) {
             Yii::$app->response->format = Response::FORMAT_JSON;
-            return array_merge(ActiveForm::validate($this->user), ActiveForm::validate($this->user->address));
+            return array_merge(ActiveForm::validate($model), ActiveForm::validate($model->address));
         }
 
         if (
-            $this->user->load(Yii::$app->request->post()) && $this->user->validate() &&
-            $this->user->address->load(Yii::$app->request->post()) && $this->user->address->validate()
+            $model->load(Yii::$app->request->post()) && $model->validate() &&
+            $model->address->load(Yii::$app->request->post()) && $model->address->validate()
         ) {
-            $this->user->save();
-            $this->user->address->save();
+            $model->save();
+            $model->address->save();
+            \Yii::$app->session->set('user', $model);
         }
 
         return $this->render(Yii::$app->controller->action->id, [
+        ]);
+    }
+
+    public function actionViewed()
+    {
+        Yii::$app->view->params['breadcrumbs'][] = [
+            'template' => "<li>{link}</li>\n",
+            'label' => ' Просмотренные товары',
+            'url' => false
+        ];
+
+        $models = $this->getLastViewListProduct();
+        $totalAmount = 0;
+
+        foreach ($models as $model) {
+            $totalAmount+= $model->realPrice;
+        }
+
+        return $this->render(Yii::$app->controller->action->id, [
+            'totalAmount' => $totalAmount,
+            'productsCount' => count($models),
+            'viewProductList' => array_chunk($models, 5),
+        ]);
+    }
+
+    public function actionOrders()
+    {
+        Yii::$app->view->params['breadcrumbs'][] = [
+            'template' => "<li>{link}</li>\n",
+            'label' => ' Мои заказы',
+            'url' => false
+        ];
+
+        return $this->render(Yii::$app->controller->action->id, [
+        ]);
+    }
+
+    public function actionWaitingList()
+    {
+        Yii::$app->view->params['breadcrumbs'][] = [
+            'template' => "<li>{link}</li>\n",
+            'label' => ' Лист ожидания',
+            'url' => false
+        ];
+
+        return $this->render(Yii::$app->controller->action->id, [
+        ]);
+    }
+
+    public function actionBasket()
+    {
+        Yii::$app->view->params['breadcrumbs'][] = [
+            'template' => "<li>{link}</li>\n",
+            'label' => ' Корзина',
+            'url' => false
+        ];
+
+        return $this->render(Yii::$app->controller->action->id, [
+        ]);
+    }
+
+    public function actionWishList()
+    {
+        Yii::$app->view->params['breadcrumbs'][] = [
+            'template' => "<li>{link}</li>\n",
+            'label' => ' Список желаний',
+            'url' => false
+        ];
+
+        $model = Customer::findOne($this->user->id);
+        $models = $model->wishProducts;
+        $totalAmount = 0;
+
+        foreach ($models as $model) {
+            $totalAmount+= $model->realPrice;
+        }
+
+        return $this->render(Yii::$app->controller->action->id, [
+            'totalAmount' => $totalAmount,
+            'productsCount' => count($models),
+            'wishProducts' => array_chunk($models, 5),
         ]);
     }
 }

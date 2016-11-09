@@ -230,6 +230,8 @@ class Product extends \yii\db\ActiveRecord
                 return round($this->price - ($this->price / 100 * $this->discount->value));
             }
         }
+
+        return round($this->price);
     }
 
 }
