@@ -49,7 +49,7 @@ class Category extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required'],
-            [['parentId', 'sortOrder', 'isActive', 'left', 'right', 'level'], 'integer'],
+            [['parentId', 'sortOrder', 'isActive', 'left', 'right', 'level', 'isInQuickLink'], 'integer'],
             [['description'], 'string'],
             [['createTime', 'updateTime'], 'safe'],
             [['optionsList', 'specificationsList'], 'safe'],
@@ -81,6 +81,7 @@ class Category extends \yii\db\ActiveRecord
             'left' => 'Left',
             'right' => 'Right',
             'level' => 'Уровень',
+            'isInQuickLink' => 'В Быстрые Ссылки',
         ];
     }
 

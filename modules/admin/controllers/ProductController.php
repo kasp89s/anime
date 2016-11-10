@@ -99,11 +99,13 @@ class ProductController extends AdminController {
                 }
             }
 
-            if (!empty($this->_post['Product']['specificationsMultiple'])) {
-                foreach ($this->_post['Product']['specificationsMultiple'] as $specificationId) {
+            if (!empty($this->_post['specifications'])) {
+                foreach ($this->_post['specifications'] as $specificationId => $specificationData) {
                     $productSpecificationRelation = new ProductSpecificationRelation();
                     $productSpecificationRelation->productId = $model->id;
                     $productSpecificationRelation->productSpecificationId = $specificationId;
+                    $productSpecificationRelation->value = $specificationData['value'];
+                    $productSpecificationRelation->isSearch = !empty($specificationData['isSearch']) ? 1 : 0;
                     $productSpecificationRelation->save();
                 }
             }
@@ -202,12 +204,14 @@ class ProductController extends AdminController {
                 }
             }
 
-            if (!empty($this->_post['Product']['specificationsMultiple'])) {
+            if (!empty($this->_post['specifications'])) {
                 ProductSpecificationRelation::deleteAll('productId = :id', [':id' => $model->id]);
-                foreach ($this->_post['Product']['specificationsMultiple'] as $specificationId) {
+                foreach ($this->_post['specifications'] as $specificationId => $specificationData) {
                     $productSpecificationRelation = new ProductSpecificationRelation();
                     $productSpecificationRelation->productId = $model->id;
                     $productSpecificationRelation->productSpecificationId = $specificationId;
+                    $productSpecificationRelation->value = $specificationData['value'];
+                    $productSpecificationRelation->isSearch = !empty($specificationData['isSearch']) ? 1 : 0;
                     $productSpecificationRelation->save();
                 }
             }

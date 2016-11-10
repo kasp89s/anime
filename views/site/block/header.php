@@ -89,12 +89,7 @@ use yii\helpers\Html;
                 </div>
             </div>
         </div>
-        <div class="cart">
-						<span>
-							Моя корзина
-							<a href="<?= Url::to('/cabinet/basket')?>">Ваша корзина пуста</a>
-						</span>
-        </div>
+        <?= \app\components\BasketWidget::widget(['model' => $this->params['basket']]) ?>
     </div>
     <div class="info col-xs-12 col-md-7 col-lg-6">
         <div class="worktime">
@@ -133,18 +128,18 @@ use yii\helpers\Html;
                                         <?php endforeach;?>
                                     </ul>
                                     <?php endif;?>
-                                    <?php if (!empty($category->options)):?>
-                                        <?php foreach ($category->options as $option):?>
-                                            <ul>
-                                                <li><a href="javascript:void(0)"><?= $option->name?></a></li>
-                                                <?php if (!empty($option->values)):?>
-                                                    <?php foreach ($option->values as $value):?>
-                                                        <li><a href="<?= Url::to('/option/value/' . $value->id)?>"><?= $value->name?></a></li>
-                                                    <?php endforeach;?>
-                                                <?php endif;?>
-                                              </ul>
-                                        <?php endforeach;?>
-                                    <?php endif;?>
+<!--                                    --><?php //if (!empty($category->options)):?>
+<!--                                        --><?php //foreach ($category->options as $option):?>
+<!--                                            <ul>-->
+<!--                                                <li><a href="javascript:void(0)">--><?//= $option->name?><!--</a></li>-->
+<!--                                                --><?php //if (!empty($option->values)):?>
+<!--                                                    --><?php //foreach ($option->values as $value):?>
+<!--                                                        <li><a href="--><?//= Url::to('/option/value/' . $value->id)?><!--">--><?//= $value->name?><!--</a></li>-->
+<!--                                                    --><?php //endforeach;?>
+<!--                                                --><?php //endif;?>
+<!--                                              </ul>-->
+<!--                                        --><?php //endforeach;?>
+<!--                                    --><?php //endif;?>
          <!--                           <?php /*if (!empty($category->specifications)):*/?>
                                     <ul>
                                             <?php /*foreach ($category->specifications as $specification):*/?>

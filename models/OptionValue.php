@@ -48,8 +48,8 @@ class OptionValue extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'productOptionId' => 'Product Option ID',
-            'name' => 'Name',
-            'price' => 'Price',
+            'name' => 'Название',
+            'price' => 'Цена',
         ];
     }
 

@@ -40,6 +40,8 @@ foreach (\app\models\Specification::find()->asArray()->all() as $record) {
                     <div class="hr-line-dashed"></div>
                     <?= $form->field($model, 'specificationsList')->dropDownList($specifications, ['multiple'=>'multiple']);?>
                     <div class="hr-line-dashed"></div>
+                    <?= $form->field($model, 'isInQuickLink')->checkbox(['value' => 1]) ?>
+                    <div class="hr-line-dashed"></div>
                     <?= $form->field($model, 'isActive')->checkbox(['value' => 1]) ?>
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">

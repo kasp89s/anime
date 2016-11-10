@@ -22,7 +22,7 @@
                     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
                     <?= $form->field($model, 'name') ?>
                     <div class="hr-line-dashed"></div>
-                    <?= $form->field($model, 'content')->textArea(['rows' => '3']) ?>
+                    <?= $form->field($model, 'content')->textArea(['rows' => '3', 'class' => 'summernote']) ?>
                     <div class="hr-line-dashed"></div>
                     <?= $form->field($model, 'image')->fileInput(['accept' => 'image/*'])?>
                     <div class="hr-line-dashed"></div>

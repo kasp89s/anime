@@ -25,22 +25,22 @@ use yii\helpers\Html;
             <?php endforeach;?>
         </ul>
         <?php endif;?>
-        <?php if (!empty($category->options)):?>
-            <?php foreach ($category->options as $option):?>
-        <h3>
-            <?= $option->name?>
-        </h3>
-        <ul>
-            <?php if (!empty($option->values)):?>
-                <?php foreach ($option->values as $value):?>
-                <li>
-                    <a href="<?= Url::to('/option/value/' . $value->id)?>">
-                        <?= $value->name?> <span>(<?php echo $value->optionAttributesCount?>)</span>
-                    </a>
-                </li>
-                <?php endforeach;?>
-            <?php endif;?>
-        </ul>
+        <?php if (!empty($category->specifications)):?>
+            <?php foreach ($category->specifications as $specifications):?>
+                <h3>
+                    <?= $specifications->name?>
+                </h3>
+<!--        <ul>-->
+<!--            --><?php //if (!empty($option->values)):?>
+<!--                --><?php //foreach ($option->values as $value):?>
+<!--                <li>-->
+<!--                    <a href="--><?//= Url::to('/option/value/' . $value->id)?><!--">-->
+<!--                        --><?//= $value->name?><!-- <span>(--><?php //echo $value->optionAttributesCount?><!--)</span>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--                --><?php //endforeach;?>
+<!--            --><?php //endif;?>
+<!--        </ul>-->
             <?php endforeach;?>
         <?php endif;?>
         <!--

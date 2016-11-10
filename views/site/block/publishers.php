@@ -4,37 +4,22 @@
  *
  * @version 1.0
  */
+use yii\helpers\Html;
+use yii\helpers\Url;
 ?>
+<?php if (!empty($quick)):?>
 <div class="publishers">
     <div class="container">
         <div class="row">
-            <a href="" class="all">Быстрые<br>ссылки</a>
+            <a href="javascript:void(0)" class="all">Быстрые<br>ссылки</a>
             <div class="owl">
-                <a href=""><img src="/img/publishers/1.png" alt=""></a>
-                <a href=""><img src="/img/publishers/2.png" alt=""></a>
-                <a href=""><img src="/img/publishers/3.png" alt=""></a>
-                <a href=""><img src="/img/publishers/4.png" alt=""></a>
-                <a href=""><img src="/img/publishers/5.png" alt=""></a>
-                <a href=""><img src="/img/publishers/6.png" alt=""></a>
-                <a href=""><img src="/img/publishers/7.png" alt=""></a>
-                <a href=""><img src="/img/publishers/8.png" alt=""></a>
-                <a href=""><img src="/img/publishers/1.png" alt=""></a>
-                <a href=""><img src="/img/publishers/2.png" alt=""></a>
-                <a href=""><img src="/img/publishers/3.png" alt=""></a>
-                <a href=""><img src="/img/publishers/4.png" alt=""></a>
-                <a href=""><img src="/img/publishers/5.png" alt=""></a>
-                <a href=""><img src="/img/publishers/6.png" alt=""></a>
-                <a href=""><img src="/img/publishers/7.png" alt=""></a>
-                <a href=""><img src="/img/publishers/8.png" alt=""></a>
-                <a href=""><img src="/img/publishers/1.png" alt=""></a>
-                <a href=""><img src="/img/publishers/2.png" alt=""></a>
-                <a href=""><img src="/img/publishers/3.png" alt=""></a>
-                <a href=""><img src="/img/publishers/4.png" alt=""></a>
-                <a href=""><img src="/img/publishers/5.png" alt=""></a>
-                <a href=""><img src="/img/publishers/6.png" alt=""></a>
-                <a href=""><img src="/img/publishers/7.png" alt=""></a>
-                <a href=""><img src="/img/publishers/8.png" alt=""></a>
+                <?php foreach ($quick as $category):?>
+                <a href="<?= Url::to('/category/' . $category->id)?>">
+                    <?= Html::img('/uploads/category/' . $category->id .'/' . $category->imageFileName, []);?>
+                </a>
+                <?php endforeach;?>
             </div>
         </div>
     </div>
 </div>
+<?php endif;?>

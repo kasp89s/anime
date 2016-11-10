@@ -107,9 +107,15 @@ class SiteController extends AbstractController
             ->all();
         $popularProducts = [];
         $overstock = [];
+
+        $quick = Category::find()->where([
+                'isActive' => 1,
+                'isInQuickLink' => 1
+            ])->all();
         return $this->render(Yii::$app->controller->action->id, [
             'slides' => $slides,
             'news' => $news,
+            'quick' => $quick,
             'newProducts' => $newProducts,
             'viewProductList' => $this->getLastViewListProduct(),
         ]);
@@ -127,7 +133,7 @@ class SiteController extends AbstractController
         $query->joinWith('marker');
         $query->where(['productcategoryrelation.productCategoryId' => $id]);
         $query->andWhere('productmarker.isActive = 1 AND productmarker.isSale = 1');
-        $query->orderBy('id desc');
+        $query->orderBy('product.id desc');
         $countQuery = clone $query;
         $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 20]);
         $pages->pageSizeParam = false;

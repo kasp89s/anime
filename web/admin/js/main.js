@@ -62,4 +62,25 @@ $(document).ready(function(){
             );
         }
     );
+
+    $('#product-specificationsmultiple').on('change', function () {
+        $('.specifications-pull').empty();
+
+        $.each($(this).find("option:selected"), function (i, item) {
+            console.log();
+            $('.specifications-pull').append($('<div></div>').append($('<input>', {
+                    value: $(item).text(),
+                    name : 'specifications['+$(item).val()+'][id]',
+                    readonly: true
+                })).append($('<input>', {
+                    placeholder: 'Значение',
+                    name : 'specifications['+$(item).val()+'][value]'
+                })).append('<lable>Поиск</lable>').append($('<input>', {
+                    value: 1,
+                    name : 'specifications['+$(item).val()+'][isSearch]',
+                    type: 'checkbox',
+                    readonly: true
+                })));
+        });
+    });
 });

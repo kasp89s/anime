@@ -6,6 +6,7 @@
  */
 namespace app\controllers;
 
+use app\models\Basket;
 use app\models\Customer;
 use app\models\CustomerAddress;
 use app\models\InfoPage;
@@ -27,6 +28,10 @@ class AbstractController extends Controller {
 
     public $_theme = '';
 
+    public $_sessionId;
+
+    public $_basket;
+
     public function init()
     {
         $this->session = Yii::$app->session;
@@ -41,6 +46,30 @@ class AbstractController extends Controller {
 		foreach (InfoPage::find()->all() as $page) {
             Yii::$app->view->params['pages'][$page->code] = $page;
         }
+
+        $this->_sessionId = session_id();
+
+        if (!empty($this->user->id)) {
+            $this->_basket = Basket::find()->where(['customerId' => $this->user->id])->one();
+
+            if (empty($this->_basket)) {
+                $this->_basket = new Basket();
+                $this->_basket->customerId = $this->user->id;
+                $this->_basket->sessionId = $this->_sessionId;
+                $this->_basket->save();
+            }
+        } else {
+            $this->_basket = Basket::find()->where(['sessionId' => $this->_sessionId])->one();
+
+            if (empty($this->_basket)) {
+                $this->_basket = new Basket();
+                $this->_basket->customerId = Customer::DEFAULT_CUSTOMER_ID;
+                $this->_basket->sessionId = $this->_sessionId;
+                $this->_basket->save();
+            }
+        }
+
+        Yii::$app->view->params['basket'] = $this->_basket;
 
         Yii::$app->view->params['breadcrumbs'][] = [
             'template' => "<li>{link}</li>\n",

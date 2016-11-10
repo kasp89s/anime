@@ -9,7 +9,7 @@ use yii\helpers\Html;
 ?>
 <?= $this->render('//site/block/main-slider', ['slides' => $slides]); ?>
 
-<?= $this->render('//site/block/publishers'); ?>
+<?= $this->render('//site/block/publishers', ['quick' => $quick]); ?>
 
 <div class="catalog">
     <div class="container type2">

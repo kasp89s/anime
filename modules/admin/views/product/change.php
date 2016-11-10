@@ -150,7 +150,18 @@ foreach ($model->categories as $category) {
                                         <?= $form->field($model, 'categoriesMultiple')->dropDownList($categories, ['multiple'=>'multiple']);?>
 
                                         <?= $form->field($model, 'specificationsMultiple')->dropDownList($specifications, ['multiple'=>'multiple']);?>
-
+                                            <div class="specifications-pull">
+                                                <?php if (!empty($model->specificationRelations)):?>
+                                                    <?php foreach ($model->specificationRelations as $item):?>
+                                                        <div>
+                                                            <input value="<?= $item->specification->name?>" readonly=""/>
+                                                            <input name="specifications[<?= $item->specification->id?>][value]" value="<?= $item->value?>"/>
+                                                            <lable>Поиск</lable>
+                                                            <input type="checkbox" name="specifications[<?= $item->specification->id?>][isSearch]" value="1" <?= ($item->isSearch) ? 'checked' : ''?>/>
+                                                        </div>
+                                                    <?php endforeach;?>
+                                                <?php endif;?>
+                                            </div>
                                         <?= $form->field($model, 'attributesMultiple')->dropDownList($attributes, ['multiple'=>'multiple']);?>
 
                                         <div class="form-group">

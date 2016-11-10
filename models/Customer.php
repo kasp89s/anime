@@ -24,6 +24,8 @@ use Yii;
  */
 class Customer extends \yii\db\ActiveRecord
 {
+    const DEFAULT_CUSTOMER_ID = 0;
+
     public $passwordConfirm;
 
     /**

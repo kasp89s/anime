@@ -11,6 +11,7 @@ use Yii;
  * @property string $productId
  * @property string $productSpecificationId
  * @property string $value
+ * @property string $isSearch
  *
  * @property Product $product
  * @property Specification $specification
@@ -32,7 +33,7 @@ class ProductSpecificationRelation extends \yii\db\ActiveRecord
     {
         return [
             [['productId', 'productSpecificationId'], 'required'],
-            [['productId', 'productSpecificationId'], 'integer'],
+            [['productId', 'productSpecificationId', 'isSearch'], 'integer'],
             [['value'], 'string'],
             [['productId'], 'exist', 'skipOnError' => true, 'targetClass' => Product::className(), 'targetAttribute' => ['productId' => 'id']],
             [['productSpecificationId'], 'exist', 'skipOnError' => true, 'targetClass' => Specification::className(), 'targetAttribute' => ['productSpecificationId' => 'id']],
@@ -48,6 +49,7 @@ class ProductSpecificationRelation extends \yii\db\ActiveRecord
             'id' => 'ID',
             'productId' => 'Product ID',
             'productSpecificationId' => 'Product Specification ID',
+            'isSearch' => 'Поиск',
             'value' => 'Value',
         ];
     }

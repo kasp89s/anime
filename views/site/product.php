@@ -67,6 +67,7 @@ use app\components\CommentWidget;
                     <?php if(!empty($product->productAttributes)):?>
                         <?php foreach ($product->productAttributes as $attribute):?>
                         <li>
+                            <input type="radio" name="option[<?= $attribute->option->id?>]" value="<?= $attribute->optionValue->id?>">
                             <?= $attribute->option->name?>:
                             <a href="<?= Url::to('/option/value/' . $attribute->optionValue->id)?>"><?= $attribute->optionValue->name?></a>
                         </li>
@@ -75,7 +76,11 @@ use app\components\CommentWidget;
                     <?php if (!empty($product->specificationRelations)):?>
                         <?php foreach ($product->specificationRelations as $relation):?>
                             <li>
-                                <?= $relation->specification->name?>: <span><?= $relation->value?></span>
+                                <?php if ($relation->isSearch):?>
+                                    <?= $relation->specification->name?>: <a href="<?= Url::to('/specification?id=' . $relation->specification->id . '&value=' . $relation->value)?>"><?= $relation->value?></a>
+                                <?php else:?>
+                                    <?= $relation->specification->name?>: <span><?= $relation->value?></span>
+                                <?php endif;?>
                             </li>
                          <?php endforeach;?>
                     <?php endif;?>
