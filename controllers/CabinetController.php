@@ -212,4 +212,34 @@ class CabinetController extends AbstractController
             'wishProducts' => array_chunk($models, 5),
         ]);
     }
+
+    public function actionOrderProcess()
+    {
+        Yii::$app->view->params['breadcrumbs'][] = [
+            'template' => "<li>{link}</li>\n",
+            'label' => ' Оформление заказа',
+            'url' => false
+        ];
+
+        if (empty($this->_basket->basketProducts))
+            throw new \yii\web\NotFoundHttpException();
+
+        return $this->render(Yii::$app->controller->action->id, [
+        ]);
+    }
+
+    public function actionOrderComplete()
+    {
+        Yii::$app->view->params['breadcrumbs'][] = [
+            'template' => "<li>{link}</li>\n",
+            'label' => ' Cпасибо за ваш заказ!',
+            'url' => false
+        ];
+
+        if (empty($this->_basket->basketProducts))
+            throw new \yii\web\NotFoundHttpException();
+
+        return $this->render(Yii::$app->controller->action->id, [
+        ]);
+    }
 }

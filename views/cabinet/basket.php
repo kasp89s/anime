@@ -37,7 +37,6 @@ $totalAmount = 0;
                         </p>
                         <?php if (!empty($basketProduct->productAttributes)):?>
                         <p class="description-code">
-                            Атрибуты: <br />
                             <?php foreach ($basketProduct->productAttributes as $basketProductAttribute):?>
                                 <?= $basketProductAttribute->productOption->name?>: <?= $basketProductAttribute->productOptionValue->name?> <br />
                                 <?php $increasePriceByAttributes+= (int) $basketProductAttribute->productOptionValue->price;?>
@@ -48,7 +47,7 @@ $totalAmount = 0;
                 </div>
                 <div class="info-description right">
                     <div class="remove-button right">
-                        <button>
+                        <button class="remove-button-item">
                             <img src="/img/remove-button.png" alt="">
                         </button>
                     </div>
@@ -75,18 +74,15 @@ $totalAmount = 0;
                         </p>
                         <div class="counter-block left">
                             <div class="left">
-                                <input type="text" class="basket-product-quantity" name="BasketProduct[<?= $basketProduct->id?>][quantity]" value="<?= $basketProduct->quantity?>">
+                                <input type="text" class="basket-product-quantity" data-id="<?= $basketProduct->id?>" value="<?= $basketProduct->quantity?>" />
                             </div>
                             <div class="right">
-                                <button class="plus"></button>
-                                <button class="minus"></button>
+                                <button class="plus" data-value="1"></button>
+                                <button class="minus"  data-value="-1"></button>
                             </div>
 
                         </div>
                     </div>
-
-
-
                 </div>
             </div>
             <?php endforeach;?>
@@ -104,7 +100,7 @@ $totalAmount = 0;
                         <span>
                             Всего к оплате: <strong><?= number_format($totalAmount, 0, '', ' ')?> грн.</strong>
                         </span>
-                <button>
+                <button onclick="window.location.href='<?= Url::to('/cabinet/order-process')?>'">
                     ОФОРМИТЬ ЗАКАЗ
                 </button>
             </div>

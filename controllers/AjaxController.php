@@ -46,6 +46,28 @@ class AjaxController extends AbstractController
         return ['success' => 'add'];
 	}
 
+	public function actionSetBasketProductCount()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $basketProduct = BasketProduct::find()->where(['id' => $this->_post['productId']])->one();
+
+        if (empty($basketProduct)) {
+            return ['error' => 'Товар не найден в корзине!'];
+        }
+
+        $newQuantity = $this->_post['count'] + (int) $this->_post['value'];
+        if ($newQuantity <= 0) {
+            $basketProduct->delete();
+            return ['success' => 'remove'];
+        }
+
+        $basketProduct->quantity = $newQuantity;
+        $basketProduct->save();
+
+        return ['success' => 'update'];
+    }
+
     public function actionAddProduct()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;

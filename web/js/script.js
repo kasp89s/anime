@@ -151,6 +151,7 @@ $(document).ready(function(){
 	$('.enter-promo').click(function(){
 		$(this).toggleClass("active");
 		$('.promo-field').toggleClass("active");
+		$('.make-order').toggle();
 	});
 
 	//===== Radio ======
@@ -334,15 +335,69 @@ $(document).ready(function(){
     );
 
     $('.plus, .minus').on('click', function () {
-        $(this).closest('.counter-block.left').find('.basket-product-quantity').val()
+		var count = parseInt($(this).closest('.counter-block.left').find('.basket-product-quantity').val()),
+			value = $(this).data('value'),
+			productId = $(this).closest('.counter-block.left').find('.basket-product-quantity').data('id');
+
+		$.post(
+			'/ajax/set-basket-product-count',
+			{
+				_csrf: $('[name="_csrf"]').val(),
+				count: count,
+				value: value,
+				productId: productId
+			},
+			function (response) {
+				if (response.success != null) {
+					location.reload();
+				}
+				if (response.error != null) {
+					showError(response.error);
+				}
+			},
+			'json'
+		).fail(function () {
+			alert('Произошла ошибка!');
+		});
     });
+
+	$('.remove-button-item').on('click', function () {
+		var count = parseInt($(this).closest('.info-description.right').find('.basket-product-quantity').val()),
+			productId = $(this).closest('.info-description.right').find('.basket-product-quantity').data('id');
+
+		$.post(
+			'/ajax/set-basket-product-count',
+			{
+				_csrf: $('[name="_csrf"]').val(),
+				count: count,
+				value: 0 - count,
+				productId: productId
+			},
+			function (response) {
+				if (response.success != null) {
+					location.reload();
+				}
+				if (response.error != null) {
+					showError(response.error);
+				}
+			},
+			'json'
+		).fail(function () {
+			alert('Произошла ошибка!');
+		});
+		console.log(count);
+	});
 
     function showAddProductNotification ($success) {
         if ($success) {
-            alert('Товар успешно добавлен в корзину!');
+			location.reload();
         } else {
             alert('Произошла ошибка при добавлении товара!');
         }
 
     }
+
+    function showError(message) {
+		alert(message);
+	}
 });

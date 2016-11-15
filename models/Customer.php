@@ -119,6 +119,15 @@ class Customer extends \yii\db\ActiveRecord
         return $this->password === md5($password);
     }
 
+    public function getDiscountByOrderAmount($amount)
+    {
+        if ($this->group->isActive == 1) {
+            return round($amount / 100 * $this->group->groupDiscount);
+        }
+
+        return 0;
+    }
+
     /**
      * Finds user by email
      *
