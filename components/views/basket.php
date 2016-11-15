@@ -8,6 +8,7 @@ use yii\helpers\Url;
                                 <?php if (empty($model->basketProducts)):?>
                                 Ваша корзина пуста
                                 <?php else:?>
+                                В корзине <?= count($model->basketProducts)?> товаров
                                 <?php endif;?>
                             </a>
 						</span>

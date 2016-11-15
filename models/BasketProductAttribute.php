@@ -12,9 +12,9 @@ use Yii;
  * @property string $productOptionId
  * @property string $productOptionValueId
  *
- * @property Basketproduct $basketProduct
- * @property Productoption $productOption
- * @property Productoptionvalue $productOptionValue
+ * @property BasketProduct $basketProduct
+ * @property Option $productOption
+ * @property OptionValue $productOptionValue
  */
 class BasketProductAttribute extends \yii\db\ActiveRecord
 {
@@ -32,11 +32,11 @@ class BasketProductAttribute extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'basketProductId', 'productOptionId', 'productOptionValueId'], 'required'],
+            [['basketProductId', 'productOptionId', 'productOptionValueId'], 'required'],
             [['id', 'basketProductId', 'productOptionId', 'productOptionValueId'], 'integer'],
             [['basketProductId'], 'exist', 'skipOnError' => true, 'targetClass' => Basketproduct::className(), 'targetAttribute' => ['basketProductId' => 'id']],
-            [['productOptionId'], 'exist', 'skipOnError' => true, 'targetClass' => Productoption::className(), 'targetAttribute' => ['productOptionId' => 'id']],
-            [['productOptionValueId'], 'exist', 'skipOnError' => true, 'targetClass' => Productoptionvalue::className(), 'targetAttribute' => ['productOptionValueId' => 'id']],
+            [['productOptionId'], 'exist', 'skipOnError' => true, 'targetClass' => Option::className(), 'targetAttribute' => ['productOptionId' => 'id']],
+            [['productOptionValueId'], 'exist', 'skipOnError' => true, 'targetClass' => OptionValue::className(), 'targetAttribute' => ['productOptionValueId' => 'id']],
         ];
     }
 

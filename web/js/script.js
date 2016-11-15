@@ -304,4 +304,45 @@ $(document).ready(function(){
 			'json'
 		);
 	});
+
+    $('.attribute-checked').on(
+        'change',
+        function () {
+            var amount = parseInt($(this).data('price')),
+                productPrice = parseInt($('.product-price-field').data('value'));
+            $('.product-price-field').text(productPrice + amount);
+        }
+    );
+
+    $('.add-product').on(
+        'click',
+        function () {
+            var element = $(this);
+            $.post(
+                '/ajax/add-product',
+                $('#option-form').serialize(),
+                function (response) {
+                    if (response.success != null) {
+                        showAddProductNotification(true);
+                    }
+                },
+                'json'
+            ).fail(function () {
+                    showAddProductNotification(false);
+            });
+        }
+    );
+
+    $('.plus, .minus').on('click', function () {
+        $(this).closest('.counter-block.left').find('.basket-product-quantity').val()
+    });
+
+    function showAddProductNotification ($success) {
+        if ($success) {
+            alert('Товар успешно добавлен в корзину!');
+        } else {
+            alert('Произошла ошибка при добавлении товара!');
+        }
+
+    }
 });

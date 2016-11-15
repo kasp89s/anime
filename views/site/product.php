@@ -38,12 +38,13 @@ use app\components\CommentWidget;
                     Код товара: <?php echo $product->sku?>
                 </p>
                 <p class="product-price-info">
-                    <?php echo $product->realPrice?> <?php echo $product->currencyCode?>.
-                    <span>
-                                В наличии <?php echo $product->quantityInStock?> шт.
-                            </span>
+                    <span class="product-price-field" data-value="<?php echo $product->realPrice?>">
+                        <?php echo $product->realPrice?>
+                    </span>
+                    <?php echo $product->currencyCode?>.
+                    <span>В наличии <?php echo $product->quantityInStock?> шт. </span>
                 </p>
-                <button class="add-product">
+                <button class="add-product" data-id="<?php echo $product->id?>">
                     Добавить в корзину
                 </button>
                 <div class="rating-info">
@@ -63,11 +64,13 @@ use app\components\CommentWidget;
                                 3 отзыва
                             </span>
                 </div>
+                <?= Html::beginForm('', 'post', ['id' => 'option-form']); ?>
+                <?= Html::input('hidden', 'productId', $product->id);?>
                 <ul class="description-list">
                     <?php if(!empty($product->productAttributes)):?>
                         <?php foreach ($product->productAttributes as $attribute):?>
                         <li>
-                            <input type="radio" name="option[<?= $attribute->option->id?>]" value="<?= $attribute->optionValue->id?>">
+                            <input type="radio" name="option[<?= $attribute->option->id?>]" data-price="<?= $attribute->optionValue->price?>" value="<?= $attribute->optionValue->id?>" class="attribute-checked">
                             <?= $attribute->option->name?>:
                             <a href="<?= Url::to('/option/value/' . $attribute->optionValue->id)?>"><?= $attribute->optionValue->name?></a>
                         </li>
@@ -85,6 +88,7 @@ use app\components\CommentWidget;
                          <?php endforeach;?>
                     <?php endif;?>
                 </ul>
+                <?= Html::endForm();?>
                 <div class="horizontal-share">
                     <img src="/img/horizonyal-share.png" alt="">
                 </div>

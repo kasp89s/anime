@@ -43,6 +43,8 @@ use Yii;
  */
 class Product extends \yii\db\ActiveRecord
 {
+    const DEFAULT_QUANTITY = 1;
+
     public $image;
 
     public $imagesMultiple;
@@ -221,14 +223,27 @@ class Product extends \yii\db\ActiveRecord
 
     public function getRealPrice()
     {
+        if (\Yii::$app->session->get('user')) {
+            $customer = \Yii::$app->session->get('user');
+        }
+
         if (!empty($this->discount) && (strtotime($this->discount->startTime) < time()) && (time() < strtotime($this->discount->endTime))){
-            if ($this->discount->type == Discount::TYPE_VALUE){
-                return round($this->price - $this->discount->value);
+            if ($this->discount->type == Discount::TYPE_VALUE) {
+                $calculatedPrice = round($this->price - $this->discount->value);
             }
 
-            if ($this->discount->type == Discount::TYPE_PERCENT){
-                return round($this->price - ($this->price / 100 * $this->discount->value));
+            if ($this->discount->type == Discount::TYPE_PERCENT) {
+                $calculatedPrice = round($this->price - ($this->price / 100 * $this->discount->value));
             }
+        }
+
+        if (!empty($customer) && $customer->group->isActive == 1) {
+            $calculatedPrice = !empty($calculatedPrice) ? $calculatedPrice : $this->price;
+            $calculatedPrice = round($calculatedPrice - ($calculatedPrice / 100 * $customer->group->groupDiscount));
+
+            return $calculatedPrice;
+        } elseif (!empty($calculatedPrice)) {
+            return $calculatedPrice;
         }
 
         return round($this->price);

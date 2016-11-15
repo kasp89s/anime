@@ -14,7 +14,7 @@ use Yii;
  *
  * @property Product $product
  * @property Basket $basket
- * @property Basketproductattribute[] $basketproductattributes
+ * @property BasketProductAttribute[] $productAttributes
  */
 class BasketProduct extends \yii\db\ActiveRecord
 {
@@ -32,7 +32,7 @@ class BasketProduct extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'basketId', 'productId', 'quantity'], 'required'],
+            [['basketId', 'productId', 'quantity'], 'required'],
             [['id', 'basketId', 'productId', 'quantity'], 'integer'],
             [['productId'], 'exist', 'skipOnError' => true, 'targetClass' => Product::className(), 'targetAttribute' => ['productId' => 'id']],
             [['basketId'], 'exist', 'skipOnError' => true, 'targetClass' => Basket::className(), 'targetAttribute' => ['basketId' => 'id']],
@@ -71,7 +71,7 @@ class BasketProduct extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getBasketProductAttributes()
+    public function getProductAttributes()
     {
         return $this->hasMany(BasketProductAttribute::className(), ['basketProductId' => 'id']);
     }

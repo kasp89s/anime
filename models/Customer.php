@@ -17,8 +17,8 @@ use Yii;
  * @property string $registrationTime
  * @property string $memo
  *
- * @property Customergroup $customerGroup
- * @property Customeraddress[] $customeraddresses
+ * @property CustomerGroup $group
+ * @property CustomerAddress[] $addresses
  * @property WishList[] $wishes
  * @property Product[] $wishProducts
  */
