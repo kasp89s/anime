@@ -388,6 +388,42 @@ $(document).ready(function(){
 		console.log(count);
 	});
 
+    $('.done-order.left').on('click', function () {
+        $('[action="/cabinet/order-complete"]').submit();
+    });
+
+    $('.delivery-type').find('[name="OrderProcessForm[shipping]"]').on('change', function () {
+        var price = $(this).data('price-message'),
+            insurance = $(this).data('insurance-message'),
+            priceValue = parseInt($(this).data('price-value')),
+            insuranceValue = parseInt($(this).data('insurance-value')),
+            totalAmount = parseInt($('.totalAmount').text()),
+            info = $('.delivery-info');
+
+        info.hide();
+
+        // Добавляем стоимость за доставку.
+        if (price.length > 0) {
+            $('.delivery-info > .delivery-price').text(price);
+            $('.delivery-commission').text(priceValue);
+            $('.totalAmount').text(totalAmount + priceValue);
+            info.show();
+        } else if (insurance.length > 0) {
+            var insuranceAmount = totalAmount / 100 * insuranceValue;
+            $('.delivery-info > .delivery-price').text(insurance);
+            $('.delivery-commission').text(insuranceAmount);
+            $('.totalAmount').text(totalAmount + insuranceAmount);
+            info.show();
+        } else {
+            // Вычетаем стоимость если уже была.
+            var deliveryAmount = parseInt($('.delivery-commission').text());
+                if (deliveryAmount > 0) {
+                    $('.delivery-commission').text('—');
+                    $('.totalAmount').text(totalAmount - deliveryAmount);
+                }
+        }
+    });
+
     function showAddProductNotification ($success) {
         if ($success) {
 			location.reload();

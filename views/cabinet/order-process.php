@@ -2,6 +2,7 @@
 use yii\widgets\Breadcrumbs;
 use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\widgets\ActiveForm;
 
 $priceWithoutDiscounts = 0;
 $totalDiscount = 0;
@@ -15,6 +16,21 @@ $totalIncrease = 0;
         </h3>
         <div class="order-info-block clearfix">
             <div class="order-info left">
+                <?php $form = ActiveForm::begin([
+                        'action' => '/cabinet/order-complete',
+                        'enableAjaxValidation' => true,
+                        'options'=>['class'=>'row'],
+                        'fieldConfig' => [
+                            'template' => '{label}{input}{error}',
+                            'errorOptions' => ['class' => 'error text-danger'],
+                            'labelOptions' => ['class' => 'label-info left'],
+                            'inputOptions' => ['class' => 'order-input'],
+                            'options' => [
+                                'tag' => 'div',
+                                'class' => 'form-row clearfix',
+                            ],
+                        ],
+                    ]); ?>
                 <div class="order-info-row">
                     <p class="number-title">
                                 <span class="number">
@@ -22,18 +38,10 @@ $totalIncrease = 0;
                                 </span>
                         Контактные данные
                     </p>
-                    <div class="form-row clearfix">
-                        <p class="label-info left">
-                            Имя Фамилия
-                        </p>
-                        <input type="text" class="order-input">
-                    </div>
-                    <div class="form-row clearfix">
-                        <p class="label-info left">
-                            Моб. телефон
-                        </p>
-                        <input type="text" class="order-input">
-                    </div>
+
+                    <?= $form->field($orderForm, 'fullName') ?>
+
+                    <?= $form->field($orderForm, 'phone') ?>
                 </div>
                 <div class="order-info-row">
                     <p class="number-title">
@@ -42,82 +50,78 @@ $totalIncrease = 0;
                                 </span>
                         Выбор способов доставки и оплаты
                     </p>
-                    <div class="form-row clearfix">
-                        <p class="label-info left">
-                            Адрес
-                        </p>
-                        <input type="text" class="order-input">
-                    </div>
+                    <?= $form->field($orderForm, 'address') ?>
                 </div>
                 <div class="order-info-row">
                     <div class="form-row clearfix">
                         <p class="label-info left">
-                            Доставка
+                            <?= Html::activeLabel($orderForm, 'shipping') ?>
                         </p>
+                        <?php if (!empty($shippingMethods)):?>
                         <div class="delivery-block left">
+                            <?php foreach ($shippingMethods as $key => $method):?>
                             <div class="delivery-type">
                                 <label class="form-label">
-                                    <input name="radio"  class="no-courier" type="radio" checked="checked">
-                                    <span class="label-text">Самовывоз</span>
+                                    <input
+                                        name="OrderProcessForm[shipping]"
+                                        class="no-courier"
+                                        type="radio"
+                                        value="<?= $method->id?>"
+                                        data-price-value="<?= round($method->price)?>"
+                                        data-insurance-value="<?= round($method->insurancePercent)?>"
+                                        data-price-message="<?= ($method->price > 0) ? '* Доставка ' . $method->name . ': + ' . round($method->price). ' грн к стоимости заказа.' : ''?>"
+                                        data-insurance-message="<?= ($method->insurancePercent > 0) ? '* Доставка ' . $method->name . ': + ' . round($method->insurancePercent) . '% к стоимости заказа.' : ''?>"
+                                        <?= ($key == 0) ? 'checked' : ''?>
+                                    />
+                                    <span class="label-text"><?= $method->name?></span>
                                 </label>
                             </div>
-                            <div class="delivery-type">
-                                <label class="form-label">
-                                    <input name="radio" class="courier" type="radio">
-                                    <span class="label-text">Курьером</span>
-                                </label>
-                            </div>
+                            <?php endforeach;?>
                             <div class="delivery-info">
-                                <p class="label-info left">
-                                    Имя Фамилия
-                                </p>
-                                <input type="text" class="order-input">
-                                <p class="delivery-price">
-                                    * Доставка курьром: + 30 грн к стоимости заказа.
-                                </p>
+                                    <p class="delivery-price"></p>
                             </div>
+                            <?= Html::error($orderForm, 'shipping', ['class' => 'error text-danger', 'id' => 'orderprocessform-shipping']) ?>
+                            <div class="error text-danger"></div>
                         </div>
+                        <?php endif;?>
                     </div>
                 </div>
                 <div class="order-info-row">
+                    <?php if (!empty($paymentMethods)):?>
                     <div class="form-row clearfix">
                         <p class="label-info left">
-                            Оплата
+                            <?= Html::activeLabel($orderForm, 'payment') ?>
                         </p>
                         <div class="payment-type left">
+                            <?php foreach ($paymentMethods as $key => $method):?>
                             <div>
                                 <label class="form-label">
-                                    <input name="radio3"type="radio">
-                                    <span class="label-text">Наличными</span>
+                                    <input name="OrderProcessForm[payment]" type="radio" <?= ($key == 0) ? 'checked' : ''?>/>
+                                    <span class="label-text">
+                                        <?= $method->name?>
+                                        <?php if ($method->price > 0):?>
+                                            + <?= $method->price?> грн к стоимости заказа.
+                                        <?php endif;?>
+                                        <?php if ($method->feePercent > 0):?>
+                                            + <?= $method->feePercent?>% к стоимости заказа.
+                                        <?php endif;?>
+                                    </span>
                                 </label>
                             </div>
-                            <div>
-                                <label class="form-label">
-                                    <input name="radio3"type="radio">
-                                    <span class="label-text">Предоплата</span>
-                                </label>
-                            </div>
-                            <div>
-                                <label class="form-label">
-                                    <input name="radio3"type="radio">
-                                    <span class="label-text">Наложенный платеж</span>
-                                </label>
-                            </div>
-                            <div>
-                                <label class="form-label">
-                                    <input name="radio3"type="radio">
-                                    <span class="label-text">Visa/MasterCard</span>
-                                </label>
-                            </div>
+                            <?php endforeach;?>
+                            <?= Html::error($orderForm, 'payment', ['class' => 'error text-danger', 'id' => 'orderprocessform-payment']) ?>
+                            <div class="error text-danger"></div>
                         </div>
                     </div>
+                    <?php endif;?>
                 </div>
                 <div class="order-info-row">
                     <button class="add-order-comment">
-                        Добавить комментарий к заказу
+                        <?= Html::activeLabel($orderForm, 'comment') ?>
                     </button>
-                    <textarea class="order-comment"></textarea>
+                    <?= Html::activeTextarea($orderForm, 'comment', ['class' => 'order-comment']) ?>
                 </div>
+                <?php ActiveForm::end(); ?>
             </div>
             <div class="total-info right">
                 <h5 class="total-info-title">
@@ -186,26 +190,18 @@ $totalIncrease = 0;
                             </div>
                         </div>
                         <?php endif;?>
-                        <!--
                         <div class="row-item-info clearfix">
                             <div class="left">
                                 Комиссия оплаты:
                             </div>
-                            <div class="right">
-                                5 грн.
-                            </div>
+                            <div class="right payment-commission">—</div>
                         </div>
-                        -->
-                        <!--
                         <div class="row-item-info clearfix">
                             <div class="left">
                                 Доставка:
                             </div>
-                            <div class="right">
-                                —
-                            </div>
+                            <div class="right delivery-commission">—</div>
                         </div>
-                        -->
                     </div>
                     <div class="total-info-row-sum">
                         <div class="row-item-info clearfix">
@@ -213,11 +209,11 @@ $totalIncrease = 0;
                                 Кол-во: <?= count($this->params['basket']->basketProducts)?> шт.
                             </div>
                             <div class="summary-price right">
-                                Цена: <?= $priceWithoutDiscounts - $totalDiscount?> грн.
+                                Цена: <span class="totalAmount"><?= $priceWithoutDiscounts - $totalDiscount?></span> грн.
                             </div>
                         </div>
                         <div class="control-order clearfix">
-                            <button class="done-order left" onclick="window.location.href='<?= Url::to('/cabinet/order-complete')?>'">
+                            <button class="done-order left">
                                 Заказ подтверждаю
                             </button>
                             <button class="edit-order right" onclick="window.location.href='<?= Url::to('/cabinet/basket')?>'">

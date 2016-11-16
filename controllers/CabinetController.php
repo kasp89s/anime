@@ -7,10 +7,13 @@
 namespace app\controllers;
 
 use app\models\Customer;
+use app\models\OrderProcessForm;
 use app\models\User;
 use Yii;
 use app\models\Category;
 use app\models\LoginForm;
+use app\models\ShippingMethod;
+use app\models\PaymentMethod;
 use \BW\Vkontakte as Vk;
 use yii\data\Pagination;
 use yii\filters\AccessControl;
@@ -215,26 +218,30 @@ class CabinetController extends AbstractController
 
     public function actionOrderProcess()
     {
-        Yii::$app->view->params['breadcrumbs'][] = [
-            'template' => "<li>{link}</li>\n",
-            'label' => ' Оформление заказа',
-            'url' => false
-        ];
-
         if (empty($this->_basket->basketProducts))
             throw new \yii\web\NotFoundHttpException();
 
+        $orderForm = new OrderProcessForm();
+
+        $shippingMethods = ShippingMethod::find()->all();
+
+        $paymentMethods = PaymentMethod::find()->all();
+
         return $this->render(Yii::$app->controller->action->id, [
+                'orderForm' => $orderForm,
+                'shippingMethods' => $shippingMethods,
+                'paymentMethods' => $paymentMethods,
         ]);
     }
 
     public function actionOrderComplete()
     {
-        Yii::$app->view->params['breadcrumbs'][] = [
-            'template' => "<li>{link}</li>\n",
-            'label' => ' Cпасибо за ваш заказ!',
-            'url' => false
-        ];
+        $orderForm = new OrderProcessForm();
+
+        if (Yii::$app->request->isAjax && $orderForm->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($orderForm);
+        }
 
         if (empty($this->_basket->basketProducts))
             throw new \yii\web\NotFoundHttpException();
