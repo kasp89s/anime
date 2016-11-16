@@ -14,6 +14,7 @@ use app\models\Category;
 use app\models\LoginForm;
 use app\models\ShippingMethod;
 use app\models\PaymentMethod;
+use app\models\Order;
 use \BW\Vkontakte as Vk;
 use yii\data\Pagination;
 use yii\filters\AccessControl;
@@ -236,6 +237,9 @@ class CabinetController extends AbstractController
 
     public function actionOrderComplete()
     {
+        if (empty($this->_basket->basketProducts))
+            throw new \yii\web\NotFoundHttpException();
+
         $orderForm = new OrderProcessForm();
 
         if (Yii::$app->request->isAjax && $orderForm->load(Yii::$app->request->post())) {
@@ -243,8 +247,10 @@ class CabinetController extends AbstractController
             return ActiveForm::validate($orderForm);
         }
 
-        if (empty($this->_basket->basketProducts))
-            throw new \yii\web\NotFoundHttpException();
+        if ($orderForm->load(Yii::$app->request->post()) && $orderForm->validate()) {
+            $order = new Order();
+            var_dump($orderForm); exit;
+        }
 
         return $this->render(Yii::$app->controller->action->id, [
         ]);

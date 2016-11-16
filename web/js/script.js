@@ -385,7 +385,6 @@ $(document).ready(function(){
 		).fail(function () {
 			alert('Произошла ошибка!');
 		});
-		console.log(count);
 	});
 
     $('.done-order.left').on('click', function () {
@@ -405,13 +404,13 @@ $(document).ready(function(){
         // Добавляем стоимость за доставку.
         if (price.length > 0) {
             $('.delivery-info > .delivery-price').text(price);
-            $('.delivery-commission').text(priceValue);
+            $('.delivery-commission').text('+' + priceValue + ' грн');
             $('.totalAmount').text(totalAmount + priceValue);
             info.show();
         } else if (insurance.length > 0) {
-            var insuranceAmount = totalAmount / 100 * insuranceValue;
+            var insuranceAmount = parseInt(totalAmount / 100 * insuranceValue);
             $('.delivery-info > .delivery-price').text(insurance);
-            $('.delivery-commission').text(insuranceAmount);
+            $('.delivery-commission').text('+' + insuranceAmount + ' грн');
             $('.totalAmount').text(totalAmount + insuranceAmount);
             info.show();
         } else {
@@ -424,6 +423,27 @@ $(document).ready(function(){
         }
     });
 
+	$('.payment-type').find('[name="OrderProcessForm[payment]"]').on('change', function () {
+		var price = parseInt($(this).data('price')),
+			totalAmount = parseInt($('.totalAmount').text()),
+			feePercent = parseInt($(this).data('fee'));
+
+		if (price > 0) {
+			$('.payment-commission').text('+' + price + ' грн');
+			$('.totalAmount').text(totalAmount + price);
+		} else if (feePercent > 0) {
+			var feeAmount = parseInt(totalAmount / 100 * feePercent);
+			$('.payment-commission').text('+' + feeAmount + ' грн');
+			$('.totalAmount').text(totalAmount + feeAmount);
+		} else {
+			// Вычетаем стоимость если уже была.
+			var paymentAmount = parseInt($('.payment-commission').text());
+			if (paymentAmount > 0) {
+				$('.payment-commission').text('—');
+				$('.totalAmount').text(totalAmount - paymentAmount);
+			}
+		}
+	});
     function showAddProductNotification ($success) {
         if ($success) {
 			location.reload();

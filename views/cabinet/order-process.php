@@ -31,6 +31,7 @@ $totalIncrease = 0;
                             ],
                         ],
                     ]); ?>
+                <?//= Html::input('hidden', 'totalAmount', null);?>
                 <div class="order-info-row">
                     <p class="number-title">
                                 <span class="number">
@@ -39,9 +40,9 @@ $totalIncrease = 0;
                         Контактные данные
                     </p>
 
-                    <?= $form->field($orderForm, 'fullName') ?>
+                    <?= $form->field($orderForm, 'fullName')->textInput(['value' => $this->params['user']->address->fullName]) ?>
 
-                    <?= $form->field($orderForm, 'phone') ?>
+                    <?= $form->field($orderForm, 'phone')->textInput(['value' => $this->params['user']->address->phone1]) ?>
                 </div>
                 <div class="order-info-row">
                     <p class="number-title">
@@ -50,7 +51,7 @@ $totalIncrease = 0;
                                 </span>
                         Выбор способов доставки и оплаты
                     </p>
-                    <?= $form->field($orderForm, 'address') ?>
+                    <?= $form->field($orderForm, 'address')->textInput(['value' => $this->params['user']->address->address]) ?>
                 </div>
                 <div class="order-info-row">
                     <div class="form-row clearfix">
@@ -96,7 +97,13 @@ $totalIncrease = 0;
                             <?php foreach ($paymentMethods as $key => $method):?>
                             <div>
                                 <label class="form-label">
-                                    <input name="OrderProcessForm[payment]" type="radio" <?= ($key == 0) ? 'checked' : ''?>/>
+                                    <input
+                                        name="OrderProcessForm[payment]"
+                                        data-price="<?= round($method->price)?>"
+                                        data-fee="<?= round($method->feePercent)?>"
+                                        type="radio" <?= ($key == 0) ? 'checked' : ''?>
+                                        value="<?= $method->id?>"
+                                    />
                                     <span class="label-text">
                                         <?= $method->name?>
                                         <?php if ($method->price > 0):?>
