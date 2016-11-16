@@ -9,8 +9,8 @@ use Yii;
  *
  * @property string $id
  * @property string $customerId
- * @property string $shppingInfo
- * @property string $paymentInfo
+ * @property string $shippingId
+ * @property string $paymentId
  * @property string $currencyCode
  * @property string $orderStatus
  * @property string $couponCode
@@ -18,15 +18,18 @@ use Yii;
  * @property integer $updateTime
  * @property integer $isFinished
  *
+ * @property ShippingMethod $shipping
  * @property Customer $customer
+ * @property PaymentMethod $payment
  * @property OrderCustomerInfo[] $customerInfo
- * @property OrderHistory[] $orderHistories
- * @property OrderPostBarcode[] $orderPostBarcode
+ * @property OrderHistory[] $orderHistory
+ * @property OrderPostBarcode[] $orderPostBarcodes
  * @property OrderProduct[] $orderProducts
- * @property OrderTotal[] $orderTotal
+ * @property OrderTotal[] $orderTotals
  */
 class Order extends \yii\db\ActiveRecord
 {
+    const CURRENCY_CODE = 'грн';
     /**
      * @inheritdoc
      */
@@ -41,13 +44,15 @@ class Order extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customerId', 'shppingInfo', 'paymentInfo', 'currencyCode', 'orderStatus', 'createTime'], 'required'],
-            [['customerId', 'createTime', 'updateTime', 'isFinished'], 'integer'],
-            [['shppingInfo', 'paymentInfo'], 'string'],
+            [['customerId', 'shippingId', 'paymentId', 'currencyCode', 'orderStatus'], 'required'],
+            [['customerId', 'shippingId', 'paymentId', 'isFinished'], 'integer'],
             [['currencyCode'], 'string', 'max' => 3],
             [['orderStatus'], 'string', 'max' => 2],
             [['couponCode'], 'string', 'max' => 255],
+            [['createTime', 'updateTime'], 'safe'],
+            [['shippingId'], 'exist', 'skipOnError' => true, 'targetClass' => ShippingMethod::className(), 'targetAttribute' => ['shippingId' => 'id']],
             [['customerId'], 'exist', 'skipOnError' => true, 'targetClass' => Customer::className(), 'targetAttribute' => ['customerId' => 'id']],
+            [['paymentId'], 'exist', 'skipOnError' => true, 'targetClass' => PaymentMethod::className(), 'targetAttribute' => ['paymentId' => 'id']],
         ];
     }
 
@@ -59,8 +64,8 @@ class Order extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'customerId' => 'Customer ID',
-            'shppingInfo' => 'Shpping Info',
-            'paymentInfo' => 'Payment Info',
+            'shippingId' => 'Shipping ID',
+            'paymentId' => 'Payment ID',
             'currencyCode' => 'Currency Code',
             'orderStatus' => 'Order Status',
             'couponCode' => 'Coupon Code',
@@ -68,6 +73,21 @@ class Order extends \yii\db\ActiveRecord
             'updateTime' => 'Update Time',
             'isFinished' => 'Is Finished',
         ];
+    }
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getShipping()
+    {
+        return $this->hasOne(ShippingMethod::className(), ['id' => 'shippingId']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPayment()
+    {
+        return $this->hasOne(PaymentMethod::className(), ['id' => 'paymentId']);
     }
 
     /**
@@ -81,15 +101,15 @@ class Order extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCustomerInfos()
+    public function getCustomerInfo()
     {
-        return $this->hasMany(OrderCustomerInfo::className(), ['orderId' => 'id']);
+        return $this->hasOne(OrderCustomerInfo::className(), ['orderId' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getOrderHistories()
+    public function getOrderHistory()
     {
         return $this->hasMany(OrderHistory::className(), ['orderId' => 'id']);
     }

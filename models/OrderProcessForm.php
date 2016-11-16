@@ -22,6 +22,8 @@ class OrderProcessForm extends Model
 
     public $comment;
 
+    public $couponCode;
+
     /**
      * @return array the validation rules.
      */
@@ -31,6 +33,7 @@ class OrderProcessForm extends Model
             // email and password are both required
             [['fullName', 'phone', 'address', 'shipping', 'payment'], 'required'],
             [['comment'], 'string'],
+            [['couponCode'], 'string'],
         ];
     }
 

@@ -67,4 +67,23 @@ class Basket extends \yii\db\ActiveRecord
     {
         return $this->hasMany(BasketProduct::className(), ['basketId' => 'id']);
     }
+
+    public function getProductsPrice()
+    {
+        $amount = 0;
+        if (empty($this->basketProducts))
+            return $amount;
+
+        foreach ($this->basketProducts as $product)
+        {
+            $amount+= $product->product->realPrice;
+            if (!empty($product->productAttributes)) {
+                foreach ($product->productAttributes as $basketProductAttribute) {
+                    $amount+= (int) $basketProductAttribute->productOptionValue->price;
+                }
+            }
+        }
+
+        return $amount;
+    }
 }

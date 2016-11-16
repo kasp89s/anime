@@ -35,7 +35,7 @@ class OrderCustomerInfo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['orderId', 'сountryCode', 'city', 'address', 'fullName', 'phone1'], 'required'],
+            [['orderId', 'сountryCode', 'address', 'fullName', 'phone1'], 'required'],
             [['orderId'], 'integer'],
             [['сountryCode'], 'string', 'max' => 3],
             [['city', 'address', 'fullName'], 'string', 'max' => 255],

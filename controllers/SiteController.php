@@ -86,7 +86,10 @@ class SiteController extends AbstractController
      */
     public function actionIndex()
     {
-        $slides = Banner::find()->where(['isActive' => 1])->all();
+        $slides = Banner::find()
+            ->where(['isActive' => 1])
+            ->andWhere('startTime <= :time AND endTime >= :time', [':time' => date('Y-m-d H:i:s', time())])
+            ->all();
         $news = News::find()->where(['isActive' => 1])->limit(4)->orderBy('publishTime desc')->all();
 
         $newProducts = Product::find()->joinWith('marker')

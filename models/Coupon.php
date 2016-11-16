@@ -26,6 +26,10 @@ use Yii;
  */
 class Coupon extends \yii\db\ActiveRecord
 {
+    const TYPE_PERCENT = 'percent';
+
+    const TYPE_VALUE = 'value';
+
     /**
      * @inheritdoc
      */
@@ -88,5 +92,18 @@ class Coupon extends \yii\db\ActiveRecord
     public function getCreateUser()
     {
         return $this->hasOne(User::className(), ['id' => 'createUserId']);
+    }
+
+    public function getDiscountByAmount($amount)
+    {
+        if ($this->type == self::TYPE_PERCENT) {
+            return round($amount / 100 * $this->value);
+        }
+
+        if ($this->type == self::TYPE_VALUE) {
+            return $this->value;
+        }
+
+        return 0;
     }
 }

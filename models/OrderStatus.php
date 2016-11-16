@@ -60,4 +60,9 @@ class OrderStatus extends \yii\db\ActiveRecord
             'isFinished' => 'Is Finished',
         ];
     }
+
+    public static function getDefault()
+    {
+        return self::find()->where(['isDefault' => 1])->one()->statusCode;
+    }
 }

@@ -3,10 +3,6 @@ use yii\widgets\Breadcrumbs;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
-$priceWithoutDiscounts = 0;
-$totalDiscount = 0;
-$totalIncrease = 0;
 ?>
 
 <div class="content-container clearfix">
@@ -31,7 +27,7 @@ $totalIncrease = 0;
                             ],
                         ],
                     ]); ?>
-                <?//= Html::input('hidden', 'totalAmount', null);?>
+                <?= Html::input('hidden', 'OrderProcessForm[couponCode]', !empty($coupon->code) ? $coupon->code : null);?>
                 <div class="order-info-row">
                     <p class="number-title">
                                 <span class="number">
@@ -157,7 +153,6 @@ $totalIncrease = 0;
                             <div class="right">
                                 Цена: <?= number_format(($basketProduct->product->realPrice + $increasePriceByAttributes), 0, '', ' ')?>
                                 <?php echo $basketProduct->product->currencyCode?>.
-                                <?php $priceWithoutDiscounts+= $basketProduct->product->realPrice + $increasePriceByAttributes;?>
                             </div>
                         </div>
                     </div>
@@ -174,7 +169,7 @@ $totalIncrease = 0;
                                 <?= count($this->params['basket']->basketProducts)?> товара на сумму:
                             </div>
                             <div class="right">
-                                <?= $priceWithoutDiscounts?> грн.
+                                <?= $totalAmount?> грн.
                             </div>
                         </div>
                         <?php if (!empty($this->params['user'])):?>
@@ -183,17 +178,17 @@ $totalIncrease = 0;
                                 Накопительная скидка:
                             </div>
                             <div class="right">
-                                -<?= $totalDiscount+= $this->params['user']->getDiscountByOrderAmount($priceWithoutDiscounts)?> грн.
+                                -<?= $costumerGroupDiscount ?> грн.
                             </div>
                         </div>
                         <?php endif;?>
-                        <?php if (!empty($promoCode)):?>
+                        <?php if (!empty($couponDiscount)):?>
                         <div class="row-item-info clearfix">
                             <div class="left">
                                 Скидка по промокоду:
                             </div>
                             <div class="right">
-                                -<?= $totalDiscount+= $promoCode->getDiscountByAmount($priceWithoutDiscounts)?> грн.
+                                -<?= $couponDiscount?> грн.
                             </div>
                         </div>
                         <?php endif;?>
@@ -216,7 +211,7 @@ $totalIncrease = 0;
                                 Кол-во: <?= count($this->params['basket']->basketProducts)?> шт.
                             </div>
                             <div class="summary-price right">
-                                Цена: <span class="totalAmount"><?= $priceWithoutDiscounts - $totalDiscount?></span> грн.
+                                Цена: <span class="totalAmount"><?= $totalAmount - $totalDiscount?></span> грн.
                             </div>
                         </div>
                         <div class="control-order clearfix">
@@ -231,11 +226,13 @@ $totalIncrease = 0;
                             <button class="enter-promo">
                                 Ввести пропокод
                             </button>
-                            <input class="promo-field" placeholder="Промокод" type="text">
+                            <?= Html::beginForm([''], 'post') ?>
+                            <input class="promo-field" name="code" placeholder="Промокод" type="text">
                         </div>
-                        <button class="make-order" style="display: none;">
+                        <button  type="submit" class="make-order" style="display: none;">
                             подтвердить
                         </button>
+                        <?= Html::endForm();?>
                     </div>
 
                 </div>

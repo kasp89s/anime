@@ -6,8 +6,12 @@
  */
 namespace app\controllers;
 
+use app\models\Coupon;
 use app\models\Customer;
+use app\models\OrderCustomerInfo;
 use app\models\OrderProcessForm;
+use app\models\OrderProduct;
+use app\models\OrderStatus;
 use app\models\User;
 use Yii;
 use app\models\Category;
@@ -222,14 +226,41 @@ class CabinetController extends AbstractController
         if (empty($this->_basket->basketProducts))
             throw new \yii\web\NotFoundHttpException();
 
+        $totalAmount = $this->_basket->productsPrice;
+
         $orderForm = new OrderProcessForm();
 
         $shippingMethods = ShippingMethod::find()->all();
 
         $paymentMethods = PaymentMethod::find()->all();
 
+        $costumerGroupDiscount = $this->user->getDiscountByOrderAmount($totalAmount);
+
+        $couponDiscount = null;
+
+        if (Yii::$app->request->isPost && !empty(Yii::$app->request->post('code'))) {
+            $coupon = Coupon::find()
+                ->where(
+                    [
+                        'code' => Yii::$app->request->post('code'),
+                        'isActive' => 1,
+                    ])
+                ->andWhere('startTime <= :time AND endTime >= :time AND minimalOrderCost <= :orderAmount',
+                    [
+                        ':time' => date('Y-m-d H:i:s', time()),
+                        ':orderAmount' => $totalAmount
+                    ])
+                ->one();
+            $couponDiscount = $coupon->getDiscountByAmount($totalAmount);
+        }
+
         return $this->render(Yii::$app->controller->action->id, [
+                'coupon' => !empty($coupon) ? $coupon : null,
                 'orderForm' => $orderForm,
+                'costumerGroupDiscount' => $costumerGroupDiscount,
+                'couponDiscount' => $couponDiscount,
+                'totalDiscount' => $costumerGroupDiscount + (int) $couponDiscount,
+                'totalAmount' => $totalAmount,
                 'shippingMethods' => $shippingMethods,
                 'paymentMethods' => $paymentMethods,
         ]);
@@ -248,7 +279,37 @@ class CabinetController extends AbstractController
         }
 
         if ($orderForm->load(Yii::$app->request->post()) && $orderForm->validate()) {
+            $shippingMethod = ShippingMethod::findOne($orderForm->shipping);
             $order = new Order();
+            $order->customerId = $this->user->id;
+            $order->shippingId = $orderForm->shipping;
+            $order->paymentId = $orderForm->payment;
+            $order->currencyCode = Order::CURRENCY_CODE;
+            $order->orderStatus = OrderStatus::getDefault();
+            $order->couponCode = $orderForm->couponCode;
+            $order->save();
+
+            $customerInfo = new OrderCustomerInfo();
+            $customerInfo->orderId = $order->id;
+            $customerInfo->сountryCode = $shippingMethod->countryCode;
+            $customerInfo->address = $orderForm->address;
+            $customerInfo->fullName = $orderForm->fullName;
+            $customerInfo->phone1 = $orderForm->phone;
+            $customerInfo->save();
+
+            foreach ($this->_basket->basketProducts as $basketProduct) {
+                $orderProduct = new OrderProduct();
+                $orderProduct->orderId = $order->id;
+                $orderProduct->productId = $basketProduct->productId;
+                $orderProduct->productSku = $basketProduct->product->sku;
+                $orderProduct->productName = $basketProduct->product->name;
+                $orderProduct->productQuantity = $basketProduct->quantity;
+                $orderProduct->productPrice = $basketProduct->product->price;
+                $orderProduct->productIncomingPrice = $basketProduct->product->incomingPrice->price;
+                $orderProduct->currencyCode = $basketProduct->product->currencyCode;
+                $orderProduct->save();
+            }
+
             var_dump($orderForm); exit;
         }
 
