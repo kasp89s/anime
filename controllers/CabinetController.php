@@ -11,7 +11,9 @@ use app\models\Customer;
 use app\models\OrderCustomerInfo;
 use app\models\OrderProcessForm;
 use app\models\OrderProduct;
+use app\models\OrderProductAttribute;
 use app\models\OrderStatus;
+use app\models\OrderTotal;
 use app\models\User;
 use Yii;
 use app\models\Category;
@@ -238,7 +240,7 @@ class CabinetController extends AbstractController
 
         $couponDiscount = null;
 
-        if (Yii::$app->request->isPost && !empty(Yii::$app->request->post('code'))) {
+        if (Yii::$app->request->isPost && !empty($_POST['code'])) {
             $coupon = Coupon::find()
                 ->where(
                     [
@@ -280,6 +282,19 @@ class CabinetController extends AbstractController
 
         if ($orderForm->load(Yii::$app->request->post()) && $orderForm->validate()) {
             $shippingMethod = ShippingMethod::findOne($orderForm->shipping);
+            $paymentMethod = PaymentMethod::findOne($orderForm->payment);
+
+            $totalAmount = $this->_basket->productsPrice;
+            $totalDiscount = $this->user->getDiscountByOrderAmount($totalAmount);
+            $totalIncrease = $shippingMethod->calculateIncrease($totalAmount);
+            $totalIncrease+= $paymentMethod->calculateIncrease($totalAmount);
+            if (!empty($orderForm->couponCode)) {
+                $coupon = Coupon::find()->where(['code' => $orderForm->couponCode])->one();
+                if (!empty($coupon)) {
+                    $totalDiscount+= $coupon->getDiscountByAmount($totalAmount);
+                }
+            }
+
             $order = new Order();
             $order->customerId = $this->user->id;
             $order->shippingId = $orderForm->shipping;
@@ -297,6 +312,12 @@ class CabinetController extends AbstractController
             $customerInfo->phone1 = $orderForm->phone;
             $customerInfo->save();
 
+            $orderTotal = new OrderTotal();
+            $orderTotal->orderId = $order->id;
+            $orderTotal->amount = $totalAmount + $totalIncrease - $totalDiscount;
+            $orderTotal->currencyCode = Order::CURRENCY_CODE;
+            $orderTotal->save();
+
             foreach ($this->_basket->basketProducts as $basketProduct) {
                 $orderProduct = new OrderProduct();
                 $orderProduct->orderId = $order->id;
@@ -308,6 +329,19 @@ class CabinetController extends AbstractController
                 $orderProduct->productIncomingPrice = $basketProduct->product->incomingPrice->price;
                 $orderProduct->currencyCode = $basketProduct->product->currencyCode;
                 $orderProduct->save();
+                if (!empty($basketProduct->productAttributes)) {
+                    foreach ($basketProduct->productAttributes as $basketProductAttribute) {
+                        $orderProductAttribute = new OrderProductAttribute();
+                        $orderProductAttribute->orderProductId = $orderProduct->id;
+                        $orderProductAttribute->productOptionId = $basketProductAttribute->productOption->id;
+                        $orderProductAttribute->productOptionName = $basketProductAttribute->productOption->name;
+                        $orderProductAttribute->productOptionValueId = $basketProductAttribute->productOptionValue->id;
+                        $orderProductAttribute->productOptionValueName = $basketProductAttribute->productOptionValue->name;
+                        $orderProductAttribute->productAttributePrice = $basketProductAttribute->productOptionValue->price;
+                        $orderProductAttribute->currencyCode = $basketProduct->product->currencyCode;
+                        $orderProductAttribute->save();
+                    }
+                }
             }
 
             var_dump($orderForm); exit;

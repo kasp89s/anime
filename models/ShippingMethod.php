@@ -66,6 +66,17 @@ class ShippingMethod extends \yii\db\ActiveRecord
         ];
     }
 
+    public function calculateIncrease($amount)
+    {
+        if (!empty($this->price)) {
+            return $this->price;
+        } elseif (!empty($this->insurancePercent)) {
+            return round($amount / 100 * $this->insurancePercent);
+        }
+
+        return 0;
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

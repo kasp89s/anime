@@ -32,7 +32,7 @@ class OrderTotal extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['orderId', 'code', 'name', 'amount', 'currecnyCode'], 'required'],
+            [['orderId', 'amount', 'currecnyCode'], 'required'],
             [['orderId'], 'integer'],
             [['amount'], 'number'],
             [['code', 'name'], 'string', 'max' => 255],

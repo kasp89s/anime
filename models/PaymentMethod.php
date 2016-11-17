@@ -62,10 +62,21 @@ class PaymentMethod extends \yii\db\ActiveRecord
         ];
     }
 
+    public function calculateIncrease($amount)
+    {
+        if (!empty($this->price)) {
+            return $this->price;
+        } elseif (!empty($this->feePercent)) {
+            return round($amount / 100 * $this->feePercent);
+        }
+
+        return 0;
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getShippingpaymentmethodrelations()
+    public function getShippingPaymentMethodRelations()
     {
         return $this->hasMany(ShippingPaymentMethodRelation::className(), ['paymentMethodId' => 'id']);
     }
