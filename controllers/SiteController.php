@@ -8,6 +8,7 @@ namespace app\controllers;
 
 use app\models\InfoPage;
 use app\models\News;
+use app\models\NewsLetterSubscriber;
 use app\models\PaymentMethod;
 use app\models\Product;
 use app\models\ProductCategoryRelation;
@@ -216,5 +217,56 @@ class SiteController extends AbstractController
         return $this->render(Yii::$app->controller->action->id, [
             'page' => $page
         ]);
+    }
+
+    public function actionSubscribe()
+    {
+        $model = new NewsLetterSubscriber();
+
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->customerId = !empty($this->user->id) ? $this->user->id : 0;
+            $model->code = uniqid();
+            $model->save();
+
+            $this->sendEmail(
+                $model->email,
+                Yii::$app->params['NewsLetterSubscriberSubject'],
+                $this->renderPartial('emailTemplates/subscribe', ['model' => $model])
+            );
+        }
+
+        return $this->render(Yii::$app->controller->action->id, [
+            'model' => $model
+        ]);
+    }
+
+    public function actionSubscribeApprove($code)
+    {
+        $model = NewsLetterSubscriber::find()->where(['code' => $code])->one();
+        if (empty($model))
+            throw new \yii\web\NotFoundHttpException();
+
+        $model->code = null;
+        $model->isActive = 1;
+
+        $model->save();
+
+        return $this->render(Yii::$app->controller->action->id, []);
+    }
+
+    public function actionDeactivationSubscribe($id)
+    {
+        $model = NewsLetterSubscriber::findOne($id);
+        if (empty($model))
+            throw new \yii\web\NotFoundHttpException();
+
+        $model->delete();
+
+        return $this->render(Yii::$app->controller->action->id, []);
     }
 }

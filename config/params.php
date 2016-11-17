@@ -7,7 +7,9 @@
 
 return [
     'adminEmail' => 'admin@example.com',
-    'newOrderSubject' => 'newOrderSubject',
+    'serverName' => (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://" . $_SERVER['HTTP_HOST'],
+    'NewOrderSubject' => 'newOrderSubject',
+    'NewsLetterSubscriberSubject' => 'NewsLetterSubscriberSubject',
     'phone' => '+380 (93) 716–54–65',
     'seo' => [
         'title' => '',

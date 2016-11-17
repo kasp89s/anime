@@ -31,7 +31,8 @@ class NewsLetterSubscriber extends \yii\db\ActiveRecord
     {
         return [
             [['customerId', 'isActive'], 'integer'],
-            [['code'], 'required'],
+            [['email'], 'required'],
+            ['email', 'email', 'message' => 'Поле должно содержать корректный E-mail'],
             [['createTime'], 'safe'],
             [['email'], 'string', 'max' => 255],
             [['code'], 'string', 'max' => 32],

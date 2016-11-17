@@ -5,6 +5,10 @@
  * @version 1.0
  */
 use yii\helpers\Url;
+use yii\helpers\Html;
+use yii\widgets\ActiveForm;
+
+$subscribe = new \app\models\NewsLetterSubscriber();
 ?>
 <footer>
     <div class="clearfix">
@@ -74,12 +78,24 @@ use yii\helpers\Url;
                 Подпишись на новости магазина чтобы быть вкурсе новых поступлений и акций и скидок.
             </p>
 
-            <form action="">
-                <input type="text" placeholder="Введи свой E-mail">
-                <button>
-                    ПОДПИСАТЬСЯ
-                </button>
-            </form>
+            <?php $form = ActiveForm::begin([
+                'action' => '/subscribe',
+                'enableAjaxValidation' => true,
+                'options'=>['class'=>'row'],
+                'fieldConfig' => [
+                    'template' => '{input}{error}',
+                    'errorOptions' => ['class' => 'error text-danger'],
+                    'labelOptions' => ['class' => ''],
+                    'inputOptions' => [],
+                    'options' => [
+                        'tag' => 'span',
+                    ],
+                ],
+            ]); ?>
+                <?= $form->field($subscribe, 'email')->textInput(['placeholder' => 'Введи свой E-mail']) ?>
+
+                <?= Html::submitButton('ПОДПИСАТЬСЯ', ['class' => 'button submit']) ?>
+            <?php ActiveForm::end(); ?>
         </div>
         <div class="col-lg-3 col-md-3 social-widget">
             <div class="">
