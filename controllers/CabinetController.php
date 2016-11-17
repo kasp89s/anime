@@ -6,6 +6,7 @@
  */
 namespace app\controllers;
 
+use app\models\BasketProduct;
 use app\models\Coupon;
 use app\models\Customer;
 use app\models\OrderCustomerInfo;
@@ -172,7 +173,21 @@ class CabinetController extends AbstractController
             'url' => false
         ];
 
+        $orders = Order::find()
+            ->where(['customerId' => $this->user->id])
+            ->joinWith('shipping')
+            ->joinWith('payment')
+            ->joinWith('customer')
+            ->joinWith('status')
+            ->joinWith('postBarcode')
+            ->joinWith('customerInfo')
+            ->joinWith('products')
+            ->joinWith('products.product')
+            ->joinWith('total')
+            ->orderBy('createTime desc')->all();
+
         return $this->render(Yii::$app->controller->action->id, [
+            'orders' => $orders
         ]);
     }
 
@@ -302,6 +317,7 @@ class CabinetController extends AbstractController
             $order->currencyCode = Order::CURRENCY_CODE;
             $order->orderStatus = OrderStatus::getDefault();
             $order->couponCode = $orderForm->couponCode;
+            $order->createTime = date('Y-m-d H:i:s', time());
             $order->save();
 
             $customerInfo = new OrderCustomerInfo();
@@ -325,7 +341,7 @@ class CabinetController extends AbstractController
                 $orderProduct->productSku = $basketProduct->product->sku;
                 $orderProduct->productName = $basketProduct->product->name;
                 $orderProduct->productQuantity = $basketProduct->quantity;
-                $orderProduct->productPrice = $basketProduct->product->price;
+                $orderProduct->productPrice = $basketProduct->product->realPrice;
                 $orderProduct->productIncomingPrice = $basketProduct->product->incomingPrice->price;
                 $orderProduct->currencyCode = $basketProduct->product->currencyCode;
                 $orderProduct->save();
@@ -344,10 +360,12 @@ class CabinetController extends AbstractController
                 }
             }
 
-            var_dump($orderForm); exit;
+            $this->sendEmail($this->user->email, Yii::$app->params['newOrderSubject'], $this->renderPartial('emailTemplates/new-order', ['order' => $order]));
+            BasketProduct::deleteAll('basketId = :id', [':id' => $this->_basket->id]);
         }
 
         return $this->render(Yii::$app->controller->action->id, [
+            'order' => $order
         ]);
     }
 }

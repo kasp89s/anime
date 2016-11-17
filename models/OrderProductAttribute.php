@@ -36,8 +36,8 @@ class OrderProductAttribute extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'orderProductId', 'productOptionId', 'productOptionValueId', 'productOptionName', 'productOptionValueName', 'currencyCode'], 'required'],
-            [['id', 'orderProductId', 'productOptionId', 'productOptionValueId'], 'integer'],
+            [['orderProductId', 'productOptionId', 'productOptionValueId', 'productOptionName', 'productOptionValueName', 'currencyCode'], 'required'],
+            [['orderProductId', 'productOptionId', 'productOptionValueId'], 'integer'],
             [['productAttributePrice'], 'number'],
             [['productOptionName', 'productOptionValueName'], 'string', 'max' => 255],
             [['currencyCode'], 'string', 'max' => 3],
@@ -67,7 +67,7 @@ class OrderProductAttribute extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getptionValue()
+    public function getOptionValue()
     {
         return $this->hasOne(OptionValue::className(), ['id' => 'productOptionValueId']);
     }

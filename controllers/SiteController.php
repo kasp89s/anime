@@ -92,7 +92,9 @@ class SiteController extends AbstractController
             ->all();
         $news = News::find()->where(['isActive' => 1])->limit(4)->orderBy('publishTime desc')->all();
 
-        $newProducts = Product::find()->joinWith('marker')
+        $newProducts = Product::find()
+            ->joinWith('discount')
+            ->joinWith('marker')
             ->where('productmarker.isActive = 1 AND productmarker.isSale = 1 AND productmarker.isNew = 1')
             ->orderBy('id desc')
             ->limit(10)
@@ -123,6 +125,7 @@ class SiteController extends AbstractController
         $query = Product::find();
         $query->joinWith('categoryRelation');
         $query->joinWith('marker');
+        $query->joinWith('discount');
         $query->where(['productcategoryrelation.productCategoryId' => $id]);
         $query->andWhere('productmarker.isActive = 1 AND productmarker.isSale = 1');
         $query->orderBy('product.id desc');

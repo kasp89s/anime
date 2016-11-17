@@ -151,7 +151,7 @@ use yii\widgets\ActiveForm;
                                 Кол-во: <?php echo $basketProduct->quantity?> шт.
                             </div>
                             <div class="right">
-                                Цена: <?= number_format(($basketProduct->product->realPrice + $increasePriceByAttributes), 0, '', ' ')?>
+                                Цена: <?= number_format(($basketProduct->product->realPrice + $increasePriceByAttributes) * $basketProduct->quantity, 0, '', ' ')?>
                                 <?php echo $basketProduct->product->currencyCode?>.
                             </div>
                         </div>

@@ -50,7 +50,13 @@ class AbstractController extends Controller {
         $this->_sessionId = session_id();
 
         if (!empty($this->user->id)) {
-            $this->_basket = Basket::find()->where(['customerId' => $this->user->id])->one();
+            $this->_basket = Basket::find()
+                ->where(['customerId' => $this->user->id])
+                ->joinWith('basketProducts')
+                ->joinWith('basketProducts.productAttributes')
+                ->joinWith('basketProducts.product')
+                ->joinWith('basketProducts.product.discount')
+                ->one();
 
             if (empty($this->_basket)) {
                 $this->_basket = new Basket();
@@ -59,7 +65,13 @@ class AbstractController extends Controller {
                 $this->_basket->save();
             }
         } else {
-            $this->_basket = Basket::find()->where(['sessionId' => $this->_sessionId])->one();
+            $this->_basket = Basket::find()
+                ->where(['sessionId' => $this->_sessionId])
+                ->joinWith('basketProducts')
+                ->joinWith('basketProducts.productAttributes')
+                ->joinWith('basketProducts.product')
+                ->joinWith('basketProducts.product.discount')
+                ->one();
 
             if (empty($this->_basket)) {
                 $this->_basket = new Basket();
@@ -135,6 +147,19 @@ class AbstractController extends Controller {
         return $this->goHome();
     }
 
+    protected function sendEmail($email, $subject, $body)
+    {
+        $mailer = new \PHPMailer();
+        $mailer->setFrom(Yii::$app->params['adminEmail']);
+        $mailer->addAddress($email);
+        $mailer->isHTML(true);
+
+        $mailer->Subject = $subject;
+        $mailer->Body    = $body;
+        if(!$mailer->send()) {
+            error_log($mailer->ErrorInfo);
+        }
+    }
 
     /**
      * Устанавливает продукт как просмотреный.
@@ -170,7 +195,7 @@ class AbstractController extends Controller {
         if (empty($currentList))
             return [];
 
-        $models = Product::find()->where(['id' => $currentList])->limit(6)->all();
+        $models = Product::find()->where(['product.id' => $currentList])->joinWith('discount')->limit(6)->all();
 
         return $models;
     }

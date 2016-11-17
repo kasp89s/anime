@@ -23,9 +23,10 @@ use Yii;
  * @property PaymentMethod $payment
  * @property OrderCustomerInfo[] $customerInfo
  * @property OrderHistory[] $orderHistory
- * @property OrderPostBarcode[] $orderPostBarcodes
- * @property OrderProduct[] $orderProducts
- * @property OrderTotal[] $orderTotals
+ * @property OrderPostBarcode[] $postBarcode
+ * @property OrderProduct[] $products
+ * @property OrderTotal[] $total
+ * @property OrderStatus[] $status
  */
 class Order extends \yii\db\ActiveRecord
 {
@@ -109,6 +110,14 @@ class Order extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getStatus()
+    {
+        return $this->hasOne(OrderStatus::className(), ['statusCode' => 'orderStatus']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getOrderHistory()
     {
         return $this->hasMany(OrderHistory::className(), ['orderId' => 'id']);
@@ -117,15 +126,15 @@ class Order extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getOrderPostBarcode()
+    public function getPostBarcode()
     {
-        return $this->hasMany(OrderPostBarcode::className(), ['orderId' => 'id']);
+        return $this->hasOne(OrderPostBarcode::className(), ['orderId' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getOrderProducts()
+    public function getProducts()
     {
         return $this->hasMany(OrderProduct::className(), ['orderId' => 'id']);
     }
@@ -133,8 +142,38 @@ class Order extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getOrderTotal()
+    public function getTotal()
     {
         return $this->hasOne(OrderTotal::className(), ['orderId' => 'id']);
+    }
+
+    /**
+     * Возвращает форматированую дату.
+     *
+     * @param string $date
+     *
+     * @return bool|string
+     */
+    public static function getDate($date)
+    {
+        $time = strtotime($date);
+        $monthData = [
+            '01' => 'Января',
+            '02' => 'Февраля',
+            '03' => 'Марта',
+            '04' => 'Апреля',
+            '05' => 'Мая',
+            '06' => 'Июня',
+            '07' => 'Июля',
+            '08' => 'Августа',
+            '09' => 'Сентября',
+            '10' => 'Октября',
+            '11' => 'Ноября',
+            '12' => 'Декабря'
+        ];
+
+        $month = $monthData[date('m', $time)];
+
+        return date("d {$month} Y г.", $time);
     }
 }

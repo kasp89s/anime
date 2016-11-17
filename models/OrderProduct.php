@@ -20,7 +20,7 @@ use Yii;
  *
  * @property Product $product
  * @property Order $order
- * @property OrderProductAttribute[] $orderProductAttributes
+ * @property OrderProductAttribute[] $productAttributes
  */
 class OrderProduct extends \yii\db\ActiveRecord
 {
@@ -87,7 +87,7 @@ class OrderProduct extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getOrderProductAttributes()
+    public function getProductAttributes()
     {
         return $this->hasMany(OrderProductAttribute::className(), ['orderProductId' => 'id']);
     }
