@@ -11,6 +11,7 @@ use app\models\Customer;
 use app\models\CustomerAddress;
 use app\models\InfoPage;
 use app\models\RecoverForm;
+use app\models\RegisterForm;
 use Yii;
 use yii\web\Controller;
 use app\models\LoginForm;
@@ -109,31 +110,43 @@ class AbstractController extends Controller {
         return $this->goHome();
     }
 
-    public function actionRegister()
+    public function actionRegistration()
     {
-        $model = new RegisterForm(['scenario' => RegisterForm::SCENARIO_REGISTER]);
+        $model = new RegisterForm();
 
-        if($model->load(Yii::$app->request->post()) && $model->register()) {
-				$mailer = new \PHPMailer();
-				$mailer->setFrom(Yii::$app->params['adminEmail']);
-				$mailer->addAddress($model->_user->email);
-				$mailer->isHTML(true);
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
 
-				$mailer->Subject = \yii\helpers\Url::base();
-				$mailer->Body    = $this->renderPartial('emailTemplates/registrationMail', [
-						'username' => $model->_user->username,
-						'email' => $model->_user->email,
-						'password' => $model->password,
-					]);
-				if(!$mailer->send()) {
-					throw new Exception('Mailer Error: ' . $mailer->ErrorInfo);
-				}
-				
-			echo \yii\helpers\BaseJson::encode(['success' => true]);
-			Yii::$app->end();
+            return ActiveForm::validate($model);
         }
 
-        echo \yii\helpers\BaseJson::encode($model->getErrors());
+        if($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $customer = $model->register();
+
+            $this->sendEmail(
+                $model->email,
+                Yii::$app->params['NewRegistrationSubject'],
+                $this->renderPartial('emailTemplates/registration', ['customer' => $customer])
+            );
+
+            return $this->render(Yii::$app->controller->action->id, [
+                'customer' => $customer
+            ]);
+        }
+    }
+
+    public function actionRegistrationConfirm($code)
+    {
+        $model = Customer::find()->where(['code' => $code])->one();
+        if (empty($model))
+            throw new \yii\web\NotFoundHttpException();
+
+        $model->code = null;
+        $model->isActive = 1;
+
+        $model->save();
+
+        return $this->render(Yii::$app->controller->action->id, []);
     }
 
     public function actionRecover()
@@ -144,11 +157,6 @@ class AbstractController extends Controller {
             Yii::$app->response->format = Response::FORMAT_JSON;
 
             return ActiveForm::validate($model);
-//            if ($model->validate() && $model->findUser()) {
-//                return ActiveForm::validate($model);
-//            } else {
-//                return $model->errors;
-//            }
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {

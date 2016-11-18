@@ -11,6 +11,7 @@ return [
     'NewOrderSubject' => 'newOrderSubject',
     'NewsLetterSubscriberSubject' => 'NewsLetterSubscriberSubject',
     'RecoverSubject' => 'RecoverSubject',
+    'NewRegistrationSubject' => 'NewRegistrationSubject',
     'phone' => '+380 (93) 716–54–65',
     'seo' => [
         'title' => '',

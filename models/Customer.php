@@ -16,9 +16,11 @@ use Yii;
  * @property string $registrationIp
  * @property string $registrationTime
  * @property string $memo
+ * @property string $authID
+ * @property string $authMethod
  *
  * @property CustomerGroup $group
- * @property CustomerAddress[] $addresses
+ * @property CustomerAddress[] $address
  * @property WishList[] $wishes
  * @property Product[] $wishProducts
  */
@@ -44,7 +46,7 @@ class Customer extends \yii\db\ActiveRecord
         return [
             [['email', 'password', 'customerGroupId', 'registrationIp'], 'required'],
             [['customerGroupId', 'isActive'], 'integer'],
-            [['registrationTime'], 'safe'],
+            [['registrationTime', 'authID', 'authMethod'], 'safe'],
             [['memo'], 'string'],
             [['email'], 'string', 'max' => 255],
             [['password', 'code'], 'string', 'max' => 32],
@@ -72,6 +74,8 @@ class Customer extends \yii\db\ActiveRecord
             'code' => 'Code',
             'registrationIp' => 'Ip регистрации',
             'registrationTime' => 'Время',
+            'authID' => 'authID',
+            'authMethod' => 'authMethod',
             'memo' => 'Memo',
         ];
     }

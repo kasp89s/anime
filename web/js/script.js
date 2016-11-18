@@ -463,6 +463,14 @@ $(document).ready(function(){
             $(this).next('.enter-row').find('.cancel.open-build-in').trigger('click');
         }
     );
+
+    $('.registration.go, .registration.return').on(
+        'click',
+        function () {
+            $(this).closest('.build-in-popup').find('.close.right.open-build-in').trigger('click');
+        }
+    );
+
     function showAddProductNotification ($success) {
         if ($success) {
 			location.reload();

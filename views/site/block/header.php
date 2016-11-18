@@ -9,6 +9,8 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 
 $recover = new \app\models\RecoverForm();
+
+$registration = new \app\models\RegisterForm();
 ?>
 <header class="clearfix">
     <div class="logo col-xs-12 col-sm-4 col-md-2">
@@ -98,7 +100,54 @@ $recover = new \app\models\RecoverForm();
                             </a>
                         </div>
 
-                        <a class="registration" href="javascript:void()">Зарегестрироваться</a>
+                        <a class="registration go open-build-in" href="javascript:void()" data-popup="#register-modal">Зарегестрироваться</a>
+                    </div>
+                </div>
+            </div>
+            <div class="build-in-popup" id="register-modal">
+                <div class="close right open-build-in" data-popup="#register-modal">
+                    <img src="/img/remove-button.png" alt="">
+                </div>
+
+                <h2>Регистрация в anime line group</h2>
+                <div class="table">
+                    <?php $form = ActiveForm::begin([
+                            'action' => '/registration',
+                            'enableAjaxValidation' => true,
+                            'options'=>['class'=>'row'],
+                            'fieldConfig' => [
+                                'template' => '{label}{input}{error}',
+                                'errorOptions' => ['class' => 'error text-danger'],
+                                'labelOptions' => ['class' => ''],
+                                'inputOptions' => ['class' => 'input'],
+                                'options' => [
+                                    'tag' => 'div',
+                                ],
+                            ],
+                        ]); ?>
+                        <?= $form->field($registration, 'email') ?>
+
+                        <?= $form->field($registration, 'password')->input('password') ?>
+
+                        <?= $form->field($registration, 'passwordConfirm')->input('password') ?>
+
+                        <div class="enter-row">
+                            <?= Html::submitButton('Зарегестрироваться', ['class' => 'button submit']) ?>
+                            <button class="cancel open-build-in" data-popup="#register-modal">Отмена</button>
+                        </div>
+                    <?php ActiveForm::end(); ?>
+                    <div class="login">
+                        <a href="javascript:void()">Войдите как пользователь</a>
+                        <div class="social-enter">
+                            <a href="<?= $this->params['facebook']->getRedirectLoginHelper()->getLoginUrl('http://' . Yii::$app->getRequest()->serverName . '/social/facebook', ['email'])?>">
+                                <img src="/img/login-fb.png" alt="">
+                            </a>
+                            <a href="<?= $this->params['vk']->getLoginUrl()?>">
+                                <img src="/img/login-vk.png" alt="">
+                            </a>
+                        </div>
+
+                        <a class="registration return open-build-in" href="javascript:void()" data-popup="#enter-modal">Войти</a>
                     </div>
                 </div>
             </div>
