@@ -60,4 +60,18 @@ class Specification extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Product::className(), ['id' => 'productId'])->viaTable('productproductspecificationrelation', ['productSpecificationId' => 'id']);
     }
+
+    public function getValuesByProductsCount()
+    {
+        return ProductSpecificationRelation::find()
+            ->select('COUNT(`productId`) as `count`, `value`')
+            ->where([
+                    'productSpecificationId' => $this->id,
+                    'isSearch' => 1
+                ])
+            ->groupBy('`value`')
+            ->orderBy('`count` DESC')
+            ->asArray()
+            ->all();
+    }
 }

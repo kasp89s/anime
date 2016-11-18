@@ -10,6 +10,7 @@ use app\models\Basket;
 use app\models\Customer;
 use app\models\CustomerAddress;
 use app\models\InfoPage;
+use app\models\RecoverForm;
 use Yii;
 use yii\web\Controller;
 use app\models\LoginForm;
@@ -133,6 +134,38 @@ class AbstractController extends Controller {
         }
 
         echo \yii\helpers\BaseJson::encode($model->getErrors());
+    }
+
+    public function actionRecover()
+    {
+        $model = new RecoverForm();
+
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
+            return ActiveForm::validate($model);
+//            if ($model->validate() && $model->findUser()) {
+//                return ActiveForm::validate($model);
+//            } else {
+//                return $model->errors;
+//            }
+        }
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $newPassword = uniqid();
+            $model->customer->password = md5($newPassword);
+            $model->customer->save();
+
+            $this->sendEmail(
+                $model->email,
+                Yii::$app->params['RecoverSubject'],
+                $this->renderPartial('emailTemplates/recover', ['newPassword' => $newPassword])
+            );
+
+            return $this->render(Yii::$app->controller->action->id, [
+                    'newPassword' => $newPassword
+            ]);
+        }
     }
 
     /**

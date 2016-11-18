@@ -9,9 +9,11 @@ namespace app\controllers;
 use app\models\InfoPage;
 use app\models\News;
 use app\models\NewsLetterSubscriber;
+use app\models\OrderProduct;
 use app\models\PaymentMethod;
 use app\models\Product;
 use app\models\ProductCategoryRelation;
+use app\models\ProductSpecificationRelation;
 use app\models\ShippingMethod;
 use app\models\WishList;
 use Yii;
@@ -100,8 +102,24 @@ class SiteController extends AbstractController
             ->orderBy('id desc')
             ->limit(10)
             ->all();
-        $popularProducts = [];
-        $overstock = [];
+
+        $popularProducts = OrderProduct::find()
+            ->select('orderproduct.`productId`, COUNT(orderproduct.`productId`) as `count`')
+            ->joinWith('product')
+            ->joinWith('product.discount')
+            ->joinWith('product.marker')
+            ->groupBy('orderproduct.productId')
+            ->orderBy('count desc')
+            ->limit(10)
+            ->all();
+
+        $overstock = Product::find()
+            ->joinWith('discount')
+            ->joinWith('marker')
+            ->where('productmarker.isActive = 1 AND productmarker.isSale = 1 AND productmarker.isNew = 1 AND productdiscount.value > 0')
+            ->orderBy('id desc')
+            ->limit(10)
+            ->all();
 
         $quick = Category::find()->where([
                 'isActive' => 1,
@@ -112,6 +130,8 @@ class SiteController extends AbstractController
             'news' => $news,
             'quick' => $quick,
             'newProducts' => $newProducts,
+            'popularProducts' => $popularProducts,
+            'overstock' => $overstock,
             'viewProductList' => $this->getLastViewListProduct(),
         ]);
     }
@@ -142,6 +162,7 @@ class SiteController extends AbstractController
             'label' => " {$category->name}",
             'url' => false
         ];
+
 
         return $this->render(Yii::$app->controller->action->id, [
             'category' => $category,

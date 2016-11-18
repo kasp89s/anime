@@ -130,7 +130,8 @@ class NewsController extends AbstractController
         ];
 
         return $this->render(Yii::$app->controller->action->id, [
-            'record' => $record
+            'record' => $record,
+            'viewProductList' => $this->getLastViewListProduct(),
         ]);
     }
 }

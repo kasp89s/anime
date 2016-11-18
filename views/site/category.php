@@ -26,21 +26,21 @@ use yii\helpers\Html;
         </ul>
         <?php endif;?>
         <?php if (!empty($category->specifications)):?>
-            <?php foreach ($category->specifications as $specifications):?>
+            <?php foreach ($category->specifications as $specification):?>
                 <h3>
-                    <?= $specifications->name?>
+                    <?= $specification->name?>
                 </h3>
-<!--        <ul>-->
-<!--            --><?php //if (!empty($option->values)):?>
-<!--                --><?php //foreach ($option->values as $value):?>
-<!--                <li>-->
-<!--                    <a href="--><?//= Url::to('/option/value/' . $value->id)?><!--">-->
-<!--                        --><?//= $value->name?><!-- <span>(--><?php //echo $value->optionAttributesCount?><!--)</span>-->
-<!--                    </a>-->
-<!--                </li>-->
-<!--                --><?php //endforeach;?>
-<!--            --><?php //endif;?>
-<!--        </ul>-->
+                <ul>
+                <?php if (!empty($specification->valuesByProductsCount)):?>
+                <?php foreach ($specification->valuesByProductsCount as $record):?>
+                    <li>
+                    <a href="<?= Url::to('/specification/' . $record['value'])?>">
+                        <?= $record['value']?> <span>(<?php echo $record['count']?>)</span>
+                    </a>
+                    </li>
+                <?php endforeach;?>
+                <?php endif;?>
+                </ul>
             <?php endforeach;?>
         <?php endif;?>
     </div>

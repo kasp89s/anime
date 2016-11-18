@@ -457,6 +457,12 @@ $(document).ready(function(){
 		}
 	);
 
+    $('.forgot-password').on(
+        'click',
+        function () {
+            $(this).next('.enter-row').find('.cancel.open-build-in').trigger('click');
+        }
+    );
     function showAddProductNotification ($success) {
         if ($success) {
 			location.reload();

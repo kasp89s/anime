@@ -7,6 +7,8 @@
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
+
+$recover = new \app\models\RecoverForm();
 ?>
 <header class="clearfix">
     <div class="logo col-xs-12 col-sm-4 col-md-2">
@@ -27,12 +29,24 @@ use yii\helpers\Html;
             <div class="build-in-popup" id="recover-password">
                 <h2>Вход в anime line group</h2>
                 <div class="table">
-                    <form action="">
-                        E-mail
-                        <input type="email" class="input">
-                        <button type="input" class="button submit">Отправить новый пароль</button>
-                        <a href="">Я вспомнил свой пароль</a>
-                    </form>
+                    <?php $form = ActiveForm::begin([
+                            'action' => '/site/recover',
+                            'enableAjaxValidation' => true,
+                            'options'=>['class'=>'row'],
+                            'fieldConfig' => [
+                                'template' => '{label}{input}{error}',
+                                'errorOptions' => ['class' => 'error text-danger'],
+                                'labelOptions' => ['class' => ''],
+                                'inputOptions' => ['class' => 'input'],
+                                'options' => [
+                                    'tag' => 'div',
+                                ],
+                            ],
+                        ]); ?>
+                        <?= $form->field($recover, 'email') ?>
+                        <?= Html::submitButton('Отправить новый пароль', ['class' => 'button submit']) ?>
+                        <a href="javascript:void(0)" class="cancel open-build-in" data-popup="#recover-password">Я вспомнил свой пароль</a>
+                    <?php ActiveForm::end(); ?>
                     <div class="login">
                         <a href="">Войдите как пользователь</a>
                         <a href=""><img src="/img/login-fb.png" alt=""></a>

@@ -43,6 +43,7 @@ use yii\helpers\Html;
             <div class="list list2 owl-catalog-1">
                 <?php if (!empty($popularProducts)):?>
                     <?php foreach ($popularProducts as $product):?>
+                        <?php $product = $product->product?>
                         <div class="item">
                             <a href="<?= Url::to('/product/' . $product->id)?>" class="link">
                                 <div class="image <?= ($product->discount->value != 0) ? 'corner-message' : ''?>" message="<?= $product->discount->description?>">

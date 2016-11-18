@@ -68,69 +68,12 @@ use yii\helpers\Html;
                     Последние просмотренные товары
                 </h4>
                 <div class="show-all-last right">
-                    <a href="#">
+                    <a href="<?= Url::to('/cabinet/viewed')?>">
                         Показать все
                     </a>
                 </div>
             </div>
-            <div class="list owl-catalog-1">
-                <div class="item">
-                    <a class="link">
-                        <div class="image corner-message" message="Скидка - 25%">
-                            <img src="img/news2.png" alt="">
-                        </div>
-                        <h3>Бэтмен. Суд Сов. Том 1</h3>
-                    </a>
-                </div>
-                <div class="item">
-                    <a class="link">
-                        <div class="image corner-message" message="Скидка - 25%">
-                            <img src="img/dummy-img1.png" alt="">
-                        </div>
-                        <h3>Бэтмен. Суд Сов. Том 1  Бэтмен. Суд Сов. Том 1 </h3>
-                    </a>
-                </div>
-                <div class="item">
-                    <a class="link">
-                        <div class="image corner-message" message="Скидка - 25%">
-                            <img src="img/dummy-img1.png" alt="">
-                        </div>
-                        <h3>Бэтмен. Суд Сов. Том 1</h3>
-                    </a>
-                </div>
-                <div class="item">
-                    <a class="link">
-                        <div class="image corner-message" message="Скидка - 25%">
-                            <img src="img/dummy-img1.png" alt="">
-                        </div>
-                        <h3>Бэтмен. Суд Сов. Том 1</h3>
-                    </a>
-                </div>
-                <div class="item">
-                    <a class="link">
-                        <div class="image corner-message" message="Скидка - 25%">
-                            <img src="img/dummy-img1.png" alt="">
-                        </div>
-                        <h3>Бэтмен. Суд Сов. Том 1</h3>
-                    </a>
-                </div>
-                <div class="item">
-                    <a class="link">
-                        <div class="image corner-message" message="Скидка - 25%">
-                            <img src="img/dummy-img1.png" alt="">
-                        </div>
-                        <h3>Бэтмен. Суд Сов. Том 1</h3>
-                    </a>
-                </div>
-                <div class="item">
-                    <a class="link">
-                        <div class="image corner-message" message="Скидка - 25%">
-                            <img src="img/dummy-img1.png" alt="">
-                        </div>
-                        <h3>Бэтмен. Суд Сов. Том 1</h3>
-                    </a>
-                </div>
-            </div>
+            <?= \app\components\LastViewWidget::widget(['models' => $viewProductList]) ?>
         </div>
     </div>
 </div>
