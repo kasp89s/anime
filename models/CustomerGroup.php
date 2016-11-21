@@ -49,13 +49,13 @@ class CustomerGroup extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'description' => 'Description',
-            'groupDiscount' => 'Group Discount',
-            'isAutomaticGroup' => 'Is Automatic Group',
-            'isActive' => 'Is Active',
-            'isDefault' => 'Is Default',
-            'groupAccumulatedLimit' => 'Group Accumulated Limit',
+            'name' => 'Группа',
+            'description' => 'Описание',
+            'groupDiscount' => 'Скидка',
+            'isAutomaticGroup' => 'Авто',
+            'isActive' => 'Активен',
+            'isDefault' => 'По умолчанию',
+            'groupAccumulatedLimit' => 'Необходимая сумма',
         ];
     }
 

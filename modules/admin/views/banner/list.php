@@ -29,60 +29,52 @@ use yii\helpers\Html;
                         </div>
                     </div>
                 </div>
-                <?php if (!empty($records)):?>
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <?php foreach ($records[0]->attributeLabels() as $column => $label):?>
-                                <?php if(in_array($column, ['isActive', 'image', 'createUserId', 'updateUserId'])) continue;?>
-                                <th><?= $label?></th>
-                            <?php endforeach;?>
-                            <th><?= $records[0]->attributeLabels()['image']?></th>
-                            <th><?= $records[0]->attributeLabels()['createUserId']?></th>
-                            <th><?= $records[0]->attributeLabels()['updateUserId']?></th>
-                            <th><?= $records[0]->attributeLabels()['isActive']?></th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <?php foreach($records as $record): ?>
-                        <tr>
-                            <?php foreach ($record->attributeLabels() as $column => $label):?>
-                                <?php if(in_array($column, ['isActive', 'image', 'createUserId', 'updateUserId'])) continue;?>
-                                <td><?= $record->{$column}?></td>
-                            <?php endforeach;?>
-                            <td>
-                                <?= Html::img('/uploads/banners/' . $record->id .'/' . $record->imageFileName, ['class' => 'img-rounded img-md']);?>
-                            </td>
-                            <td><?= $record->createUser->email?></td>
-                            <td><?= isset($record->updateUser->email) ? $record->updateUser->email : ''?></td>
-                            <td>
-                                <?php if ($record->isActive):?>
-                                <span class="badge badge-primary">Активен</span>
-                                <?php else:?>
-                                <span class="badge badge-danger">Не активен</span>
-                                <?php endif;?>
-                            </td>
-                            <td class="text-right footable-visible footable-last-column">
-                                <div class="btn-group">
-                                    <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/change/' . $record->id)?>" class="btn-white btn btn-xs">Редактировать</a>
-                                    <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/remove/' . $record->id)?>" class="btn-white btn btn-xs">Удалить</a>
-                                </div>
-                            </td>
-                        </tr>
-                        <?php endforeach;?>
-                        </tbody>
-                    </table>
+                <?= \yii\grid\GridView::widget([
+                        'dataProvider' => $dataProvider,
+                        'filterModel' => $searchModel,
+                        'columns' => [
+                            ['class' => 'yii\grid\SerialColumn'],
+                            'name',
+                            'content:ntext',
+                            [
+                                'attribute' => 'image',
+                                'format' => 'raw',
+                                'filter' => false,
+                                'value' => function($model) {
+                                   return Html::img('/uploads/banners/' . $model->id .'/' . $model->imageFileName, ['class' => 'img-rounded img-md']);
+                                }
+                            ],
+                            'startTime',
+                            // 'endTime',
+                            // 'isActive',
+                            // 'createTime',
+                            // 'updateTime',
+                            // 'createUserId',
+                            // 'updateUserId',
 
-                    <?php
-
-                    echo LinkPager::widget([
-                            'pagination' => $pages,
-                        ]);
-                    ?>
-                </div>
-                <?php endif;?>
+                            [
+                                'attribute' => 'isActive',
+                                'filter' => array(1 => "Активен", 0 => "Не активен"),
+                                'format' => 'raw',
+                                'value' => function($model) {
+                                    if ($model->isActive) {
+                                        return '<span class="badge badge-primary">Активен</span>';
+                                    } else {
+                                        return '<span class="badge badge-danger">Не активен</span>';
+                                    }
+                                }
+                            ],
+                            [
+                                'format' => 'raw',
+                                'value' => function($model) {
+                                    return '<div class="btn-group">
+                                            <a href="' . Url::to('/admin/'. Yii::$app->controller->id .'/change/' . $model->id) . '" class="btn-white btn btn-xs">Редактировать</a>
+                                            <a href="' . Url::to('/admin/'. Yii::$app->controller->id .'/remove/' . $model->id) . '" class="btn-white btn btn-xs">Удалить</a>
+                                        </div>';
+                                }
+                            ],
+                        ],
+                    ]); ?>
             </div>
         </div>
     </div>

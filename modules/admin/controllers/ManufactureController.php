@@ -6,7 +6,8 @@ use Yii;
 use yii\data\Pagination;
 use yii\web\UploadedFile;
 use yii\helpers\BaseFileHelper;
-
+use app\modules\admin\models\search\ManufactureSearch;
+use yii\web\NotFoundHttpException;
 class ManufactureController extends AdminController {
 
     public function actionList()
@@ -17,21 +18,13 @@ class ManufactureController extends AdminController {
             'url' => ['/'. Yii::$app->controller->module->id .'/'. Yii::$app->controller->id .'/'. Yii::$app->controller->action->id]
         ];
 
-        $query = Manufacture::find();
-        $countQuery = clone $query;
-        $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 30]);
-        $pages->pageSizeParam = false;
-        $records = $query->offset($pages->offset)
-            ->limit($pages->limit)
-            ->orderBy('id desc')
-            ->all();
+        $searchModel = new ManufactureSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('list',
-            [
-                'records' => $records,
-                'pages' => $pages,
-            ]
-        );
+        return $this->render(Yii::$app->controller->action->id, [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
     }
 
     public function actionCreate()
@@ -103,5 +96,21 @@ class ManufactureController extends AdminController {
         return $this->render(Yii::$app->controller->action->id, [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * Finds the Manufacture model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param string $id
+     * @return Manufacture the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModel($id)
+    {
+        if (($model = Manufacture::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
     }
 }

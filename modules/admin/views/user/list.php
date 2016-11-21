@@ -1,13 +1,6 @@
 <?php
-use yii\widgets\LinkPager;
 use yii\widgets\Breadcrumbs;
 use yii\helpers\Url;
-use yii\helpers\Html;
-
-$groups = ['all' => 'Все'];
-foreach (\app\models\Group::find()->asArray()->all() as $record) {
-    $groups[$record['id']] = $record['name'];
-}
 ?>
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
@@ -33,69 +26,38 @@ foreach (\app\models\Group::find()->asArray()->all() as $record) {
                             </div>
                         </div>
                     </div>
-                    <?= Html::beginForm([''], 'get') ?>
-                    <div class="col-sm-2 m-b-xs">
-                        <?= Html::dropDownList('filterGroup', null, $groups, ['class' => 'input-sm form-control input-s-sm inline'])?>
-                    </div>
-                    <div class="col-sm-2 m-b-xs">
-                        <?= Html::dropDownList('filterGroup', null, ['all' => 'Все', 1 => 'Активен', 0 => 'Не активен'], ['class' => 'input-sm form-control input-s-sm inline'])?>
-                    </div>
-                    <div class="col-sm-3">
-                        <div class="input-group">
-                            <?= Html::textInput('search', null, ['class' => 'input-sm form-control', 'placeholder' => 'Фильтр'])?>
-                            <span class="input-group-btn">
-                                  <?= Html::submitButton('Найти', ['class' => 'btn btn-sm btn-primary']) ?>
-                            </span>
-                        </div>
-                    </div>
-                    <?= Html::endForm() ?>
                 </div>
-                <?php if (!empty($records)):?>
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th></th>
-                            <th>Почта/Логин </th>
-                            <th>Группа </th>
-                            <th>Активность </th>
-                            <th>Описание</th>
-                            <th>Действия</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <?php foreach($records as $record): ?>
-                        <tr>
-                            <td><?= $record->id?></td>
-                            <td><?= $record->email?></td>
-                            <td><?= $record->group->name?></td>
-                            <td>
-                                <?php if ($record->isActive):?>
-                                <span class="badge badge-primary">Активен</span>
-                                <?php else:?>
-                                <span class="badge badge-danger">Не активен</span>
-                                <?php endif;?>
-                            </td>
-                            <td><?= $record->description?></td>
-                            <td class="text-right footable-visible footable-last-column">
-                                <div class="btn-group">
-                                    <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/change/' . $record->id)?>" class="btn-white btn btn-xs">Редактировать</a>
-                                    <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/remove/' . $record->id)?>" class="btn-white btn btn-xs">Удалить</a>
-                                </div>
-                            </td>
-                        </tr>
-                        <?php endforeach;?>
-                        </tbody>
-                    </table>
 
-                    <?php
-
-                    echo LinkPager::widget([
-                            'pagination' => $pages,
-                        ]);
-                    ?>
-                </div>
-                <?php endif;?>
+                <?= \yii\grid\GridView::widget([
+                        'dataProvider' => $dataProvider,
+                        'filterModel' => $searchModel,
+                        'columns' => [
+                            ['class' => 'yii\grid\SerialColumn'],
+                            'email:email',
+                            'group.name',
+                            [
+                                'attribute' => 'isActive',
+                                'filter' => array(1 => "Активен", 0 => "Не активен"),
+                                'format' => 'raw',
+                                'value' => function($model) {
+                                    if ($model->isActive) {
+                                        return '<span class="badge badge-primary">Активен</span>';
+                                    } else {
+                                        return '<span class="badge badge-danger">Не активен</span>';
+                                    }
+                                }
+                            ],
+                            [
+                                'format' => 'raw',
+                                'value' => function($model) {
+                                    return '<div class="btn-group">
+                                    <a href="' . Url::to('/admin/'. Yii::$app->controller->id .'/change/' . $model->id) . '" class="btn-white btn btn-xs">Редактировать</a>
+                                    <a href="' . Url::to('/admin/'. Yii::$app->controller->id .'/remove/' . $model->id) . '" class="btn-white btn btn-xs">Удалить</a>
+                                </div>';
+                                }
+                            ],
+                        ],
+                    ]); ?>
             </div>
         </div>
     </div>

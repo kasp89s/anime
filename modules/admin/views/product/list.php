@@ -2,6 +2,7 @@
 use yii\widgets\LinkPager;
 use yii\widgets\Breadcrumbs;
 use yii\helpers\Url;
+use yii\helpers\Html;
 ?>
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
@@ -26,70 +27,46 @@ use yii\helpers\Url;
                             </div>
                         </div>
                     </div>
-                    <?php if (!empty($records)):?>
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                <tr>
-                                    <?php foreach ($records[0]->attributeLabels() as $column => $label):?>
-                                        <?php if(in_array($column, [
-                                            'description',
-                                            'image',
-                                            'imagesMultiple',
-                                            'barcode2',
-                                            'barcode3',
-                                            'availableTime',
-                                            'productDisountId',
-                                            'productManufactureId',
-                                            'imageFileName',
-                                            'categoriesMultiple',
-                                            'specificationsMultiple',
-                                            'attributesMultiple',
-                                        ])) continue;?>
-                                        <th><?= $label?></th>
-                                    <?php endforeach;?>
-                                    <th></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <?php foreach($records as $record): ?>
-                                    <tr>
-                                        <?php foreach ($record->attributeLabels() as $column => $label):?>
-                                            <?php if(in_array($column, [
-                                                'description',
-                                                'image',
-                                                'imagesMultiple',
-                                                'barcode2',
-                                                'barcode3',
-                                                'availableTime',
-                                                'productDisountId',
-                                                'productManufactureId',
-                                                'imageFileName',
-                                                'categoriesMultiple',
-                                                'specificationsMultiple',
-                                                'attributesMultiple',
-                                            ])) continue;?>
-                                            <td><?= $record->{$column}?></td>
-                                        <?php endforeach;?>
-                                        <td class="text-right footable-visible footable-last-column">
-                                            <div class="btn-group">
-                                                <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/change/' . $record->id)?>" class="btn-white btn btn-xs">Редактировать</a>
-                                                <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/remove/' . $record->id)?>" class="btn-white btn btn-xs">Удалить</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                <?php endforeach;?>
-                                </tbody>
-                            </table>
-
-                            <?php
-
-                            echo LinkPager::widget([
-                                    'pagination' => $pages,
-                                ]);
-                            ?>
-                        </div>
-                    <?php endif;?>
+                    <?= \yii\grid\GridView::widget([
+                            'dataProvider' => $dataProvider,
+                            'filterModel' => $searchModel,
+                            'columns' => [
+                                ['class' => 'yii\grid\SerialColumn'],
+                                'sku',
+                                'name',
+//                                'description:ntext',
+                                'quantityInStock',
+                                // 'quantityOfSold',
+                                // 'barcode1',
+                                // 'barcode2',
+                                // 'barcode3',
+                                // 'availableTime',
+                                // 'createTime',
+                                // 'updateTime',
+                                 'price',
+                                 'currencyCode',
+                                // 'productDisountId',
+                                // 'productManufactureId',
+                                // 'imageFileName',
+                                [
+                                    'attribute' => 'image',
+                                    'format' => 'raw',
+                                    'filter' => false,
+                                    'value' => function($model) {
+                                        return Html::img('/uploads/product/' . $model->id .'/' . $model->imageFileName, ['class' => 'img-rounded img-md']);
+                                    }
+                                ],
+                                [
+                                    'format' => 'raw',
+                                    'value' => function($model) {
+                                        return '<div class="btn-group">
+                                            <a href="' . Url::to('/admin/'. Yii::$app->controller->id .'/change/' . $model->id) . '" class="btn-white btn btn-xs">Редактировать</a>
+                                            <a href="' . Url::to('/admin/'. Yii::$app->controller->id .'/remove/' . $model->id) . '" class="btn-white btn btn-xs">Удалить</a>
+                                        </div>';
+                                    }
+                                ],
+                            ],
+                        ]); ?>
                 </div>
             </div>
         </div>

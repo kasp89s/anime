@@ -4,7 +4,8 @@ namespace app\modules\admin\controllers;
 use app\models\InfoPage;
 use Yii;
 use yii\data\Pagination;
-
+use app\modules\admin\models\search\InfoPageSearch;
+use yii\web\NotFoundHttpException;
 class InfoPageController extends AdminController {
 
     public function actionList()
@@ -15,21 +16,13 @@ class InfoPageController extends AdminController {
             'url' => ['/'. Yii::$app->controller->module->id .'/'. Yii::$app->controller->id .'/'. Yii::$app->controller->action->id]
         ];
 
-        $query = InfoPage::find();
-        $countQuery = clone $query;
-        $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 30]);
-        $pages->pageSizeParam = false;
-        $records = $query->offset($pages->offset)
-            ->limit($pages->limit)
-            ->orderBy('id desc')
-            ->all();
+        $searchModel = new InfoPageSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('list',
-            [
-                'records' => $records,
-                'pages' => $pages,
-            ]
-        );
+        return $this->render(Yii::$app->controller->action->id, [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
     }
 
     public function actionCreate()
@@ -57,5 +50,22 @@ class InfoPageController extends AdminController {
         }
 
         return parent::actionChange($id);
+    }
+
+
+    /**
+     * Finds the Banner model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param integer $id
+     * @return Banner the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModel($id)
+    {
+        if (($model = InfoPage::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
     }
 }

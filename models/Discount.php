@@ -51,11 +51,11 @@ class Discount extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'description' => 'Description',
-            'startTime' => 'Start Time',
-            'endTime' => 'End Time',
-            'type' => 'Type',
-            'value' => 'Value',
+            'description' => 'Описание',
+            'startTime' => 'Начало',
+            'endTime' => 'Окончание',
+            'type' => 'Тип',
+            'value' => 'Значение',
         ];
     }
 

@@ -30,48 +30,35 @@ use yii\helpers\Html;
                         </div>
                     </div>
                 </div>
-                <?php if (!empty($records)):?>
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <?php foreach ($records[0]->attributeLabels() as $column => $label):?>
-                                <?php if(in_array($column, ['file', 'imageFileName'])) continue;?>
-                                <th><?= $label?></th>
-                            <?php endforeach;?>
-                            <th><?= $records[0]->attributeLabels()['file']?></th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <?php foreach($records as $record): ?>
-                        <tr>
-                            <?php foreach ($record->attributeLabels() as $column => $label):?>
-                                <?php if(in_array($column, ['file', 'imageFileName'])) continue;?>
-                                <td><?= $record->{$column}?></td>
-                            <?php endforeach;?>
-                            <td>
-                                <?= Html::img('/uploads/paymentMethod/' . $record->id .'/' . $record->imageFileName, ['class' => 'img-rounded img-md']);?>
-                            </td>
-                            <td class="text-right footable-visible footable-last-column">
-                                <div class="btn-group">
-                                    <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/change/' . $record->id)?>" class="btn-white btn btn-xs">Редактировать</a>
-                                    <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/remove/' . $record->id)?>" class="btn-white btn btn-xs">Удалить</a>
-                                </div>
-                            </td>
-                        </tr>
-                        <?php endforeach;?>
-                        </tbody>
-                    </table>
-
-                    <?php
-
-                    echo LinkPager::widget([
-                            'pagination' => $pages,
-                        ]);
-                    ?>
-                </div>
-                <?php endif;?>
+                <?= \yii\grid\GridView::widget([
+                        'dataProvider' => $dataProvider,
+                        'filterModel' => $searchModel,
+                        'columns' => [
+                            ['class' => 'yii\grid\SerialColumn'],
+                            'name',
+                            'countryCode',
+                            'description:ntext',
+                             'price',
+                             'feePercent',
+                            [
+                                'attribute' => 'image',
+                                'format' => 'raw',
+                                'filter' => false,
+                                'value' => function($model) {
+                                    return Html::img('/uploads/paymentMethod/' . $model->id .'/' . $model->imageFileName, ['class' => 'img-rounded img-md']);
+                                }
+                            ],
+                            [
+                                'format' => 'raw',
+                                'value' => function($model) {
+                                    return '<div class="btn-group">
+                                            <a href="' . Url::to('/admin/'. Yii::$app->controller->id .'/change/' . $model->id) . '" class="btn-white btn btn-xs">Редактировать</a>
+                                            <a href="' . Url::to('/admin/'. Yii::$app->controller->id .'/remove/' . $model->id) . '" class="btn-white btn btn-xs">Удалить</a>
+                                        </div>';
+                                }
+                            ],
+                        ],
+                    ]); ?>
             </div>
         </div>
     </div>

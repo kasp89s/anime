@@ -8,7 +8,9 @@ namespace app\modules\admin\controllers;
 
 use app\models\User;
 use Yii;
-use yii\data\Pagination;
+
+use yii\web\NotFoundHttpException;
+use app\modules\admin\models\search\UserSearch;
 
 class UserController extends AdminController {
 
@@ -20,19 +22,13 @@ class UserController extends AdminController {
             'url' => ['/admin/user/list']
         ];
 
-        $query = User::find();
-        $countQuery = clone $query;
-        $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 30]);
-        $pages->pageSizeParam = false;
-        $records = $query->offset($pages->offset)
-            ->limit($pages->limit)
-            ->orderBy('id desc')
-            ->all();
+        $searchModel = new UserSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('list',
+        return $this->render(Yii::$app->controller->action->id,
             [
-                'records' => $records,
-                'pages' => $pages,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
             ]
         );
     }
@@ -70,5 +66,21 @@ class UserController extends AdminController {
         }
 
         return parent::actionChange($id);
+    }
+
+    /**
+     * Finds the User model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param string $id
+     * @return User the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModel($id)
+    {
+        if (($model = User::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
     }
 }

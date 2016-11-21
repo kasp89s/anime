@@ -8,9 +8,11 @@ namespace app\modules\admin\controllers;
 
 use app\models\Banner;
 use Yii;
-use yii\data\Pagination;
+
 use yii\web\UploadedFile;
 use yii\helpers\BaseFileHelper;
+use app\modules\admin\models\search\BannerSearch;
+use yii\web\NotFoundHttpException;
 
 class BannerController extends AdminController {
 
@@ -22,21 +24,13 @@ class BannerController extends AdminController {
             'url' => [Yii::$app->controller->module->id .'/'. Yii::$app->controller->id .'/'. Yii::$app->controller->action->id]
         ];
 
-        $query = Banner::find();
-        $countQuery = clone $query;
-        $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 30]);
-        $pages->pageSizeParam = false;
-        $records = $query->offset($pages->offset)
-            ->limit($pages->limit)
-            ->orderBy('id desc')
-            ->all();
+        $searchModel = new BannerSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render(Yii::$app->controller->action->id,
-            [
-                'records' => $records,
-                'pages' => $pages,
-            ]
-        );
+        return $this->render(Yii::$app->controller->action->id, [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
     }
 
     public function actionCreate()
@@ -112,5 +106,21 @@ class BannerController extends AdminController {
         return $this->render(Yii::$app->controller->action->id, [
                 'model' => $model,
             ]);
+    }
+
+    /**
+     * Finds the Banner model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param integer $id
+     * @return Banner the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModel($id)
+    {
+        if (($model = Banner::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
     }
 }

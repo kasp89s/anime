@@ -25,51 +25,41 @@ use yii\helpers\Url;
                                 <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/create')?>" class="btn btn-primary">Создать</a>
                             </div>
                         </div>
-                        <div class="col-sm-6">
-                            <div class="input-group">
-                                <input type="text" placeholder="Фильтр" class="input-sm form-control">
-                            <span class="input-group-btn">
-                                        <button type="button" class="btn btn-sm btn-primary"> Найти</button>
-                            </span>
-                            </div>
-                        </div>
                     </div>
-                    <?php if (!empty($records)):?>
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                <tr>
-                                    <?php foreach ($records[0]->attributeLabels() as $label):?>
-                                        <th><?= $label?></th>
-                                    <?php endforeach;?>
-                                    <th></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <?php foreach($records as $record): ?>
-                                    <tr>
-                                        <?php foreach ($record->attributeLabels() as $column => $label):?>
-                                            <td><?= $record->{$column}?></td>
-                                        <?php endforeach;?>
-                                        <td class="text-right footable-visible footable-last-column">
-                                            <div class="btn-group">
-                                                <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/change/' . $record->id)?>" class="btn-white btn btn-xs">Редактировать</a>
-                                                <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/remove/' . $record->id)?>" class="btn-white btn btn-xs">Удалить</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                <?php endforeach;?>
-                                </tbody>
-                            </table>
-
-                            <?php
-
-                            echo LinkPager::widget([
-                                    'pagination' => $pages,
-                                ]);
-                            ?>
-                        </div>
-                    <?php endif;?>
+                    <?= \yii\grid\GridView::widget([
+                            'dataProvider' => $dataProvider,
+                            'filterModel' => $searchModel,
+                            'columns' => [
+                                ['class' => 'yii\grid\SerialColumn'],
+                                'name',
+                                'description:ntext',
+                                'groupDiscount',
+                                [
+                                    'attribute' => 'isActive',
+                                    'filter' => array(1 => "Активен", 0 => "Не активен"),
+                                    'format' => 'raw',
+                                    'value' => function($model) {
+                                        if ($model->isActive) {
+                                            return '<span class="badge badge-primary">Активен</span>';
+                                        } else {
+                                            return '<span class="badge badge-danger">Не активен</span>';
+                                        }
+                                    }
+                                ],
+                                 'isDefault',
+                                 'groupAccumulatedLimit',
+                                 'isAutomaticGroup',
+                                [
+                                    'format' => 'raw',
+                                    'value' => function($model) {
+                                        return '<div class="btn-group">
+                                            <a href="' . Url::to('/admin/'. Yii::$app->controller->id .'/change/' . $model->id) . '" class="btn-white btn btn-xs">Редактировать</a>
+                                            <a href="' . Url::to('/admin/'. Yii::$app->controller->id .'/remove/' . $model->id) . '" class="btn-white btn btn-xs">Удалить</a>
+                                        </div>';
+                                    }
+                                ],
+                            ],
+                        ]); ?>
                 </div>
             </div>
         </div>

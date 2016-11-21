@@ -26,61 +26,46 @@ use yii\helpers\Url;
                             </div>
                         </div>
                     </div>
-                    <?php if (!empty($records)):?>
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                <tr>
-                                    <?php foreach ($records[0]->attributeLabels() as $label):?>
-                                        <th><?= $label?></th>
-                                    <?php endforeach;?>
-                                    <th>Значения</th>
-                                    <th></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <?php foreach($records as $record): ?>
-                                    <tr>
-                                        <?php foreach ($record->attributeLabels() as $column => $label):?>
-                                            <td><?= $record->{$column}?></td>
-                                        <?php endforeach;?>
-                                        <td>
-                                            <ul class="dd-list">
+                    <?= \yii\grid\GridView::widget([
+                            'dataProvider' => $dataProvider,
+                            'filterModel' => $searchModel,
+                            'columns' => [
+                                ['class' => 'yii\grid\SerialColumn'],
+                                'name',
+                                [
+                                    'format' => 'raw',
+                                    'value' => function($model) {
+                                        $item = '<ul class="dd-list">
                                                 <li>
-                                                    <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/option-create/' . $record->id)?>"><i>[Новое значение]</i></a>
-                                                </li>
-                                            <?php if (!empty($record->values)):?>
-                                            <?php foreach ($record->values as $value):?>
-                                                <li>
-                                                    <?= $value->name?> - <?= $value->price?>
-                                                    <div class="btn-group">
-                                                        <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/option-change/' . $value->id)?>" class="btn-white btn btn-xs">Редактировать</i></a>
-                                                        <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/option-remove/' . $value->id)?>" class="btn-white btn btn-xs">Удалить</a>
-                                                    </div>
-                                                </li>
-                                            <?php endforeach;?>
-                                            <?php endif;?>
-                                            </ul>
-                                        </td>
-                                        <td class="text-right footable-visible footable-last-column">
-                                            <div class="btn-group">
-                                                <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/change/' . $record->id)?>" class="btn-white btn btn-xs">Редактировать</a>
-                                                <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/remove/' . $record->id)?>" class="btn-white btn btn-xs">Удалить</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                <?php endforeach;?>
-                                </tbody>
-                            </table>
-
-                            <?php
-
-                            echo LinkPager::widget([
-                                    'pagination' => $pages,
-                                ]);
-                            ?>
-                        </div>
-                    <?php endif;?>
+                                                    <a href="' . Url::to('/admin/'. Yii::$app->controller->id .'/option-create/' . $model->id) . '"><i>[Новое значение]</i></a>
+                                                </li>';
+                                        if (!empty($model->values)) {
+                                            $item.= '<ul class="unstyled">';
+                                            foreach($model->values as $value) {
+                                                $item.= '<li>
+                                                ' . $value->name . ' - ' . $value->price .'
+                                                <div class="btn-group">
+                                                    <a href="' . Url::to('/admin/'. Yii::$app->controller->id .'/option-change/' . $value->id) . '" class="btn-white btn btn-xs">Редактировать</i></a>
+                                                    <a href="' .  Url::to('/admin/'. Yii::$app->controller->id .'/option-remove/' . $value->id) . '" class="btn-white btn btn-xs">Удалить</a>
+                                                </div>
+                                                </li>';
+                                            }
+                                            $item.= '</ul>';
+                                        }
+                                        return $item;
+                                    }
+                                ],
+                                [
+                                    'format' => 'raw',
+                                    'value' => function($model) {
+                                        return '<div class="btn-group">
+                                            <a href="' . Url::to('/admin/'. Yii::$app->controller->id .'/change/' . $model->id) . '" class="btn-white btn btn-xs">Редактировать</a>
+                                            <a href="' . Url::to('/admin/'. Yii::$app->controller->id .'/remove/' . $model->id) . '" class="btn-white btn btn-xs">Удалить</a>
+                                        </div>';
+                                    }
+                                ],
+                            ],
+                        ]); ?>
                 </div>
             </div>
         </div>

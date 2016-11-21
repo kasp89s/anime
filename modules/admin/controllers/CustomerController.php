@@ -9,7 +9,9 @@ namespace app\modules\admin\controllers;
 use app\models\Customer;
 use app\models\CustomerAddress;
 use Yii;
-use yii\data\Pagination;
+
+use app\modules\admin\models\search\CustomerSearch;
+use yii\web\NotFoundHttpException;
 
 class CustomerController extends AdminController {
 
@@ -21,21 +23,13 @@ class CustomerController extends AdminController {
             'url' => ['/admin/customer/list']
         ];
 
-        $query = Customer::find();
-        $countQuery = clone $query;
-        $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 30]);
-        $pages->pageSizeParam = false;
-        $records = $query->offset($pages->offset)
-            ->limit($pages->limit)
-            ->orderBy('id desc')
-            ->all();
+        $searchModel = new CustomerSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('list',
-            [
-                'records' => $records,
-                'pages' => $pages,
-            ]
-        );
+        return $this->render(Yii::$app->controller->action->id, [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
     }
 
     public function actionCreate()
@@ -101,5 +95,21 @@ class CustomerController extends AdminController {
         return $this->render(Yii::$app->controller->action->id, [
                 'model' => $model,
             ]);
+    }
+
+    /**
+     * Finds the Customer model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param string $id
+     * @return Customer the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModel($id)
+    {
+        if (($model = Customer::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
     }
 }
