@@ -50,11 +50,11 @@ class OrderHistory extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'orderId' => 'Order ID',
-            'orderStatus' => 'Order Status',
-            'comment' => 'Comment',
-            'isCustomerNotified' => 'Is Customer Notified',
-            'createTime' => 'Create Time',
-            'createUserId' => 'Create User ID',
+            'orderStatus' => 'Статус',
+            'comment' => 'Коментарий',
+            'isCustomerNotified' => 'Оповещен',
+            'createTime' => 'Время',
+            'createUserId' => 'Создал',
         ];
     }
 
@@ -64,5 +64,13 @@ class OrderHistory extends \yii\db\ActiveRecord
     public function getOrder()
     {
         return $this->hasOne(Order::className(), ['id' => 'orderId']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreateUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'createUserId']);
     }
 }

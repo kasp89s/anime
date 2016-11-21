@@ -6,7 +6,7 @@ return [
     'username' => 'orion',
     'password' => 'W6x1F4i1',
     'charset' => 'utf8',
-    'enableSchemaCache' => true,
+//    'enableSchemaCache' => true,
 
     // Продолжительность кеширования схемы.
     'schemaCacheDuration' => 3600,

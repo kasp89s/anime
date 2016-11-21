@@ -67,7 +67,7 @@
 <li <?php echo (Yii::$app->controller->id == 'product') ? 'class="active"' : '';?>>
     <a href="<?= Url::to('/admin/product/list')?>"><i class="fa fa-cutlery"></i> <span class="nav-label">Товары</span> </a>
 </li>
-    <li <?php echo (
+<li <?php echo (
         Yii::$app->controller->id == 'category' ||
         Yii::$app->controller->id == 'specification' ||
         Yii::$app->controller->id == 'option'
@@ -83,6 +83,21 @@
         </li>
         <li <?php echo (Yii::$app->controller->id == 'option') ? 'class="active"' : '';?>>
             <a href="<?= Url::to('/admin/option/list')?>">Список опций (атрибутов)</a>
+        </li>
+    </ul>
+</li>
+<li <?php echo (
+        Yii::$app->controller->id == 'order' ||
+        Yii::$app->controller->id == 'order-status'
+    ) ? 'class="active"' : '';?>>
+    <a href="javascript:void(0)"><i class="fa fa-shopping-cart"></i> <span class="nav-label">Заказы</span> <span
+            class="fa arrow"></span></a>
+    <ul class="nav nav-second-level collapse">
+        <li <?php echo (Yii::$app->controller->id == 'order') ? 'class="active"' : '';?>>
+            <a href="<?= Url::to('/admin/order/list')?>">Список заказов</a>
+        </li>
+        <li <?php echo (Yii::$app->controller->id == 'order-status') ? 'class="active"' : '';?>>
+            <a href="<?= Url::to('/admin/order-status/list')?>">Статусы заказа</a>
         </li>
     </ul>
 </li>

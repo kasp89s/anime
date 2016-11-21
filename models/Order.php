@@ -63,16 +63,16 @@ class Order extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'customerId' => 'Customer ID',
+            'id' => 'Номер заказа',
+            'customerId' => 'Покупатель',
             'shippingId' => 'Shipping ID',
             'paymentId' => 'Payment ID',
             'currencyCode' => 'Currency Code',
-            'orderStatus' => 'Order Status',
-            'couponCode' => 'Coupon Code',
-            'createTime' => 'Create Time',
-            'updateTime' => 'Update Time',
-            'isFinished' => 'Is Finished',
+            'orderStatus' => 'Статус заказа',
+            'couponCode' => 'Купон',
+            'createTime' => 'Дата заказа',
+            'updateTime' => 'Изменен',
+            'isFinished' => 'Закончен',
         ];
     }
     /**

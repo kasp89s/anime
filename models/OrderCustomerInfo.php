@@ -9,7 +9,7 @@ use Yii;
  *
  * @property string $id
  * @property string $orderId
- * @property string $сountryCode
+ * @property string $countryCode
  * @property string $city
  * @property string $zip
  * @property string $address
@@ -35,9 +35,9 @@ class OrderCustomerInfo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['orderId', 'сountryCode', 'address', 'fullName', 'phone1'], 'required'],
+            [['orderId', 'countryCode', 'address', 'fullName', 'phone1'], 'required'],
             [['orderId'], 'integer'],
-            [['сountryCode'], 'string', 'max' => 3],
+            [['countryCode'], 'string', 'max' => 3],
             [['city', 'address', 'fullName'], 'string', 'max' => 255],
             [['zip'], 'string', 'max' => 10],
             [['phone1'], 'string', 'max' => 15],
@@ -54,13 +54,13 @@ class OrderCustomerInfo extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'orderId' => 'Order ID',
-            'сountryCode' => 'сountry Code',
-            'city' => 'City',
-            'zip' => 'Zip',
-            'address' => 'Address',
-            'fullName' => 'Full Name',
-            'phone1' => 'Phone1',
-            'phone2' => 'Phone2',
+            'countryCode' => 'Код страны',
+            'city' => 'Город',
+            'zip' => 'Индекс',
+            'address' => 'Адресс',
+            'fullName' => 'Имя Фамилия',
+            'phone1' => 'Моб. телефон',
+            'phone2' => 'Доп. телефон',
         ];
     }
 

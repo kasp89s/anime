@@ -10,6 +10,7 @@ use app\models\BasketProduct;
 use app\models\Coupon;
 use app\models\Customer;
 use app\models\OrderCustomerInfo;
+use app\models\OrderHistory;
 use app\models\OrderProcessForm;
 use app\models\OrderProduct;
 use app\models\OrderProductAttribute;
@@ -322,7 +323,7 @@ class CabinetController extends AbstractController
 
             $customerInfo = new OrderCustomerInfo();
             $customerInfo->orderId = $order->id;
-            $customerInfo->сountryCode = $shippingMethod->countryCode;
+            $customerInfo->countryCode = $shippingMethod->countryCode;
             $customerInfo->address = $orderForm->address;
             $customerInfo->fullName = $orderForm->fullName;
             $customerInfo->phone1 = $orderForm->phone;
@@ -333,6 +334,14 @@ class CabinetController extends AbstractController
             $orderTotal->amount = $totalAmount + $totalIncrease - $totalDiscount;
             $orderTotal->currencyCode = Order::CURRENCY_CODE;
             $orderTotal->save();
+
+            $orderHistory = new OrderHistory();
+            $orderHistory->orderId = $order->id;
+            $orderHistory->orderStatus = $order->orderStatus;
+            $orderHistory->isCustomerNotified = 1;
+            $orderHistory->createTime = date('Y-m-d H:i:s', time());
+            $orderHistory->createUserId = User::DEFAULT_USER;
+            $orderHistory->save();
 
             foreach ($this->_basket->basketProducts as $basketProduct) {
                 $orderProduct = new OrderProduct();

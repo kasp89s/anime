@@ -16,6 +16,8 @@ use yii\db\ActiveRecord;
 
 class User extends ActiveRecord implements \yii\web\IdentityInterface
 {
+    const DEFAULT_USER = 0;
+
     protected $authKey;
 
     public $passwordConfirm;
