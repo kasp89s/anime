@@ -184,6 +184,7 @@ class CabinetController extends AbstractController
             ->joinWith('customerInfo')
             ->joinWith('products')
             ->joinWith('products.product')
+            ->joinWith('products.productAttributes')
             ->joinWith('total')
             ->orderBy('createTime desc')->all();
 
@@ -367,6 +368,8 @@ class CabinetController extends AbstractController
                         $orderProductAttribute->save();
                     }
                 }
+                $orderProduct->productPrice = $orderProduct->priceWithAttributes;
+                $orderProduct->save();
             }
 
             $this->sendEmail($this->user->email, Yii::$app->params['newOrderSubject'], $this->renderPartial('emailTemplates/new-order', ['order' => $order]));

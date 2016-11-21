@@ -34,6 +34,9 @@ class Order extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+
+    public $_totalWithoutCommission = false;
+
     public static function tableName()
     {
         return 'order';
@@ -155,7 +158,7 @@ class Order extends \yii\db\ActiveRecord
             return 0;
 
         if ($coupon->type == Coupon::TYPE_PERCENT) {
-            return round($this->total->amount / 100 * $coupon->value);
+            return round($this->totalWithoutCommission / 100 * $coupon->value);
         }elseif ($coupon->type == Coupon::TYPE_VALUE) {
             return $coupon->value;
         }
@@ -163,12 +166,28 @@ class Order extends \yii\db\ActiveRecord
 
     public function calculateAmountWithCommission()
     {
-        return $this->total->amount -
+        return $this->totalWithoutCommission -
         $this->getDiscountByCoupon() -
-        $this->customer->getDiscountByOrderAmount($this->total->amount) -
-        $this->payment->calculateIncrease($this->total->amount) -
-        $this->shipping->calculateIncrease($this->total->amount);
+        $this->customer->getDiscountByOrderAmount($this->totalWithoutCommission) -
+        $this->payment->calculateIncrease($this->totalWithoutCommission) -
+        $this->shipping->calculateIncrease($this->totalWithoutCommission);
     }
+
+    public function getTotalWithoutCommission()
+    {
+        if ($this->_totalWithoutCommission !== false) {
+            return $this->_totalWithoutCommission;
+        }
+
+        $total = 0;
+        foreach ($this->products as $product)
+        {
+            $total+= $product->productPrice;
+        }
+
+        return $total;
+    }
+
     /**
      * Возвращает форматированую дату.
      *
@@ -197,5 +216,54 @@ class Order extends \yii\db\ActiveRecord
         $month = $monthData[date('m', $time)];
 
         return date("d {$month} Y г.", $time);
+    }
+
+    public function awayProducts()
+    {
+        foreach ($this->products as $product) {
+            $product->product->quantityInStock-= $product->productQuantity;
+            $product->product->quantityOfSold+= $product->productQuantity;
+            $product->product->save();
+        }
+    }
+
+    public function returnProducts()
+    {
+        foreach ($this->products as $product) {
+            $product->product->quantityInStock+= $product->productQuantity;
+            $product->product->quantityOfSold-= $product->productQuantity;
+            $product->product->save();
+        }
+    }
+
+    public function recalculateGroup()
+    {
+        // Считаем сумму покупок.
+        $finishedStatuses = OrderStatus::find()->where(['isFinished' => 1])->asArray()->all();
+        $purchaseAmount = Order::find()
+            ->select('SUM(ordertotal.amount) as total, order.id')
+            ->joinWith('total')
+            ->where([
+                'order.customerId' => $this->customerId,
+                'order.orderStatus' => $finishedStatuses
+            ])
+            ->asArray()->one();
+        var_dump($purchaseAmount); exit;
+        // Находим автогруппу с подходящим лимитом.
+        $suitableGroup = CustomerGroup::find()
+            ->where([
+                'isAutomaticGroup' => 1,
+                'isActive' => 1,
+            ])
+            ->andWhere('groupAccumulatedLimit <= :amount', [':amount' => $purchaseAmount['total']])
+            ->orderBy('groupAccumulatedLimit desc')
+            ->one();
+
+        // устанавливаем текущей если найдена.
+        if (!empty($suitableGroup))
+        {
+            $this->customer->customerGroupId = $suitableGroup->id;
+            $this->customer->save();
+        }
     }
 }

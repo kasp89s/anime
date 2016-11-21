@@ -64,4 +64,48 @@ class OrderStatus extends \yii\db\ActiveRecord
     {
         return self::find()->where(['isDefault' => 1])->one()->statusCode;
     }
+
+    public function isAway($old)
+    {
+        if (
+            $old->isDefault && $this->isChargeble ||
+            $old->isDefault && $this->isPaid ||
+            $old->isDefault && $this->isShipped ||
+            $old->isDefault && $this->isPenalty ||
+            $old->isDefault && $this->isFinished
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isReturn($old)
+    {
+        if (
+            $old->isChargeble && $this->isRestock ||
+            $old->isPaid && $this->isRestock ||
+            $old->isShipped && $this->isRestock ||
+            $old->isFinished && $this->isRestock
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isRecalculateGroup($old)
+    {
+        if (
+            $old->isDefault && $this->isFinished ||
+            $old->isChargeble && $this->isFinished ||
+            $old->isShipped && $this->isFinished ||
+            $old->isPaid && $this->isFinished ||
+            $old->isPenalty && $this->isFinished
+        ) {
+            return true;
+        }
+
+        return false;
+    }
 }

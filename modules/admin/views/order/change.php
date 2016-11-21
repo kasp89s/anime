@@ -4,8 +4,6 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-$historyModel = new \app\models\OrderHistory();
-
 $customers = [];
 foreach (\app\models\Customer::find()->asArray()->all() as $record) {
     $customers[$record['id']] = $record['email'];
@@ -80,13 +78,13 @@ foreach (\app\models\OrderStatus::find()->asArray()->all() as $status) {
                             <fieldset class="form-horizontal">
                                 <?= $form->field($model, 'id') ?>
 
-                                <?= $form->field($model, 'orderStatus') ?>
+                                <?= $form->field($model, 'orderStatus')->textInput(['disabled' => 'true']) ?>
 
                                 <?= $form->field($model, 'couponCode')?>
 
                                 <?= $form->field($model, 'createTime')->textInput(['class' => 'form-control datepicker']) ?>
 
-                                <?= $form->field($model, 'isFinished')->checkbox(['value' => 1]) ?>
+                                <?= $form->field($model, 'isFinished')->checkbox(['value' => 1, 'disabled' => 'true']) ?>
 
                                 <div class="form-group">
                                     <?= Html::submitInput('Сохранить', ['class' => 'btn btn-primary']) ?>
@@ -305,17 +303,17 @@ foreach (\app\models\OrderStatus::find()->asArray()->all() as $status) {
                                         </table>
                                         <dl class="dl-horizontal m-t-md small">
                                             <dt>Сумма без комисий и скидок:</dt>
-                                            <dd><?= $model->total->amount?> <?= $model->total->currencyCode?></dd>
+                                            <dd><?= $model->totalWithoutCommission?> <?= $model->total->currencyCode?></dd>
                                             <dt>Накопительная скидка:</dt>
-                                            <dd><?= $model->customer->getDiscountByOrderAmount($model->total->amount)?> <?= $model->currencyCode?></dd>
+                                            <dd><?= $model->customer->getDiscountByOrderAmount($model->totalWithoutCommission)?> <?= $model->currencyCode?></dd>
                                             <dt>Купон:</dt>
                                             <dd><?= $model->discountByCoupon?> <?= $model->currencyCode?></dd>
                                             <dt>Комиссия оплаты:</dt>
-                                            <dd><?= $model->payment->calculateIncrease($model->total->amount)?> <?= $model->currencyCode?></dd>
+                                            <dd><?= $model->payment->calculateIncrease($model->totalWithoutCommission)?> <?= $model->currencyCode?></dd>
                                             <dt>Доставка:</dt>
-                                            <dd><?= $model->shipping->calculateIncrease($model->total->amount)?> <?= $model->currencyCode?></dd>
+                                            <dd><?= $model->shipping->calculateIncrease($model->totalWithoutCommission)?> <?= $model->currencyCode?></dd>
                                             <dt>К оплате:</dt>
-                                            <dd><?= $model->calculateAmountWithCommission()?> <?= $model->currencyCode?></dd>
+                                            <dd><?= $model->total->amount?> <?= $model->currencyCode?></dd>
                                         </dl>
                                     <?php endif;?>
                                     <h3>Добавить товар</h3>

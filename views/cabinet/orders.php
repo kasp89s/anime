@@ -99,6 +99,11 @@ use yii\helpers\Html;
                                 <div class="description-text left">
                                     <p class="description-name">
                                         <?= $product->productName?>
+                                        <?php if (!empty($product->productAttributes)):?>
+                                            <?php foreach ($product->productAttributes as $attribute):?>
+                                                <br /><?= $attribute->productOptionName?>: <?= $attribute->productOptionValueName?>
+                                            <?php endforeach;?>
+                                        <?php endif;?>
                                     </p>
                                     <p class="description-code">
                                         Код товара: <?= $product->productSku?>

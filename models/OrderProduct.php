@@ -91,4 +91,17 @@ class OrderProduct extends \yii\db\ActiveRecord
     {
         return $this->hasMany(OrderProductAttribute::className(), ['orderProductId' => 'id']);
     }
+
+    public function getPriceWithAttributes()
+    {
+        $price = $this->productPrice;
+
+        if (!empty($this->productAttributes)) {
+            foreach ($this->productAttributes as $attribute) {
+                $price+= $attribute->productAttributePrice;
+            }
+        }
+
+        return $price;
+    }
 }
