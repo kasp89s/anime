@@ -58,13 +58,13 @@ class OrderProduct extends \yii\db\ActiveRecord
             'id' => 'ID',
             'orderId' => 'Order ID',
             'productId' => 'Product ID',
-            'productSku' => 'Product Sku',
-            'productName' => 'Product Name',
-            'productQuantity' => 'Product Quantity',
-            'productPrice' => 'Product Price',
+            'productSku' => 'Артикул',
+            'productName' => 'Название',
+            'productQuantity' => 'Количество',
+            'productPrice' => 'Цена',
             'productIncomingPrice' => 'Product Incoming Price',
-            'isPreOrder' => 'Is Pre Order',
-            'currencyCode' => 'Currency Code',
+            'isPreOrder' => 'Предзаказ',
+            'currencyCode' => 'Валюта',
         ];
     }
 

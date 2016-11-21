@@ -29,13 +29,6 @@ foreach (\app\models\OrderStatus::find()->asArray()->all() as $status) {
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="input-group">
-<!--                                <a href="--><?//= Url::to('/admin/'. Yii::$app->controller->id .'/create')?><!--" class="btn btn-primary">Создать</a>-->
-                            </div>
-                        </div>
-                    </div>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -66,14 +59,6 @@ foreach (\app\models\OrderStatus::find()->asArray()->all() as $status) {
                     return $model->total->amount . ' ' . $model->total->currencyCode;
                 }
             ],
-//            'shippingId',
-//            'paymentId',
-//            'currencyCode',
-//             'status.name',
-            // 'couponCode',
-
-            // 'updateTime',
-            // 'isFinished',
             [
                 'format' => 'raw',
                 'value' => function($model) {

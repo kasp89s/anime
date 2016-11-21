@@ -4,7 +4,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-$history = new \app\models\OrderHistory();
+$historyModel = new \app\models\OrderHistory();
 
 $customers = [];
 foreach (\app\models\Customer::find()->asArray()->all() as $record) {
@@ -25,6 +25,8 @@ $statuses = [];
 foreach (\app\models\OrderStatus::find()->asArray()->all() as $status) {
     $statuses[$status['statusCode']] = $status['name'];
 }
+
+
 ?>
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
@@ -65,6 +67,9 @@ foreach (\app\models\OrderStatus::find()->asArray()->all() as $status) {
                     </li>
                     <li class="<?php if (\Yii::$app->session->hasFlash('tab') && \Yii::$app->session->getFlash('tab') == 6):?>active<?php endif;?>">
                         <a data-toggle="tab" href="#tab-6" aria-expanded="false"> Способ оплаты</a>
+                    </li>
+                    <li class="<?php if (\Yii::$app->session->hasFlash('tab') && \Yii::$app->session->getFlash('tab') == 7):?>active<?php endif;?>">
+                        <a data-toggle="tab" href="#tab-7" aria-expanded="false"> Товары</a>
                     </li>
                 </ul>
                 <div class="tab-content">
@@ -191,11 +196,11 @@ foreach (\app\models\OrderStatus::find()->asArray()->all() as $status) {
                                     <h3>Сменить статус</h3>
                                     <?php $form = ActiveForm::begin();?>
 
-                                        <?= $form->field($history, 'orderStatus')->dropDownList($statuses); ?>
+                                        <?= $form->field($historyModel, 'orderStatus')->dropDownList($statuses); ?>
 
-                                        <?= $form->field($history, 'comment')->textArea(['rows' => '3']); ?>
+                                        <?= $form->field($historyModel, 'comment')->textArea(['rows' => '3']); ?>
 
-                                        <?= $form->field($history, 'isCustomerNotified')->checkbox(['value' => 1]); ?>
+                                        <?= $form->field($historyModel, 'isCustomerNotified')->checkbox(['value' => 1]); ?>
 
                                         <div class="form-group">
                                             <?= Html::submitInput('Сохранить', ['class' => 'btn btn-primary']) ?>
@@ -250,6 +255,80 @@ foreach (\app\models\OrderStatus::find()->asArray()->all() as $status) {
                                 <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/list')?>" class="btn btn-white" type="submit">Cancel</a>
                             </div>
                             <?php ActiveForm::end(); ?>
+                        </div>
+                    </div>
+                    <div id="tab-7" class="tab-pane <?php if (\Yii::$app->session->hasFlash('tab') && \Yii::$app->session->getFlash('tab') == 7):?>active<?php endif;?>">
+                        <div class="panel-body">
+                            <div class="ibox-content">
+                                <fieldset class="form-horizontal">
+                                    <?php if (!empty($model->products)):?>
+                                        <h1>Товары в заказе</h1>
+                                        <table class="table table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th>Артикул</th>
+                                                <th>Название</th>
+                                                <th>Количество</th>
+                                                <th>Цена товара</th>
+                                                <th>Цена в заказе</th>
+                                                <th></th>
+                                            </tr>
+                                            </thead>
+                                            <?php foreach ($model->products as $product):?>
+                                                <tr>
+                                                    <td><?= $product->productSku?></td>
+                                                    <td><?= $product->productName?></td>
+                                                    <td>
+                                                        <?= Html::beginForm('/admin/order/change-product-quantity')?>
+                                                        <?= Html::activeHiddenInput($product, 'id', ['value' => $product->id])?>
+                                                        <?= Html::activeTextInput($product, 'productQuantity', ['value' => $product->productQuantity]) ?>
+                                                        <?= Html::submitButton('save', ['class' => 'btn-white btn btn-xs'])?>
+                                                        <?= Html::endForm()?>
+                                                    </td>
+                                                    <td><?= $product->product->price?></td>
+                                                    <td>
+                                                        <?= Html::beginForm('/admin/order/change-product-price')?>
+                                                        <?= Html::activeHiddenInput($product, 'id', ['value' => $product->id])?>
+                                                        <?= Html::activeTextInput($product, 'productPrice', ['value' => $product->productPrice]) ?>
+                                                        <?= Html::submitButton('save', ['class' => 'btn-white btn btn-xs'])?>
+                                                        <?= Html::endForm()?>
+                                                    </td>
+                                                    <td>
+                                                        <?= Html::beginForm('/admin/order/change-product-quantity')?>
+                                                        <?= Html::activeHiddenInput($product, 'id', ['value' => $product->id])?>
+                                                        <?= Html::activeHiddenInput($product, 'productQuantity', ['value' => 0]) ?>
+                                                        <?= Html::submitButton('удалить', ['class' => 'btn-white btn btn-xs'])?>
+                                                        <?= Html::endForm()?>
+                                                    </td>
+                                                </tr>
+                                            <?php endforeach;?>
+                                        </table>
+                                        <dl class="dl-horizontal m-t-md small">
+                                            <dt>Сумма без комисий и скидок:</dt>
+                                            <dd><?= $model->total->amount?> <?= $model->total->currencyCode?></dd>
+                                            <dt>Накопительная скидка:</dt>
+                                            <dd><?= $model->customer->getDiscountByOrderAmount($model->total->amount)?> <?= $model->currencyCode?></dd>
+                                            <dt>Купон:</dt>
+                                            <dd><?= $model->discountByCoupon?> <?= $model->currencyCode?></dd>
+                                            <dt>Комиссия оплаты:</dt>
+                                            <dd><?= $model->payment->calculateIncrease($model->total->amount)?> <?= $model->currencyCode?></dd>
+                                            <dt>Доставка:</dt>
+                                            <dd><?= $model->shipping->calculateIncrease($model->total->amount)?> <?= $model->currencyCode?></dd>
+                                            <dt>К оплате:</dt>
+                                            <dd><?= $model->calculateAmountWithCommission()?> <?= $model->currencyCode?></dd>
+                                        </dl>
+                                    <?php endif;?>
+                                    <h3>Добавить товар</h3>
+                                    <?php $form = ActiveForm::begin();?>
+                                    <?= $form->field(new \app\models\OrderProduct(), 'productSku'); ?>
+
+                                    <div class="form-group">
+                                        <?= Html::submitInput('Сохранить', ['class' => 'btn btn-primary']) ?>
+                                        <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/list')?>" class="btn btn-white" type="submit">Cancel</a>
+                                    </div>
+                                    <?php ActiveForm::end(); ?>
+                                </fieldset>
+                            </div>
                         </div>
                     </div>
                 </div>

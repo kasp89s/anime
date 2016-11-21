@@ -65,8 +65,8 @@ class Order extends \yii\db\ActiveRecord
         return [
             'id' => 'Номер заказа',
             'customerId' => 'Покупатель',
-            'shippingId' => 'Shipping ID',
-            'paymentId' => 'Payment ID',
+            'shippingId' => 'Доставка',
+            'paymentId' => 'Оплата',
             'currencyCode' => 'Currency Code',
             'orderStatus' => 'Статус заказа',
             'couponCode' => 'Купон',
@@ -147,6 +147,28 @@ class Order extends \yii\db\ActiveRecord
         return $this->hasOne(OrderTotal::className(), ['orderId' => 'id']);
     }
 
+    public function getDiscountByCoupon()
+    {
+        $coupon = Coupon::find()->where(['code' => $this->couponCode])->one();
+
+        if (empty($coupon))
+            return 0;
+
+        if ($coupon->type == Coupon::TYPE_PERCENT) {
+            return round($this->total->amount / 100 * $coupon->value);
+        }elseif ($coupon->type == Coupon::TYPE_VALUE) {
+            return $coupon->value;
+        }
+    }
+
+    public function calculateAmountWithCommission()
+    {
+        return $this->total->amount -
+        $this->getDiscountByCoupon() -
+        $this->customer->getDiscountByOrderAmount($this->total->amount) -
+        $this->payment->calculateIncrease($this->total->amount) -
+        $this->shipping->calculateIncrease($this->total->amount);
+    }
     /**
      * Возвращает форматированую дату.
      *
