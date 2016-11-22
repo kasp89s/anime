@@ -101,7 +101,13 @@ class OrderStatus extends \yii\db\ActiveRecord
             $old->isChargeble && $this->isFinished ||
             $old->isShipped && $this->isFinished ||
             $old->isPaid && $this->isFinished ||
-            $old->isPenalty && $this->isFinished
+            $old->isPenalty && $this->isFinished ||
+            $old->isFinished && $this->isDefault ||
+            $old->isFinished && $this->isChargeble ||
+            $old->isFinished && $this->isShipped ||
+            $old->isFinished && $this->isPaid ||
+            $old->isFinished && $this->isPenalty
+
         ) {
             return true;
         }

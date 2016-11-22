@@ -13,6 +13,8 @@ use Yii;
  * @property integer $isActive
  * @property string $code
  * @property string $createTime
+ *
+ * @property Customer $customer
  */
 class NewsLetterSubscriber extends \yii\db\ActiveRecord
 {
@@ -50,7 +52,16 @@ class NewsLetterSubscriber extends \yii\db\ActiveRecord
             'email' => 'Email',
             'isActive' => 'Активность',
             'code' => 'Code',
-            'createTime' => 'Время содания',
+            'createTime' => 'Время создания',
         ];
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCustomer()
+    {
+        return $this->hasOne(Customer::className(), ['id' => 'customerId']);
+    }
+
 }

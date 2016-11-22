@@ -80,7 +80,7 @@ class BannerController extends AdminController {
         $model = Banner::findOne($id);
 
         if (empty($model))
-            throw new \yii\web\NotFoundHttpException();
+            throw new NotFoundHttpException();
 
         if ($model->load($this->_post) && $model->validate()) {
             $path = Yii::getAlias('@webroot') . '/uploads/banners/' . $model->id;

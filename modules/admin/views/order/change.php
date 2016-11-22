@@ -269,13 +269,21 @@ foreach (\app\models\OrderStatus::find()->asArray()->all() as $status) {
                                                 <th>Количество</th>
                                                 <th>Цена товара</th>
                                                 <th>Цена в заказе</th>
+                                                <th>Сумма в заказе</th>
                                                 <th></th>
                                             </tr>
                                             </thead>
                                             <?php foreach ($model->products as $product):?>
                                                 <tr>
                                                     <td><?= $product->productSku?></td>
-                                                    <td><?= $product->productName?></td>
+                                                    <td>
+                                                        <?= $product->productName?>
+                                                        <?php if (!empty($product->productAttributes)):?>
+                                                            <?php foreach ($product->productAttributes as $attribute):?>
+                                                                <br /><?= $attribute->productOptionName?>: <?= $attribute->productOptionValueName?>
+                                                            <?php endforeach;?>
+                                                        <?php endif;?>
+                                                    </td>
                                                     <td>
                                                         <?= Html::beginForm('/admin/order/change-product-quantity')?>
                                                         <?= Html::activeHiddenInput($product, 'id', ['value' => $product->id])?>
@@ -292,6 +300,9 @@ foreach (\app\models\OrderStatus::find()->asArray()->all() as $status) {
                                                         <?= Html::endForm()?>
                                                     </td>
                                                     <td>
+                                                        <?= $product->productPrice * $product->productQuantity?>
+                                                    </td>
+                                                    <td>
                                                         <?= Html::beginForm('/admin/order/change-product-quantity')?>
                                                         <?= Html::activeHiddenInput($product, 'id', ['value' => $product->id])?>
                                                         <?= Html::activeHiddenInput($product, 'productQuantity', ['value' => 0]) ?>
@@ -305,20 +316,23 @@ foreach (\app\models\OrderStatus::find()->asArray()->all() as $status) {
                                             <dt>Сумма без комисий и скидок:</dt>
                                             <dd><?= $model->totalWithoutCommission?> <?= $model->total->currencyCode?></dd>
                                             <dt>Накопительная скидка:</dt>
-                                            <dd><?= $model->customer->getDiscountByOrderAmount($model->totalWithoutCommission)?> <?= $model->currencyCode?></dd>
+                                            <dd> - <?= $model->customer->getDiscountByOrderAmount($model->totalWithoutCommission)?> <?= $model->currencyCode?></dd>
                                             <dt>Купон:</dt>
-                                            <dd><?= $model->discountByCoupon?> <?= $model->currencyCode?></dd>
+                                            <dd> - <?= $model->discountByCoupon?> <?= $model->currencyCode?></dd>
                                             <dt>Комиссия оплаты:</dt>
-                                            <dd><?= $model->payment->calculateIncrease($model->totalWithoutCommission)?> <?= $model->currencyCode?></dd>
+                                            <dd> + <?= $model->payment->calculateIncrease($model->totalWithoutCommission)?> <?= $model->currencyCode?></dd>
                                             <dt>Доставка:</dt>
-                                            <dd><?= $model->shipping->calculateIncrease($model->totalWithoutCommission)?> <?= $model->currencyCode?></dd>
+                                            <dd> + <?= $model->shipping->calculateIncrease($model->totalWithoutCommission)?> <?= $model->currencyCode?></dd>
                                             <dt>К оплате:</dt>
                                             <dd><?= $model->total->amount?> <?= $model->currencyCode?></dd>
                                         </dl>
                                     <?php endif;?>
                                     <h3>Добавить товар</h3>
-                                    <?php $form = ActiveForm::begin();?>
-                                    <?= $form->field(new \app\models\OrderProduct(), 'productSku'); ?>
+                                    <?php $form = ActiveForm::begin(['action' => '/admin/order/add-product', 'enableAjaxValidation' => true]);?>
+
+                                    <?= $form->field($newProduct, 'orderId')->hiddenInput(['value' => $model->id])->label(false); ?>
+
+                                    <?= $form->field($newProduct, 'productSku'); ?>
 
                                     <div class="form-group">
                                         <?= Html::submitInput('Сохранить', ['class' => 'btn btn-primary']) ?>

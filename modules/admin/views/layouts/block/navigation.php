@@ -62,7 +62,10 @@
     <a href="<?= Url::to('/admin/payment-method/list')?>"><i class="fa fa-cc-visa"></i> <span class="nav-label">Способы оплаты</span> </a>
 </li>
     <li <?php echo (Yii::$app->controller->id == 'news') ? 'class="active"' : '';?>>
-    <a href="<?= Url::to('/admin/news/list')?>"><i class="fa fa-h-square"></i> <span class="nav-label">Новости</span> </a>
+    <a href="<?= Url::to('/admin/news/list')?>"><i class="fa fa-newspaper-o"></i> <span class="nav-label">Новости</span> </a>
+</li>
+<li <?php echo (Yii::$app->controller->id == 'news-letter-subscriber') ? 'class="active"' : '';?>>
+    <a href="<?= Url::to('/admin/news-letter-subscriber/list')?>"><i class="fa fa-twitch"></i> <span class="nav-label">Подписчики</span> </a>
 </li>
 <li <?php echo (Yii::$app->controller->id == 'product') ? 'class="active"' : '';?>>
     <a href="<?= Url::to('/admin/product/list')?>"><i class="fa fa-cutlery"></i> <span class="nav-label">Товары</span> </a>

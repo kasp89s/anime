@@ -4,12 +4,16 @@ namespace app\modules\admin\controllers;
 
 use app\models\Coupon;
 use app\models\OrderHistory;
+use app\models\OrderProduct;
 use app\models\OrderStatus;
+use app\models\Product;
 use Yii;
 use app\models\Order;
 use app\modules\admin\models\search\OrderSearch;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
+use yii\widgets\ActiveForm;
 
 /**
  * OrderController implements the CRUD actions for Order model.
@@ -60,6 +64,7 @@ class OrderController extends AdminController
 
         $couponCode = $model->couponCode;
         $historyModel = new OrderHistory();
+        $newProduct = new OrderProduct();
 
         if ($model->load($this->_post) && $model->validate()) {
             $model->updateTime = date('Y-m-d H:i:s', time());
@@ -79,15 +84,28 @@ class OrderController extends AdminController
                         ])
                     ->one();
 
-                if (!empty($coupon)) {
-                    $model->total->amount = $model->calculateAmountWithCommission();
-                    $model->total->save();
-                } else {
+                if (empty($coupon)) {
                     $model->couponCode = null;
                 }
             }
 
             $model->save();
+
+            $model->recalculateTotal();
+
+            if (!empty($this->_post['Order']['customerId'])) {
+                Yii::$app->session->setFlash('save', 'Изменения успешно сохранены.');
+                Yii::$app->session->setFlash('tab', 2);
+            }
+            if (!empty($this->_post['Order']['shippingId'])) {
+                Yii::$app->session->setFlash('save', 'Изменения успешно сохранены.');
+                Yii::$app->session->setFlash('tab', 5);
+            }
+            if (!empty($this->_post['Order']['paymentId'])) {
+                Yii::$app->session->setFlash('save', 'Изменения успешно сохранены.');
+                Yii::$app->session->setFlash('tab', 6);
+            }
+
             Yii::$app->session->setFlash('save', 'Изменения успешно сохранены.');
         }
 
@@ -128,7 +146,91 @@ class OrderController extends AdminController
         return $this->render(Yii::$app->controller->action->id, [
                 'model' => $model,
                 'historyModel' => $historyModel,
+                'newProduct' => $newProduct,
             ]);
+    }
+
+    public function actionChangeProductQuantity()
+    {
+        $orderProduct = OrderProduct::findOne($this->_post['OrderProduct']['id']);
+
+        if (empty($orderProduct))
+            throw new NotFoundHttpException();
+
+        if ($this->_post['OrderProduct']['productQuantity'] > 0) {
+            $orderProduct->productQuantity = $this->_post['OrderProduct']['productQuantity'];
+            $orderProduct->save();
+        }
+
+        if ($this->_post['OrderProduct']['productQuantity'] == 0) {
+            $orderProduct->delete();
+        }
+
+        $orderProduct->order->recalculateTotal();
+
+        Yii::$app->session->setFlash('save', 'Изменения успешно сохранены.');
+        Yii::$app->session->setFlash('tab', 7);
+        return $this->redirect(Yii::$app->request->referrer);
+    }
+
+    public function actionChangeProductPrice()
+    {
+        $orderProduct = OrderProduct::findOne($this->_post['OrderProduct']['id']);
+
+        if (empty($orderProduct))
+            throw new NotFoundHttpException();
+
+        if ($this->_post['OrderProduct']['productPrice'] > 0) {
+            $orderProduct->productPrice = $this->_post['OrderProduct']['productPrice'];
+            $orderProduct->save();
+        }
+
+        if ($this->_post['OrderProduct']['productPrice'] == 0) {
+            $orderProduct->delete();
+        }
+
+        $orderProduct->order->recalculateTotal();
+
+        Yii::$app->session->setFlash('save', 'Изменения успешно сохранены.');
+        Yii::$app->session->setFlash('tab', 7);
+        return $this->redirect(Yii::$app->request->referrer);
+    }
+
+    public function actionAddProduct()
+    {
+        if (Yii::$app->request->isAjax) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            $model = new OrderProduct();
+
+            $product = Product::find()->where(['sku' => $this->_post['OrderProduct']['productSku']])->one();
+
+            if (empty($product)) {
+                $model->addError('orderproduct-productsku', 'Товар не существует');
+            }
+
+//            return ActiveForm::validate($model);
+            return $model->errors;
+        }
+
+        if (Yii::$app->request->isPost) {
+            $product = Product::find()->where(['sku' => $this->_post['OrderProduct']['productSku']])->one();
+            $model = new OrderProduct();
+            $model->orderId = $this->_post['OrderProduct']['orderId'];
+            $model->productId = $product->id;
+            $model->productSku = $this->_post['OrderProduct']['productSku'];
+            $model->productName = $product->name;
+            $model->productQuantity = Product::DEFAULT_QUANTITY;
+            $model->productPrice = $product->realPrice;
+            $model->productIncomingPrice = $product->incomingPrice->price;
+            $model->currencyCode = $product->currencyCode;
+            $model->save();
+
+            $model->order->recalculateTotal();
+
+            Yii::$app->session->setFlash('save', 'Изменения успешно сохранены.');
+            Yii::$app->session->setFlash('tab', 7);
+            return $this->redirect(Yii::$app->request->referrer);
+        }
     }
 
     /**
@@ -143,7 +245,7 @@ class OrderController extends AdminController
         if (($model = Order::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException();
         }
     }
 }

@@ -168,8 +168,8 @@ class Order extends \yii\db\ActiveRecord
     {
         return $this->totalWithoutCommission -
         $this->getDiscountByCoupon() -
-        $this->customer->getDiscountByOrderAmount($this->totalWithoutCommission) -
-        $this->payment->calculateIncrease($this->totalWithoutCommission) -
+        $this->customer->getDiscountByOrderAmount($this->totalWithoutCommission) +
+        $this->payment->calculateIncrease($this->totalWithoutCommission) +
         $this->shipping->calculateIncrease($this->totalWithoutCommission);
     }
 
@@ -182,7 +182,7 @@ class Order extends \yii\db\ActiveRecord
         $total = 0;
         foreach ($this->products as $product)
         {
-            $total+= $product->productPrice;
+            $total+= $product->productPrice * $product->productQuantity;
         }
 
         return $total;
@@ -239,23 +239,23 @@ class Order extends \yii\db\ActiveRecord
     public function recalculateGroup()
     {
         // Считаем сумму покупок.
-        $finishedStatuses = OrderStatus::find()->where(['isFinished' => 1])->asArray()->all();
+        $finishedStatuses = OrderStatus::find()->select('statusCode')->where(['isFinished' => 1])->asArray()->one();
         $purchaseAmount = Order::find()
-            ->select('SUM(ordertotal.amount) as total, order.id')
-            ->joinWith('total')
+            ->select('SUM(amount) as sum, order.id')
+            ->joinWith('total', false)
             ->where([
                 'order.customerId' => $this->customerId,
                 'order.orderStatus' => $finishedStatuses
             ])
             ->asArray()->one();
-        var_dump($purchaseAmount); exit;
+
         // Находим автогруппу с подходящим лимитом.
         $suitableGroup = CustomerGroup::find()
             ->where([
                 'isAutomaticGroup' => 1,
                 'isActive' => 1,
             ])
-            ->andWhere('groupAccumulatedLimit <= :amount', [':amount' => $purchaseAmount['total']])
+            ->andWhere('groupAccumulatedLimit <= :amount', [':amount' => $purchaseAmount['sum']])
             ->orderBy('groupAccumulatedLimit desc')
             ->one();
 
@@ -265,5 +265,12 @@ class Order extends \yii\db\ActiveRecord
             $this->customer->customerGroupId = $suitableGroup->id;
             $this->customer->save();
         }
+    }
+
+    public function recalculateTotal()
+    {
+        $totalWithCommission = $this->calculateAmountWithCommission();
+        $this->total->amount = $totalWithCommission;
+        $this->total->save();
     }
 }
