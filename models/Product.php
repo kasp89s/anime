@@ -252,4 +252,19 @@ class Product extends \yii\db\ActiveRecord
 
         return $this->realPrice;
     }
+
+    public function getCommentsRate()
+    {
+        if (empty($this->comments)) {
+            return 0;
+        }
+
+        $totalRate = 0;
+        foreach ($this->comments as $comment)
+        {
+            $totalRate+= $comment->rating;
+        }
+
+        return round($totalRate / count($this->comments));
+    }
 }

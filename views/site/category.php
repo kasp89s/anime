@@ -91,7 +91,7 @@ use yii\helpers\Html;
                             <b class="new-price"><?= number_format($product->realPrice, 0, '', ' ')?> <?= $product->currencyCode?>.</b>
                         </div>
 
-                        <button class="button">В КОРЗИНУ</button>
+                        <a href="<?= Url::to('/product/' . $product->id)?>" class="button">В КОРЗИНУ</a>
                     </div>
                 </div>
                     <?php endforeach;?>

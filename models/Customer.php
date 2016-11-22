@@ -112,6 +112,20 @@ class Customer extends \yii\db\ActiveRecord
         return $this->hasMany(Product::className(), ['id' => 'productId'])->viaTable('wishlist', ['customerId' => 'id']);
     }
 
+    public function getPurchaseAmount()
+    {
+        $finishedStatuses = OrderStatus::find()->select('statusCode')->where(['isFinished' => 1])->asArray()->one();
+
+        $purchaseAmount = Order::find()
+            ->select('SUM(amount) as sum, order.id')
+            ->joinWith('total', false)
+            ->where([
+                    'order.customerId' => $this->id,
+                    'order.orderStatus' => $finishedStatuses
+                ])
+            ->asArray()->one();
+        return (int) $purchaseAmount['sum'];
+    }
     /**
      * Validates password
      *

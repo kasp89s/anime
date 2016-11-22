@@ -157,7 +157,7 @@ $registration = new \app\models\RegisterForm();
     <div class="info col-xs-12 col-md-7 col-lg-6">
         <div class="worktime">
             Время работы: пн-вс. с 10:00 до 18:00 / +38 (063) <span>467-27-36</span>
-            <a href="<?= Url::to('/'. $this->params['pages']['contacts']->code)?>">все контакты</a>
+            <a href="<?= Url::to('/page/'. $this->params['pages']['contacts']->code)?>">все контакты</a>
         </div>
         <form action="" class="search">
             <input type="text" name="s" placeholder="ПОИСК ПО САЙТУ">

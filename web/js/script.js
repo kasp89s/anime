@@ -114,7 +114,8 @@ $(document).ready(function(){
 	$('.remove-number-block').click(function(){
 		console.log('hwiehf');
 		$(this).parent().removeClass("active");
-	})
+	});
+
 	$(document).on('click','.remove-number-block',function(){
 		var parent =$(this).parent()
 		parent.removeClass("active");
@@ -134,7 +135,8 @@ $(document).ready(function(){
 
 	$('.remove-address-block').click(function(){
 		$(this).parent().removeClass("active");
-	})
+	});
+
 	$(document).on('click','.remove-address-block',function(){
 		var parent =$(this).parent()
 		parent.removeClass("active");
@@ -272,7 +274,7 @@ $(document).ready(function(){
 				);
 	});
 
-    $('ul.rating li').mouseover(
+    $('ul.rating.active li').mouseover(
         function () {
             $(this).addClass('active');
             var count = $(this).prevAll("li").addClass('active').length;

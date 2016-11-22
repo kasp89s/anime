@@ -42,7 +42,11 @@ use app\components\CommentWidget;
                         <?php echo $product->realPrice?>
                     </span>
                     <?php echo $product->currencyCode?>.
-                    <span>В наличии <?php echo $product->quantityInStock?> шт. </span>
+                    <?php if ($product->quantityInStock > 0):?>
+                        <span>В наличии <?php echo $product->quantityInStock?> шт. </span>
+                    <?php else:?>
+                        <span>Нет в наличии. </span>
+                    <?php endif;?>
                 </p>
                 <button class="add-product" data-id="<?php echo $product->id?>">
                     Добавить в корзину
@@ -54,15 +58,9 @@ use app\components\CommentWidget;
                     </button>
                     <?php endif;?>
                     <ul class="rating">
-                        <li class="active"></li>
-                        <li class="active"></li>
-                        <li class="active"></li>
-                        <li class="active"></li>
-                        <li class="active"></li>
+                        <?= str_repeat('<li class="active"></li>', $product->commentsRate)?><?= str_repeat('<li></li>', 5 - $product->commentsRate)?>
                     </ul>
-                    <span>
-                                3 отзыва
-                            </span>
+                    <span><?= count($product->comments)?> отзыва</span>
                 </div>
                 <?= Html::beginForm('', 'post', ['id' => 'option-form']); ?>
                 <?= Html::input('hidden', 'productId', $product->id);?>
@@ -108,7 +106,7 @@ use app\components\CommentWidget;
                     Расчёт идёт при получении заказа в отделении транспортной компании.
                 </p>
                 <p>
-                    <a href="<?= Url::to('/'. $this->params['pages']['delivery']->code)?>">
+                    <a href="<?= Url::to('/page/'. $this->params['pages']['delivery']->code)?>">
                         Читать подробнее...
                     </a>
                 </p>

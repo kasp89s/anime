@@ -37,7 +37,7 @@
                 <span>
                             <?php echo $this->params['user']->group->groupDiscount?>%
                         </span>
-                <a href="#">
+                <a href="<?= Url::to('/page/'. $this->params['pages']['discount_system']->code)?>">
                     Узнать подробнее о системе скидок!
                 </a>
             </p>
@@ -46,7 +46,7 @@
                             Общая сумма ваших заказов по программе
                         </span>
                 <span>
-                            (накопительная скидка): {order_sum} грн.
+                            (накопительная скидка): <?= $this->params['user']->purchaseAmount?> грн.
                         </span>
             </p>
         </div>

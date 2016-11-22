@@ -49,16 +49,16 @@ $comment = new \app\models\Comment();
 
     <?= $form->field($comment, 'rating')->hiddenInput(['value' => 4])->label(false) ?>
 
-    <?= $form->field($comment, 'message')->textArea(['placeholder' => 'Ваш отзыв'])->label(false) ?>
+    <?= $form->field($comment, 'message')->textArea(['placeholder' => 'Ваш отзыв', 'value' => ''])->label(false) ?>
 
-    <?= $form->field($comment, 'userName') ?>
+    <?= $form->field($comment, 'userName')->input('text', ['value' => !empty($this->params['user']->address->fullName) ? $this->params['user']->address->fullName : '']) ?>
 
     <?= $form->field($comment, 'userEmail')->input('email', ['value' => !empty($this->params['user']->email) ? $this->params['user']->email : '']) ?>
 
     <div class="comments-control clearfix">
         <div class="left">
             <span>Оценка</span>
-            <ul class="rating">
+            <ul class="rating active">
                 <li class="active"></li>
                 <li class="active"></li>
                 <li class="active"></li>
