@@ -8,7 +8,7 @@ use yii\helpers\Url;
                                 <?php if (empty($model->basketProducts)):?>
                                 Ваша корзина пуста
                                 <?php else:?>
-									<?php echo \Yii::t('app', '{n, plural, =0{Ваша корзина пуста} =1{В корзине # товар} few{В корзине # товара} many{В корзине # товаров}}', ['n' => count($model->basketProducts)]);?>
+									В корзине <?= count($model->basketProducts)?> <?php echo \Yii::numberEnd(count($model->basketProducts), 'товар', ['', 'а', 'ов']);?>
                                 <?php endif;?>
                             </a>
 						</span>
