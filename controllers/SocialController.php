@@ -119,7 +119,8 @@ class SocialController extends AbstractController
             $customer->authID = (string) $params['id'];
             $customer->authMethod = $method;
             if (!$customer->validate()) {
-                $errors = end($customer->getErrors());
+                $errors = $customer->getErrors();
+                $errors = end($errors);
                 throw new \yii\web\NotFoundHttpException($errors[0]);
             } else {
                 $customer->save();
