@@ -253,7 +253,7 @@ class CabinetController extends AbstractController
 
         $paymentMethods = PaymentMethod::find()->all();
 
-        $costumerGroupDiscount = $this->user->getDiscountByOrderAmount($totalAmount);
+        $costumerGroupDiscount = !empty($this->user) ? $this->user->getDiscountByOrderAmount($totalAmount) : 0;
 
         $couponDiscount = null;
 
@@ -302,7 +302,7 @@ class CabinetController extends AbstractController
             $paymentMethod = PaymentMethod::findOne($orderForm->payment);
 
             $totalAmount = $this->_basket->productsPrice;
-            $totalDiscount = $this->user->getDiscountByOrderAmount($totalAmount);
+            $totalDiscount = !empty ($this->user) ? $this->user->getDiscountByOrderAmount($totalAmount) : 0;
             $totalIncrease = $shippingMethod->calculateIncrease($totalAmount);
             $totalIncrease+= $paymentMethod->calculateIncrease($totalAmount);
             if (!empty($orderForm->couponCode)) {
@@ -313,7 +313,7 @@ class CabinetController extends AbstractController
             }
 
             $order = new Order();
-            $order->customerId = $this->user->id;
+            $order->customerId = !empty ($this->user) ? $this->user->id : Customer::DEFAULT_CUSTOMER_ID;
             $order->shippingId = $orderForm->shipping;
             $order->paymentId = $orderForm->payment;
             $order->currencyCode = Order::CURRENCY_CODE;
@@ -372,7 +372,9 @@ class CabinetController extends AbstractController
                 $orderProduct->save();
             }
 
-            $this->sendEmail($this->user->email, Yii::$app->params['newOrderSubject'], $this->renderPartial('emailTemplates/new-order', ['order' => $order]));
+            //@todo Добавить для не авторизированого юзера ввод email.
+            $email = !empty($this->user) ? $this->user->email : 'default@mail.com';
+            $this->sendEmail($email, Yii::$app->params['newOrderSubject'], $this->renderPartial('emailTemplates/new-order', ['order' => $order]));
             BasketProduct::deleteAll('basketId = :id', [':id' => $this->_basket->id]);
         }
 

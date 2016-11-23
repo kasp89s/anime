@@ -36,9 +36,9 @@ use yii\widgets\ActiveForm;
                         Контактные данные
                     </p>
 
-                    <?= $form->field($orderForm, 'fullName')->textInput(['value' => $this->params['user']->address->fullName]) ?>
+                    <?= $form->field($orderForm, 'fullName')->textInput(['value' => !empty($this->params['user']) ? $this->params['user']->address->fullName : '']) ?>
 
-                    <?= $form->field($orderForm, 'phone')->textInput(['value' => $this->params['user']->address->phone1]) ?>
+                    <?= $form->field($orderForm, 'phone')->textInput(['value' => !empty($this->params['user']) ? $this->params['user']->address->phone1 : '']) ?>
                 </div>
                 <div class="order-info-row">
                     <p class="number-title">
@@ -47,7 +47,7 @@ use yii\widgets\ActiveForm;
                                 </span>
                         Выбор способов доставки и оплаты
                     </p>
-                    <?= $form->field($orderForm, 'address')->textInput(['value' => $this->params['user']->address->address]) ?>
+                    <?= $form->field($orderForm, 'address')->textInput(['value' => !empty($this->params['user']) ? $this->params['user']->address->address : '']) ?>
                 </div>
                 <div class="order-info-row">
                     <div class="form-row clearfix">

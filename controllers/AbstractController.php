@@ -49,9 +49,10 @@ class AbstractController extends Controller {
             Yii::$app->view->params['pages'][$page->code] = $page;
         }
 
-        $this->_sessionId = session_id();
+        $this->instanceBasketSession();
 
         if (!empty($this->user->id)) {
+            // Заходит авторизированый пользователь.
             $this->_basket = Basket::find()
                 ->where(['customerId' => $this->user->id])
                 ->joinWith('basketProducts')
@@ -60,13 +61,40 @@ class AbstractController extends Controller {
                 ->joinWith('basketProducts.product.discount')
                 ->one();
 
+            // Если пользователь зашол с другого компютера и авторизировался синхронизируем его корзину.
+            if (!empty($this->_basket) && $this->_sessionId != $this->_basket->sessionId) {
+                Yii::$app->response->cookies->add(new \yii\web\Cookie([
+                        'name' => '_sid',
+                        'value' => $this->_basket->sessionId,
+                ]));
+
+                // И удалим корзину гостя. Перенеся все что в ней было в корзину пользователя.
+                Basket::synchronization($this->_sessionId, $this->_basket);
+
+                $this->_sessionId = $this->_basket->sessionId;
+            }
+
+            // Если пользователь авторизирован но у него нет корзины значить он новый.
             if (empty($this->_basket)) {
+                // Создаем корзину.
                 $this->_basket = new Basket();
                 $this->_basket->customerId = $this->user->id;
-                $this->_basket->sessionId = $this->_sessionId;
+                $this->_basket->sessionId = md5(time());
                 $this->_basket->save();
+
+                // Обновим сессию.
+                Yii::$app->response->cookies->add(new \yii\web\Cookie([
+                        'name' => '_sid',
+                        'value' => $this->_basket->sessionId,
+                    ]));
+
+                // И удалим корзину гостя. Перенеся все что в ней было в корзину пользователя.
+                Basket::synchronization($this->_sessionId, $this->_basket);
+
+                $this->_sessionId = $this->_basket->sessionId;
             }
         } else {
+            // Заходит гость.
             $this->_basket = Basket::find()
                 ->where(['sessionId' => $this->_sessionId])
                 ->joinWith('basketProducts')
@@ -90,6 +118,19 @@ class AbstractController extends Controller {
             'label' => 'Главная',
             'url' => ['/']
         ];
+    }
+
+    protected function instanceBasketSession()
+    {
+        $this->_sessionId = Yii::$app->request->cookies->getValue('_sid');
+
+        if (empty($this->_sessionId)) {
+            $this->_sessionId = md5(time());
+            Yii::$app->response->cookies->add(new \yii\web\Cookie([
+                    'name' => '_sid',
+                    'value' => $this->_sessionId,
+                ]));
+        }
     }
 
     public function actionLogin()

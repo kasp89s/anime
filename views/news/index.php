@@ -11,31 +11,8 @@ use yii\helpers\Html;
 </div>
 <div class="content-container clearfix">
     <div class="fix-size-aside left">
-        <h3>
-            Категории
-        </h3>
-        <ul>
-            <li>
-                <a href="#">
-                    Новинки <span>(110)</span>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    Предзаказы <span>(15)</span>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    Новости магазина<span>(10)</span>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    Акции и распродажи<span>(5)</span>
-                </a>
-            </li>
-        </ul>
+        <h3>&nbsp;</h3>
+
     </div>
     <div class="responsive-container left">
         <h3>
@@ -47,13 +24,17 @@ use yii\helpers\Html;
                         Сортировка:
                     </span>
                 <ul>
-                    <li>Новинки</li>
-                    <li>Популярные</li>
+                    <li class="<?= !empty($_GET['time']) ? 'active' : ''?>"
+                        data-url="<?= Url::to('/'. Yii::$app->controller->id . '?' . http_build_query(array_merge($_GET, ['time' => !empty($_GET['time']) ? 0 : 1])))?>">
+                        Новинки
+                    </li>
+                    <li class="<?= !empty($_GET['view']) ? 'active' : ''?>"
+                        data-url="<?= Url::to('/'. Yii::$app->controller->id . '?' . http_build_query(array_merge($_GET, ['view' => !empty($_GET['view']) ? 0 : 1])))?>">
+                        Популярные
+                    </li>
 
                 </ul>
-                <span class="reset-filter">
-                            Сбросить сортировку
-                        </span>
+                <span class="reset-filter" data-url="<?= Url::to('/'. Yii::$app->controller->id)?>">Сбросить сортировку</span>
             </div>
             <div class="right">
                         <span class="result">

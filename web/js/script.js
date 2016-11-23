@@ -144,10 +144,12 @@ $(document).ready(function(){
 
 	//filter
 	$('.filter li').click(function(){
-		$(this).toggleClass("active");
+        $(this).toggleClass("active");
+        location.href = $(this).data('url');
 	});
 	$(".reset-filter").click(function(){
 		$(".filter li").removeClass("active");
+        location.href = $(this).data('url');
 	});
 	//==== Promo ======
 	$('.enter-promo').click(function(){

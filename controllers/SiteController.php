@@ -149,7 +149,28 @@ class SiteController extends AbstractController
         $query->joinWith('discount');
         $query->where(['productcategoryrelation.productCategoryId' => $id]);
         $query->andWhere('productmarker.isActive = 1 AND productmarker.isSale = 1');
-        $query->orderBy('product.id desc');
+
+        if (!empty($_GET['time']))
+            $query->orderBy('updateTime desc');
+
+        if (!empty($_GET['price_d']))
+            $query->orderBy('price desc');
+
+        if (!empty($_GET['price_a']))
+            $query->orderBy('price asc');
+
+        if (!empty($_GET['name_a']))
+            $query->orderBy('name asc');
+
+        if (!empty($_GET['name_d']))
+            $query->orderBy('name desc');
+
+        if (!empty($_GET['stock']))
+            $query->orderBy('quantityInStock desc');
+
+        if (!empty($_GET['sold']))
+            $query->orderBy('quantityOfSold desc');
+
         $countQuery = clone $query;
         $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 20]);
         $pages->pageSizeParam = false;

@@ -38,7 +38,7 @@ foreach (\app\models\OrderStatus::find()->asArray()->all() as $status) {
                 'label' => 'Имя',
                 'format' => 'raw',
                 'value' => function($model) {
-                    return $model->customer->address->fullName;
+                    return $model->customerInfo->fullName;
                 }
             ],
             'createTime',

@@ -86,4 +86,28 @@ class Basket extends \yii\db\ActiveRecord
 
         return $amount;
     }
+
+    /**
+     * Выполняет синхронизацию корзины гостя и авторизированого пользователя.
+     *
+     * @param string $oldSession Идентификатор старой сессии.
+     * @param Basket $current    Текущая корзина.
+     */
+    public static function synchronization($oldSession, &$current)
+    {
+        $oldBasket = self::find()->where(['sessionId' => $oldSession])->one();
+
+        if (!empty($oldBasket)) {
+            if (!empty($oldBasket->basketProducts)) {
+                foreach ($oldBasket->basketProducts as $product) {
+                    $product->basketId = $current->id;
+                    $product->save();
+                }
+            }
+
+            $oldBasket->delete();
+
+            $current = self::find()->where(['customerId' => $current->customerId])->one();
+        }
+    }
 }

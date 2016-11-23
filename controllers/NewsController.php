@@ -104,10 +104,15 @@ class NewsController extends AbstractController
         $countQuery = clone $query;
         $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 5]);
         $pages->pageSizeParam = false;
-        $records = $query->offset($pages->offset)
-            ->limit($pages->limit)
-            ->orderBy('publishTime desc')
-            ->all();
+        $query->offset($pages->offset)->limit($pages->limit);
+
+        if (!empty($_GET['time']))
+            $query->orderBy('publishTime desc');
+
+        if (!empty($_GET['view']))
+            $query->orderBy('publishTime desc');
+
+        $records = $query->all();
 
         return $this->render(Yii::$app->controller->action->id, [
             'records' => $records,
