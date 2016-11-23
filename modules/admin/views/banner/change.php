@@ -34,9 +34,9 @@
                     <?= Html::img('/uploads/banners/' . $model->id .'/' . $model->imageFileName, ['class' => 'img-rounded img-md']);?>
                     <?= $form->field($model, 'image')->fileInput(['accept' => 'image/*'])?>
                     <div class="hr-line-dashed"></div>
-                    <?= $form->field($model, 'startTime')->textInput(['class' => 'form-control datepicker', 'value' => date('Y-m-d', time())]) ?>
+                    <?= $form->field($model, 'startTime')->textInput(['class' => 'form-control datepicker']) ?>
                     <div class="hr-line-dashed"></div>
-                    <?= $form->field($model, 'endTime')->textInput(['class' => 'form-control datepicker', 'value' => date('Y-m-d', time())]) ?>
+                    <?= $form->field($model, 'endTime')->textInput(['class' => 'form-control datepicker']) ?>
                     <div class="hr-line-dashed"></div>
                     <?= $form->field($model, 'isActive')->checkbox(['value' => 1]) ?>
                     <div class="hr-line-dashed"></div>

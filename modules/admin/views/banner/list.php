@@ -45,7 +45,7 @@ use yii\helpers\Html;
                                 }
                             ],
                             'startTime',
-                            // 'endTime',
+                             'endTime',
                             // 'isActive',
                             // 'createTime',
                             // 'updateTime',
