@@ -66,7 +66,7 @@ class SiteController extends AbstractController
         $this->vk = new Vk([
             'client_id' => Yii::$app->params['social']['vk']['id'],
             'client_secret' => Yii::$app->params['social']['vk']['secret'],
-            'scope' => 'email',
+            'scope' => ['email'],
             'redirect_uri' => 'http://' . Yii::$app->getRequest()->serverName . '/social/vk',
         ]);
 
