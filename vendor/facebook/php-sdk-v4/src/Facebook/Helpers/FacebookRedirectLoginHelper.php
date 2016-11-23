@@ -218,7 +218,7 @@ class FacebookRedirectLoginHelper
             return null;
         }
 
-        $this->validateCsrf();
+        //$this->validateCsrf();
 
         $redirectUrl = $redirectUrl ?: $this->urlDetectionHandler->getCurrentUrl();
         // At minimum we need to remove the state param
