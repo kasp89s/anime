@@ -36,11 +36,6 @@ class AbstractController extends Controller {
 
     public function init()
     {
-        $this->session = Yii::$app->session;
-        if (!$this->session->isActive) {
-            $this->session->open();
-        }
-
 		if (\Yii::$app->session->get('user')) {
 			$this->user = \Yii::$app->session->get('user');
 		}
