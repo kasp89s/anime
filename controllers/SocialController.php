@@ -118,13 +118,17 @@ class SocialController extends AbstractController
             $customer->registrationIp = $_SERVER['REMOTE_ADDR'];
             $customer->authID = (string) $params['id'];
             $customer->authMethod = $method;
-
-            $customer->save();
+            if (!$customer->validate()) {
+                var_dump($customer->getErrors());
+                exit;
+            } else {
+                $customer->save();
 
                 $customerAddress = new CustomerAddress();
                 $customerAddress->customerId = $customer->id;
                 $customerAddress->fullName = $params['name'];
                 $customerAddress->save(false);
+            }
         }
 
         \Yii::$app->session->set('user', $customer);
