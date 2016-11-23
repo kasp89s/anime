@@ -119,16 +119,11 @@ class SocialController extends AbstractController
             $customer->authID = (string) $params['id'];
             $customer->authMethod = $method;
 
-            if (!$customer->validate()) {
-                var_dump($customer->getErrors());
-                exit;
-            } else {
-                $customer->save();
+            $customer->save(false);
 
                 $customerAddress = new CustomerAddress();
                 $customerAddress->customerId = $customer->id;
                 $customerAddress->save(false);
-            }
         }
 
         \Yii::$app->session->set('user', $customer);
