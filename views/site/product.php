@@ -61,7 +61,7 @@ use app\components\CommentWidget;
                         <?= str_repeat('<li class="active"></li>', $product->commentsRate)?><?= str_repeat('<li></li>', 5 - $product->commentsRate)?>
                     </ul>
                     <span>
-                           <?= \Yii::t('app', '{n, plural, =0{нет отзывов} =1{# отзыв} few{# отзыва} many{# отзывов}}', ['n' => count($product->comments)]);?>
+                           <?php echo \Yii::t('app', '{n, plural, =0{нет отзывов} =1{# отзыв} few{# отзыва} many{# отзывов}}', ['n' => count($product->comments)]);?>
                     </span>
                 </div>
                 <?= Html::beginForm('', 'post', ['id' => 'option-form']); ?>
