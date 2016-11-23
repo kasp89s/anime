@@ -40,7 +40,7 @@ use yii\helpers\Html;
                                     'format' => 'raw',
                                     'filter' => false,
                                     'value' => function($model) {
-                                        return Html::img('/uploads/banners/' . $model->id .'/' . $model->imageFileName, ['class' => 'img-rounded img-md']);
+                                        return Html::img('/uploads/news/' . $model->id .'/' . $model->imageFileName, ['class' => 'img-rounded img-md']);
                                     }
                                 ],
                                 // 'formatedShortContent:ntext',
