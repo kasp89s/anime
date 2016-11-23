@@ -32,8 +32,8 @@ return [
             'link' => 'https://twitter.com',
         ],
         'vk' => [
-            'id' => '5502193',
-            'secret' => 'sdtJaR3vwe2YHdTedIA4',
+            'id' => '5743793',
+            'secret' => 'tsQnLise5VbFunL9XvyB',
             'link' => 'https://vk.com',
         ],
         'google' => [
@@ -45,8 +45,8 @@ return [
             'ClientSecret' => '33154ec4b10e31dcc841c294823e44f9',
         ],
         'facebook' => [
-            'id' => '527659790751462',
-            'secret' => 'f27475e7bf861149ff8a8a2e567cd207',
+            'id' => '100387777116770',
+            'secret' => 'db4b424382997f080b6a9465e0285af6',
             'link' => 'https://www.facebook.com',
         ],
         'yahoo' => [
