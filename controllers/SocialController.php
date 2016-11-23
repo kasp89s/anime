@@ -51,7 +51,7 @@ class SocialController extends AbstractController
             $this->auth([
                     'id' => (string) $user[0]['id'],
                     'name' => $user[0]['first_name'] . ' ' . $user[0]["last_name"],
-                    'email' => $this->vk->getEmail(),
+                    'email' => $this->vk->getUserEmail(),
                 ], 'vk');
         }
     }
