@@ -42,6 +42,7 @@ class SocialController extends AbstractController
                     'user_id' => $this->vk->getUserId(),
                     'fields' => [
                         'nickname',
+                        'email',
                         'photo_50',
                         'city',
                         'sex',
@@ -51,7 +52,7 @@ class SocialController extends AbstractController
             $this->auth([
                     'id' => (string) $user[0]['id'],
                     'name' => !empty($user[0]['nickname']) ? $user[0]['nickname'] : $user[0]['first_name'],
-                    'email' => null,
+                    'email' => $user[0]['email'],
                 ], 'vk');
         }
     }
