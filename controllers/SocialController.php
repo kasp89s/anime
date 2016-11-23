@@ -112,7 +112,7 @@ class SocialController extends AbstractController
         if (empty($customer)) {
             $customer = new Customer();
             $customer->email = $params['email'];
-            $customer->password = md5($this->password);
+            $customer->password = md5(uniqid());
             $customer->customerGroupId = $group->id;
             $customer->isActive = 1;
             $customer->registrationIp = $_SERVER['REMOTE_ADDR'];
