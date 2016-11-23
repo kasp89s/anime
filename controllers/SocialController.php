@@ -48,7 +48,7 @@ class SocialController extends AbstractController
                         'sex',
                     ],
                 ]);
-
+            var_dump($user); exit;
             $this->auth([
                     'id' => (string) $user[0]['id'],
                     'name' => !empty($user[0]['nickname']) ? $user[0]['nickname'] : $user[0]['first_name'],
