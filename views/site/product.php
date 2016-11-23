@@ -60,20 +60,31 @@ use app\components\CommentWidget;
                     <ul class="rating">
                         <?= str_repeat('<li class="active"></li>', $product->commentsRate)?><?= str_repeat('<li></li>', 5 - $product->commentsRate)?>
                     </ul>
-                    <span><?= count($product->comments)?> отзыва</span>
+                    <span>
+                           <?= \Yii::t('app', '{n, plural, =0{нет отзывов} =1{# отзыв} few{# отзыва} many{# отзывов}}', ['n' => count($product->comments)]);?>
+                    </span>
                 </div>
                 <?= Html::beginForm('', 'post', ['id' => 'option-form']); ?>
                 <?= Html::input('hidden', 'productId', $product->id);?>
                 <ul class="description-list">
                     <?php if(!empty($product->productAttributes)):?>
-                        <?php foreach ($product->productAttributes as $attribute):?>
+                        <?php foreach ($product->formattedAttributes as $optionId => $optionData):?>
                         <li>
-                            <input type="radio" name="option[<?= $attribute->option->id?>]" data-price="<?= $attribute->optionValue->price?>" value="<?= $attribute->optionValue->id?>" class="attribute-checked">
-                            <?= $attribute->option->name?>:
-                            <a href="<?= Url::to('/option/value/' . $attribute->optionValue->id)?>"><?= $attribute->optionValue->name?></a>
+                            <span class="size-title">
+                                <?= $optionData['name']?>:
+                            </span>
+                            <div class="size">
+                                <?php foreach ($optionData['values'] as $optionValueId => $optionValue):?>
+                                    <div>
+                                        <input type="radio" name="option[<?= $optionId?>]" data-price="<?= $optionValue['price']?>" value="<?= $optionValueId?>" class="attribute-checked">
+                                        <?= $optionValue['name']?>
+                                    </div>
+                                <?php endforeach;?>
+                            </div>
                         </li>
                         <?php endforeach;?>
                     <?php endif;?>
+
                     <?php if (!empty($product->specificationRelations)):?>
                         <?php foreach ($product->specificationRelations as $relation):?>
                             <li>
@@ -114,7 +125,7 @@ use app\components\CommentWidget;
                 <ul class="product-payment">
                     <?php foreach ($paymentMethods as $method):?>
                     <li>
-                        <a class="visa" href="#"></a>
+                        <?= Html::img('/uploads/paymentMethod/' . $method->id .'/' . $method->imageFileName)?>
                     </li>
                     <?php endforeach;?>
                 </ul>

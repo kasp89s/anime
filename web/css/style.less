@@ -1429,13 +1429,16 @@ footer{
 		}
 	}
 	.description-name{
-		margin: 0 0 26px 0;
+		margin: 0;
 		font-size: 16px;
 		color:@main-color;
 	}
-	.description-code{
+	.description-code, .description-size{
 		font-size: 14px;
 		color:@secondary-color;
+	}
+	.description-size{
+		margin: 0 0 16px 0;
 	}
 	.info-title{
 		font-size: 14px;
@@ -2382,6 +2385,7 @@ footer{
 .description-list{
 	li{
 		display: block;
+		position: relative;
 		color:@main-color;
 		padding: 0 0 10px 0;
 		&:last-child{
@@ -2395,6 +2399,14 @@ footer{
 		}
 
 	}
+}
+.size{
+	display: inline-block;
+}
+.size-title{
+	vertical-align: top;
+	display: inline-block;
+	padding: 0 9px 0 0;
 }
 .horizontal-share{
 	padding: 30px 0 0 0;

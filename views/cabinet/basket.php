@@ -32,17 +32,17 @@ $totalAmount = 0;
                         <p class="description-name">
                             <?php echo $basketProduct->product->name?>
                         </p>
+                        <?php if (!empty($basketProduct->productAttributes)):?>
+                            <p class="description-size">
+                                <?php foreach ($basketProduct->productAttributes as $basketProductAttribute):?>
+                                    <?= $basketProductAttribute->productOption->name?>: <?= $basketProductAttribute->productOptionValue->name?> <br />
+                                    <?php $increasePriceByAttributes+= (int) $basketProductAttribute->productOptionValue->price;?>
+                                <?php endforeach;?>
+                            </p>
+                        <?php endif;?>
                         <p class="description-code">
                             Код товара: <?php echo $basketProduct->product->sku?>
                         </p>
-                        <?php if (!empty($basketProduct->productAttributes)):?>
-                        <p class="description-code">
-                            <?php foreach ($basketProduct->productAttributes as $basketProductAttribute):?>
-                                <?= $basketProductAttribute->productOption->name?>: <?= $basketProductAttribute->productOptionValue->name?> <br />
-                                <?php $increasePriceByAttributes+= (int) $basketProductAttribute->productOptionValue->price;?>
-                            <?php endforeach;?>
-                        </p>
-                        <?php endif;?>
                     </div>
                 </div>
                 <div class="info-description right">

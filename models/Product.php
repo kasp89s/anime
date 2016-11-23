@@ -149,6 +149,31 @@ class Product extends \yii\db\ActiveRecord
         return $this->hasMany(Attribute::className(), ['productId' => 'id']);
     }
 
+    public function getFormattedAttributes()
+    {
+        $result = [];
+        foreach ($this->productAttributes as $attribute) {
+            if (empty($result[$attribute->productOptionId])) {
+                $result[$attribute->productOptionId] = [
+                    'name' => $attribute->option->name,
+                    'values' => [
+                        $attribute->productOptionValueId => [
+                            'name' => $attribute->optionValue->name,
+                            'price' => $attribute->optionValue->price
+                        ]
+                    ]
+                ];
+            } else {
+                $result[$attribute->productOptionId]['values'][$attribute->productOptionValueId] = [
+                    'name' => $attribute->optionValue->name,
+                    'price' => $attribute->optionValue->price
+                ];
+            }
+        }
+
+        return $result;
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
