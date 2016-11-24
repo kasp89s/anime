@@ -1,7 +1,6 @@
 <?php
 namespace app\modules\admin\controllers;
 
-use app\models\User;
 use yii\web\Controller;
 use Yii;
 
@@ -42,7 +41,7 @@ abstract class AdminController extends Controller {
 
     public function beforeAction($event)
     {
-        if (!in_array(Yii::$app->controller->id, $this->_user->group->availableActions))
+        if (!in_array(Yii::$app->controller->id, $this->_user->group->availableActions) && Yii::$app->controller->id != 'index')
             throw new \yii\web\NotFoundHttpException('Доступ запрещен.');
 
         Yii::$app->view->params['breadcrumbs'][] = [

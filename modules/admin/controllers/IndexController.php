@@ -8,18 +8,8 @@ namespace app\modules\admin\controllers;
 
 use yii\web\Controller;
 use Yii;
-class DefaultController extends Controller
+class IndexController extends AdminController
 {
-    public $layout = 'default';
-
-    public function init()
-    {
-        parent::init();
-        if (\Yii::$app->user->isGuest) {
-            Yii::$app->response->redirect(array('admin/login'));
-        }
-    }
-
     public function actionIndex()
     {
         return $this->render('index', []);
