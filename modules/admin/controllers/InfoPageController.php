@@ -10,12 +10,6 @@ class InfoPageController extends AdminController {
 
     public function actionList()
     {
-        Yii::$app->view->params['breadcrumbs'][] = [
-            'template' => "<li>{link}</li>\n",
-            'label' => 'Список страниц',
-            'url' => ['/'. Yii::$app->controller->module->id .'/'. Yii::$app->controller->id .'/'. Yii::$app->controller->action->id]
-        ];
-
         $searchModel = new InfoPageSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

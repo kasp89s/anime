@@ -87,6 +87,7 @@ use yii\helpers\Html;
                                     return '<div class="btn-group">
                                     <a href="' . Url::to('/admin/'. Yii::$app->controller->id .'/change/' . $model->id) . '" class="btn-white btn btn-xs">Редактировать</a>
                                     <a href="' . Url::to('/admin/'. Yii::$app->controller->id .'/remove/' . $model->id) . '" class="btn-white btn btn-xs">Удалить</a>
+                                    <a href="' . Url::to('/admin/order/list?OrderSearch%5BcustomerId%5D=' . $model->id) . '" class="btn btn-w-m btn-link">Заказы</a>
                                 </div>';
                                 }
                             ],

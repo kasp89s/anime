@@ -11,12 +11,6 @@ class CustomerGroupController extends AdminController {
 
     public function actionList()
     {
-        Yii::$app->view->params['breadcrumbs'][] = [
-            'template' => "<li>{link}</li>\n",
-            'label' => 'Список групп клиентов',
-            'url' => ['/admin/customer-group/list']
-        ];
-
         $searchModel = new CustomerGroupSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

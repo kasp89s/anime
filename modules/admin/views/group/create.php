@@ -22,6 +22,8 @@
                     <?php $form = ActiveForm::begin(); ?>
                     <?= $form->field($model, 'name') ?>
                     <div class="hr-line-dashed"></div>
+                    <?= $form->field($model, 'actions')->dropDownList($model->actionList, ['multiple'=>'multiple']);?>
+                    <div class="hr-line-dashed"></div>
                     <div class="form-group">
                             <?= Html::submitInput('Сохранить', ['class' => 'btn btn-primary']) ?>
                             <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/list')?>" class="btn btn-white" type="submit">Cancel</a>

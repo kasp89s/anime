@@ -17,12 +17,6 @@ class CategoryController extends AdminController {
 
     public function actionList()
     {
-        Yii::$app->view->params['breadcrumbs'][] = [
-            'template' => "<li>{link}</li>\n",
-            'label' => 'Список категорий',
-            'url' => [Yii::$app->controller->module->id .'/'. Yii::$app->controller->id .'/'. Yii::$app->controller->action->id]
-        ];
-
         $records = Category::find()->where(['level' => 0])->orderBy('sortOrder desc')->all();
 
         return $this->render('list',

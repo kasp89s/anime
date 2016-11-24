@@ -17,12 +17,6 @@ class CustomerController extends AdminController {
 
     public function actionList()
     {
-        Yii::$app->view->params['breadcrumbs'][] = [
-            'template' => "<li>{link}</li>\n",
-            'label' => 'Список клиентов',
-            'url' => ['/admin/customer/list']
-        ];
-
         $searchModel = new CustomerSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

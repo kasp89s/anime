@@ -12,12 +12,6 @@ class ManufactureController extends AdminController {
 
     public function actionList()
     {
-        Yii::$app->view->params['breadcrumbs'][] = [
-            'template' => "<li>{link}</li>\n",
-            'label' => 'Список групп',
-            'url' => ['/'. Yii::$app->controller->module->id .'/'. Yii::$app->controller->id .'/'. Yii::$app->controller->action->id]
-        ];
-
         $searchModel = new ManufactureSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

@@ -52,6 +52,15 @@ class GroupController extends AdminController {
             'url' => ['/admin/group/change']
         ];
 
-        return parent::actionChange($id);
+        $model = Group::findOne($id);
+        if (!empty($model) && $model->load($this->_post) && $model->validate()) {
+            $model->actions = implode(',', $this->_post['Group']['availableActions']);
+            $model->save();
+            Yii::$app->session->setFlash('save', 'Изменения успешно сохранены.');
+        }
+
+        return $this->render(Yii::$app->controller->action->id, [
+            'model' => $model,
+        ]);
     }
 }

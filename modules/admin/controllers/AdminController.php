@@ -1,6 +1,7 @@
 <?php
 namespace app\modules\admin\controllers;
 
+use app\models\User;
 use yii\web\Controller;
 use Yii;
 
@@ -11,6 +12,8 @@ abstract class AdminController extends Controller {
     protected $_activeModel;
 
     protected $_post;
+
+    protected $_user;
 
     public function actions()
     {
@@ -33,6 +36,22 @@ abstract class AdminController extends Controller {
             'url' => ['/admin']
         ];
         $this->_post = Yii::$app->request->post();
+
+        $this->_user = \Yii::$app->user->getIdentity();
+    }
+
+    public function beforeAction($event)
+    {
+        if (!in_array(Yii::$app->controller->id, $this->_user->group->availableActions))
+            throw new \yii\web\NotFoundHttpException('Доступ запрещен.');
+
+        Yii::$app->view->params['breadcrumbs'][] = [
+            'template' => "<li>{link}</li>\n",
+            'label' => 'Список',
+            'url' => ['/'. Yii::$app->controller->module->id .'/' .Yii::$app->controller->id. '/list']
+        ];
+
+        return parent::beforeAction($event);
     }
 
     public function actionCreate()

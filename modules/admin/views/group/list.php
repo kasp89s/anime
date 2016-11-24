@@ -25,21 +25,14 @@ use yii\helpers\Url;
                                 <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/create')?>" class="btn btn-primary">Создать группу</a>
                             </div>
                         </div>
-                        <div class="col-sm-6">
-                            <div class="input-group">
-                                <input type="text" placeholder="Фильтр" class="input-sm form-control">
-                            <span class="input-group-btn">
-                                        <button type="button" class="btn btn-sm btn-primary"> Найти</button>
-                            </span>
-                            </div>
-                        </div>
                     </div>
                     <?php if (!empty($records)):?>
                     <div class="table-responsive">
                         <table class="table table-striped">
                             <thead>
                             <tr>
-                                <?php foreach ($records[0]->attributeLabels() as $label):?>
+                                <?php foreach ($records[0]->attributeLabels() as $column => $label):?>
+                                    <?php if ($column == 'availableActions') continue;?>
                                     <th><?= $label?></th>
                                 <?php endforeach;?>
                                 <th></th>
@@ -49,6 +42,7 @@ use yii\helpers\Url;
                             <?php foreach($records as $record): ?>
                             <tr>
                                 <?php foreach ($record->attributeLabels() as $column => $label):?>
+                                    <?php if ($column == 'availableActions') continue;?>
                                     <td><?= $record->{$column}?></td>
                                 <?php endforeach;?>
                                 <td class="text-right footable-visible footable-last-column">
