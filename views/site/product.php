@@ -2,6 +2,7 @@
 use yii\widgets\Breadcrumbs;
 use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\widgets\ActiveForm;
 use app\components\CommentWidget;
 ?>
 <div class="breadcrumbs-block clearfix">
@@ -50,6 +51,10 @@ use app\components\CommentWidget;
                 </p>
                 <button class="add-product" data-id="<?php echo $product->id?>">
                     Добавить в корзину
+                </button>
+                <br />
+                <button class="enter-modal-btn">
+                    Заказать в один клик
                 </button>
                 <div class="rating-info">
                     <?php if (!empty($this->params['user']->id)):?>
@@ -158,4 +163,45 @@ use app\components\CommentWidget;
         <?= \app\components\LastViewWidget::widget(['models' => $viewProductList]) ?>
     </div>
     <?php endif;?>
+</div>
+
+<div id="overlay" style="display: none;"></div>
+<div class="modal enter-modal" style="opacity: 0; top: 45%; display: none;">
+
+    <div class="build-in-popup" id="recover-password">
+
+        <div class="close right">
+            <img src="/img/remove-button.png" alt="">
+        </div>
+
+        <h2>Быстрый заказ</h2>
+        <div class="table">
+            <?php $form = ActiveForm::begin([
+                'action' => '/cabinet/quick-order',
+                'enableAjaxValidation' => true,
+                'options'=>['class'=>'row'],
+                'fieldConfig' => [
+                    'template' => '{label}{input}{error}',
+                    'errorOptions' => ['class' => 'error text-danger'],
+                    'labelOptions' => ['class' => ''],
+                    'inputOptions' => ['class' => 'input'],
+                    'options' => [
+                        'tag' => 'div',
+                    ],
+                ],
+            ]); ?>
+
+                <?= $form->field($quickOrder, 'productId')->hiddenInput(['value' => $product->id])->label(false) ?>
+
+                <?= $form->field($quickOrder, 'name') ?>
+
+                <?= $form->field($quickOrder, 'phone') ?>
+
+                <div class="enter-row">
+                    <?= Html::submitButton('Заказать', ['class' => 'button submit']) ?>
+                </div>
+            <?php ActiveForm::end(); ?>
+        </div>
+    </div>
+
 </div>

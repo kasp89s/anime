@@ -9,9 +9,11 @@ use yii\helpers\Html;
         <h3 class="order-title">
             Cпасибо за ваш заказ!
         </h3>
-        <p class="order-subtitle">
-            Сообщение о подтверждении заказа  было выслано на ваш e-mail.
-        </p>
+        <?php if(!empty($this->params['user'])):?>
+            <p class="order-subtitle">
+                Сообщение о подтверждении заказа  было выслано на ваш e-mail.
+            </p>
+        <?php endif;?>
         <div class="order-info-block clearfix">
             <div class="order-info left">
                 <div class="order-info-row">

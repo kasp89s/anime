@@ -14,6 +14,7 @@ use app\models\PaymentMethod;
 use app\models\Product;
 use app\models\ProductCategoryRelation;
 use app\models\ProductSpecificationRelation;
+use app\models\QuickOrderForm;
 use app\models\ShippingMethod;
 use app\models\WishList;
 use Yii;
@@ -241,6 +242,7 @@ class SiteController extends AbstractController
             'viewProductList' => $this->getLastViewListProduct(),
             'shippingMethods' => $shippingMethods,
             'paymentMethods' => $paymentMethods,
+            'quickOrder' => new QuickOrderForm(),
         ]);
     }
 
