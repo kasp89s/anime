@@ -12,6 +12,7 @@ use Yii;
  * @property string $password
  * @property string $customerGroupId
  * @property integer $isActive
+ * @property string $fullName
  * @property string $code
  * @property string $registrationIp
  * @property string $registrationTime
@@ -21,6 +22,7 @@ use Yii;
  *
  * @property CustomerGroup $group
  * @property CustomerAddress[] $address
+ * @property CustomerPhone[] $phones
  * @property WishList[] $wishes
  * @property Product[] $wishProducts
  */
@@ -48,7 +50,7 @@ class Customer extends \yii\db\ActiveRecord
             [['customerGroupId', 'isActive'], 'integer'],
             [['registrationTime', 'authID', 'authMethod'], 'safe'],
             [['memo'], 'string'],
-            [['email'], 'string', 'max' => 255],
+            [['email', 'fullName'], 'string', 'max' => 255],
             [['password', 'code'], 'string', 'max' => 32],
             [['registrationIp'], 'string', 'max' => 16],
             ['email', 'unique', 'message' => 'Пользователь с таким E-mail уже зарегистрирован в системе'],
@@ -71,6 +73,7 @@ class Customer extends \yii\db\ActiveRecord
             'passwordConfirm' => 'Пароль еще раз',
             'customerGroupId' => 'Группа',
             'isActive' => 'Активность',
+            'fullName' => 'Имя Фамилия',
             'code' => 'Code',
             'registrationIp' => 'Ip регистрации',
             'registrationTime' => 'Время',
@@ -78,6 +81,14 @@ class Customer extends \yii\db\ActiveRecord
             'authMethod' => 'authMethod',
             'memo' => 'Memo',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPhones()
+    {
+        return $this->hasMany(CustomerPhone::className(), ['customerId' => 'id']);
     }
 
     /**
@@ -93,7 +104,7 @@ class Customer extends \yii\db\ActiveRecord
      */
     public function getAddress()
     {
-        return $this->hasOne(CustomerAddress::className(), ['customerId' => 'id']);
+        return $this->hasMany(CustomerAddress::className(), ['customerId' => 'id']);
     }
 
     /**
@@ -110,6 +121,28 @@ class Customer extends \yii\db\ActiveRecord
     public function getWishProducts()
     {
         return $this->hasMany(Product::className(), ['id' => 'productId'])->viaTable('wishlist', ['customerId' => 'id']);
+    }
+
+    public function getPhonesArray()
+    {
+        $result = [];
+        foreach ($this->phones as $phone)
+        {
+            $result[$phone->phone] = $phone->phone;
+        }
+
+        return $result;
+    }
+
+    public function getAddressArray()
+    {
+        $result = [];
+        foreach ($this->address as $address)
+        {
+            $result[$address->id] = $address->city . ', ' . $address->address . ', ' . $address->zip;
+        }
+
+        return $result;
     }
 
     public function getPurchaseAmount()

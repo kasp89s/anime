@@ -32,29 +32,66 @@ use yii\helpers\Html;
                 ],
             ]); ?>
 
-            <?= $form->field($this->params['user']->address, 'fullName') ?>
+            <?= $form->field($model, 'fullName') ?>
 
-            <?= $form->field($this->params['user'], 'email') ?>
-
-            <?= $form->field($this->params['user']->address, 'phone1') ?>
-
-            <?php if (empty($this->params['user']->address->phone2)):?>
-                <div class="form-row clearfix new-number">
-                    <?= Html::activeTextInput($this->params['user']->address, 'phone2', ['placeholder' => 'Например, (066) 123-23-32']) ?>
-                    <button class="remove-number-block">
-                        <img src="img/remove-button.png" alt="">
-                    </button>
-                </div>
-                <div class="form-row clearfix">
-                        <span class="add-number" onclick="$(this).closest('.form-row.clearfix').hide()">
-                            Добавить еще один +
-                        </span>
+            <?= $form->field($model, 'email') ?>
+            <div class="form-row clearfix">
+            <div class="label left">
+                Моб. телефон
+            </div>
+            <?php if (!empty($model->phones)):?>
+                <div class="info left">
+                <?php foreach ($model->phones as $index => $phone):?>
+                        <?= $form->field($phone, '['.$index.']phone')->textInput(['placeholder' => 'Например, (066) 123-23-32'])->label(false)?>
+                <?php endforeach;?>
                 </div>
             <?php else:?>
-                <?= $form->field($this->params['user']->address, 'phone2') ?>
+                <div class="info left">
+                    <?= Html::textInput('phones[]', null, ['placeholder' => 'Например, (066) 123-23-32']);?>
+                </div>
             <?php endif;?>
-
-            <?= $form->field($this->params['user']->address, 'address') ?>
+            </div>
+            <div class="form-row clearfix new-number template">
+                <?= Html::textInput('phones[]', null, ['placeholder' => 'Например, (066) 123-23-32']);?>
+                <a href="javascript:void(0)" class="remove-number-block">
+                    <img src="/img/remove-button.png" alt="">
+                </a>
+            </div>
+            <div class="form-row clearfix">
+                        <span class="add-number">
+                            Добавить еще один +
+                        </span>
+            </div>
+            <div class="form-row clearfix">
+            <div class="label left">
+                Адрес:
+            </div>
+            <?php if (!empty($model->address)):?>
+                <div class="info left">
+                <?php foreach ($model->address as $index => $address):?>
+                        <?= $form->field($address, '['.$index.']city')->textInput(['placeholder' => 'Город'])->label(false)?>
+                        <?= $form->field($address, '['.$index.']address')->textInput(['placeholder' => 'Улица, дом, квартира, район, домофон, этаж...'])->label(false)?>
+                        <?= $form->field($address, '['.$index.']zip')->textInput(['placeholder' => 'Индекс'])->label(false)?>
+                <?php endforeach;?>
+                </div>
+            <?php else:?>
+            <?php endif;?>
+            </div>
+            <div class="form-row clearfix new-address template">
+                <?= Html::textInput('address[{index}][city]', null, ['placeholder' => 'Город']);?>
+                <a href="javascript:void(0)" class="remove-address-block">
+                    <img src="/img/remove-button.png" alt="">
+                </a>
+                <div>
+                    <?= Html::textInput('address[{index}][address]', null, ['placeholder' => 'Улица, дом, квартира, район, домофон, этаж...']);?>
+                </div>
+                <?= Html::textInput('address[{index}][zip]', null, ['placeholder' => 'Индекс']);?>
+            </div>
+            <div class="form-row clearfix">
+                        <span class="add-address">
+                            Добавить еще один +
+                        </span>
+            </div>
             <div class="form-row control">
                 <?= Html::submitButton('Сохранить изменения', ['class' => 'save']) ?>
                 <a href="<?= Url::to('/'. Yii::$app->controller->id)?>" class="cancel">

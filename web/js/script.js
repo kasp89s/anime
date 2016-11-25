@@ -1,4 +1,5 @@
 $(document).ready(function(){
+	var INDEX = 0;
 	$('.main-slider').slick({
 		dots:true,
 		arrows:false,
@@ -100,15 +101,31 @@ $(document).ready(function(){
 		var buttonWrapper = $(this).parent();
 		buttonWrapper.siblings(".more-detail").toggleClass("active");
 	});
-	$(".add-number").click(function(){
-		var newNumber = $(".new-number");
-		if(newNumber.hasClass("active")){
-			newNumber.clone().removeClass("new-number").addClass("clone").insertAfter(newNumber);
-		}
-		else{
-			$(".new-number").addClass("active");
-		}
 
+	$(".add-number-order").on('click', function () {
+		$('.new-number-order').toggle();
+	});
+
+	$(".add-address-order").on('click', function () {
+		$('.new-address-order').toggle();
+	});
+
+	$(".add-number").click(function(){
+		var newNumber = $(".new-number.template");
+			newNumber.clone().removeClass("template").addClass("active").insertAfter($(".new-number").last()).find('input').val('');
+	});
+
+	//add address
+	$(".add-address").click(function(){
+		var newNumber = $(".new-address.template"),
+			newAddress = newNumber.clone().removeClass("template").addClass("active").insertAfter($(".new-address").last()),
+			newAddressFields = newAddress.find('input');
+
+		newAddressFields.each(function( index ) {
+			var name = $( this ).attr('name').replace("{index}", INDEX);
+			$( this ).attr('name', name);
+		});
+		INDEX++;
 	});
 
 	$('.remove-number-block').click(function(){
@@ -119,18 +136,6 @@ $(document).ready(function(){
 	$(document).on('click','.remove-number-block',function(){
 		var parent =$(this).parent()
 		parent.removeClass("active");
-	});
-
-	//add address
-	$(".add-address").click(function(){
-		var newNumber = $(".new-address");
-		if(newNumber.hasClass("active")){
-			newNumber.clone().removeClass("new-address").addClass("clone").insertAfter(newNumber);
-		}
-		else{
-			$(".new-address").addClass("active");
-		}
-
 	});
 
 	$('.remove-address-block').click(function(){

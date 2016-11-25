@@ -24,7 +24,7 @@ $registration = new \app\models\RegisterForm();
 							<a href="/" class="open-build-in" data-popup="#enter-modal">Войдите в личный кабинет</a>
                             <?php else:?>
                             <span class="user-login show">
-                                Привет, <?= !empty($this->params['user']->address->fullName) ? $this->params['user']->address->fullName : $this->params['user']->email?>
+                                Привет, <?= !empty($this->params['user']->fullName) ? $this->params['user']->fullName : $this->params['user']->email?>
                             </span>
                             <?php endif;?>
 						</span>

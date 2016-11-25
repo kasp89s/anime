@@ -51,7 +51,7 @@ $comment = new \app\models\Comment();
 
     <?= $form->field($comment, 'message')->textArea(['placeholder' => 'Ваш отзыв', 'value' => ''])->label(false) ?>
 
-    <?= $form->field($comment, 'userName')->input('text', ['value' => !empty($this->params['user']->address->fullName) ? $this->params['user']->address->fullName : '']) ?>
+    <?= $form->field($comment, 'userName')->input('text', ['value' => !empty($this->params['user']->fullName) ? $this->params['user']->fullName : '']) ?>
 
     <?= $form->field($comment, 'userEmail')->input('email', ['value' => !empty($this->params['user']->email) ? $this->params['user']->email : '']) ?>
 

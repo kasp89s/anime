@@ -118,6 +118,7 @@ class SocialController extends AbstractController
             $customer->registrationIp = $_SERVER['REMOTE_ADDR'];
             $customer->authID = (string) $params['id'];
             $customer->authMethod = $method;
+            $customer->fullName = $params['name'];
             if (!$customer->validate()) {
                 $errors = $customer->getErrors();
                 $errors = end($errors);
@@ -127,7 +128,6 @@ class SocialController extends AbstractController
 
                 $customerAddress = new CustomerAddress();
                 $customerAddress->customerId = $customer->id;
-                $customerAddress->fullName = $params['name'];
                 $customerAddress->save(false);
             }
         }

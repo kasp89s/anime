@@ -36,9 +36,28 @@ use yii\widgets\ActiveForm;
                         Контактные данные
                     </p>
 
-                    <?= $form->field($orderForm, 'fullName')->textInput(['value' => !empty($this->params['user']) ? $this->params['user']->address->fullName : '']) ?>
+                    <?php if (empty($this->params['user'])):?>
+                        <?= $form->field($orderForm, 'email') ?>
+                    <?php endif; ?>
+                    <?= $form->field($orderForm, 'fullName')->textInput(['value' => !empty($this->params['user']) ? $this->params['user']->fullName : '']) ?>
 
-                    <?= $form->field($orderForm, 'phone')->textInput(['value' => !empty($this->params['user']) ? $this->params['user']->address->phone1 : '']) ?>
+                    <?php if (!empty($this->params['user']->phones)):?>
+                        <?= $form->field($orderForm, 'phone')->dropDownList($this->params['user']->phonesArray); ?>
+
+                        <div class="form-row clearfix">
+                            <label class="label-info left add-number-order" style="cursor: pointer">
+                                Указать другой +
+                            </label>
+                            <?= Html::textInput('newPhone', null, [
+                                'placeholder' => 'Например, (066) 123-23-32',
+                                'class' => 'order-input new-number-order',
+                                'style' => 'display: none;'
+                            ])?>
+                        </div>
+                    <?php else:?>
+                        <?= $form->field($orderForm, 'phone')->textInput(['placeholder' => 'Например, (066) 123-23-32']) ?>
+                    <?php endif;?>
+
                 </div>
                 <div class="order-info-row">
                     <p class="number-title">
@@ -47,7 +66,31 @@ use yii\widgets\ActiveForm;
                                 </span>
                         Выбор способов доставки и оплаты
                     </p>
-                    <?= $form->field($orderForm, 'address')->textInput(['value' => !empty($this->params['user']) ? $this->params['user']->address->address : '']) ?>
+                    <?php if (!empty($this->params['user']->address)):?>
+                        <?= $form->field($orderForm, 'address')->dropDownList($this->params['user']->addressArray); ?>
+                        <div class="form-row clearfix">
+                            <label class="label-info left add-address-order" style="cursor: pointer">
+                                Указать другой +
+                            </label>
+                            <?= Html::textInput('newAddress[city]', null, [
+                                'placeholder' => 'Город',
+                                'class' => 'order-input new-address-order',
+                                'style' => 'display: none;'
+                            ])?>
+                            <?= Html::textInput('newAddress[address]', null, [
+                                'placeholder' => 'Улица, дом, квартира, район, домофон, этаж...',
+                                'class' => 'order-input new-address-order',
+                                'style' => 'display: none;'
+                            ])?>
+                            <?= Html::textInput('newAddress[zip]', null, [
+                                'placeholder' => 'Индекс',
+                                'class' => 'order-input new-address-order',
+                                'style' => 'display: none;'
+                            ])?>
+                        </div>
+                        <?php else:?>
+                        <?= $form->field($orderForm, 'address')->textInput() ?>
+                    <?php endif;?>
                 </div>
                 <div class="order-info-row">
                     <div class="form-row clearfix">
@@ -119,9 +162,9 @@ use yii\widgets\ActiveForm;
                     <?php endif;?>
                 </div>
                 <div class="order-info-row">
-                    <button class="add-order-comment">
+                    <a href="javascript:void(0)" class="add-order-comment">
                         <?= Html::activeLabel($orderForm, 'comment') ?>
-                    </button>
+                    </a>
                     <?= Html::activeTextarea($orderForm, 'comment', ['class' => 'order-comment']) ?>
                 </div>
                 <?php ActiveForm::end(); ?>

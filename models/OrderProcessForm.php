@@ -10,6 +10,8 @@ use yii\base\Model;
  */
 class OrderProcessForm extends Model
 {
+    public $email;
+
     public $fullName;
 
     public $phone;
@@ -33,6 +35,7 @@ class OrderProcessForm extends Model
             // email and password are both required
             [['fullName', 'phone', 'address', 'shipping', 'payment'], 'required'],
             [['comment'], 'string'],
+            ['email', 'email', 'message' => 'Поле должно содержать корректный E-mail'],
             [['couponCode'], 'string'],
         ];
     }
@@ -43,6 +46,7 @@ class OrderProcessForm extends Model
     public function attributeLabels()
     {
         return [
+            'email' => 'E-mail',
             'fullName' => 'Имя Фамилия',
             'phone' => 'Моб. телефон',
             'address' => 'Адрес',

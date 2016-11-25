@@ -109,8 +109,8 @@ foreach (\app\models\OrderStatus::find()->asArray()->all() as $status) {
                                     <dd><?= $model->customer->address->zip?></dd>
                                     <dt><?= $model->customer->address->attributeLabels()['address']?></dt>
                                     <dd><?= $model->customer->address->address?></dd>
-                                    <dt><?= $model->customer->address->attributeLabels()['fullName']?></dt>
-                                    <dd><?= $model->customer->address->fullName?></dd>
+                                    <dt><?= $model->customer->attributeLabels()['fullName']?></dt>
+                                    <dd><?= $model->customer->fullName?></dd>
                                     <dt><?= $model->customer->address->attributeLabels()['phone1']?></dt>
                                     <dd><?= $model->customer->address->phone1?></dd>
                                     <dt><?= $model->customer->address->attributeLabels()['phone2']?></dt>

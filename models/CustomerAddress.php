@@ -13,9 +13,6 @@ use Yii;
  * @property string $city
  * @property string $zip
  * @property string $address
- * @property string $fullName
- * @property string $phone1
- * @property string $phone2
  * @property integer $isPrimary
  *
  * @property Customer $customer
@@ -36,13 +33,12 @@ class CustomerAddress extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customerId', 'address', 'fullName', 'phone1'], 'required'],
+            [['customerId', 'address'], 'required'],
             [['customerId', 'isPrimary'], 'integer'],
             [['countryCode'], 'string', 'max' => 3],
             [['city'], 'string', 'max' => 100],
             [['zip'], 'string', 'max' => 10],
-            [['address', 'fullName'], 'string', 'max' => 255],
-            [['phone1', 'phone2'], 'string', 'max' => 15],
+            [['address'], 'string', 'max' => 255],
             [['customerId'], 'exist', 'skipOnError' => true, 'targetClass' => Customer::className(), 'targetAttribute' => ['customerId' => 'id']],
         ];
     }
@@ -59,9 +55,6 @@ class CustomerAddress extends \yii\db\ActiveRecord
             'city' => 'Гогод',
             'zip' => 'Индекс',
             'address' => 'Адрес',
-            'fullName' => 'Имя Фамилия',
-            'phone1' => 'Моб. телефон',
-            'phone2' => 'Доп. телефон',
             'isPrimary' => 'Is Primary',
         ];
     }

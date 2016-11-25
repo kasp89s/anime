@@ -56,7 +56,7 @@
                             Имя:
                         </span>
                 <span>
-                             <?php echo $this->params['user']->address->fullName ?>
+                             <?php echo $this->params['user']->fullName ?>
                         </span>
             </p>
             <p>
@@ -72,17 +72,23 @@
                             Телефоны:
                         </span>
                         <span>
-                             <?php echo $this->params['user']->address->phone1?><?php
-                                echo (!empty($this->params['user']->address->phone2)) ? ', ' . $this->params['user']->address->phone2 : '';
-                             ?>
+                            <?php if (!empty($this->params['user']->phones)):?>
+                                <?php foreach ($this->params['user']->phones as $phone):?>
+                                    <?php echo $phone->phone?>
+                                <?php endforeach;?>
+                            <?php endif;?>
                         </span>
             </p>
             <p>
                         <span class="title">
                             Адрес доставки:
                         </span>
-                <span>
-                             <?php echo $this->params['user']->address->address?>
+                        <span>
+                            <?php if (!empty($this->params['user']->address)):?>
+                                <?php foreach ($this->params['user']->address as $address):?>
+                                        <?= $address->city?> <?= $address->address?> <?= $address->zip?> <br />
+                                <?php endforeach;?>
+                            <?php endif;?>
                         </span>
             </p>
         </div>

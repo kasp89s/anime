@@ -9,6 +9,8 @@ namespace app\controllers;
 use app\models\BasketProduct;
 use app\models\Coupon;
 use app\models\Customer;
+use app\models\CustomerAddress;
+use app\models\CustomerPhone;
 use app\models\OrderCustomerInfo;
 use app\models\OrderHistory;
 use app\models\OrderProcessForm;
@@ -26,6 +28,7 @@ use app\models\ShippingMethod;
 use app\models\PaymentMethod;
 use app\models\Order;
 use \BW\Vkontakte as Vk;
+use yii\base\Model;
 use yii\data\Pagination;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -128,21 +131,56 @@ class CabinetController extends AbstractController
         ];
 
         $model = Customer::findOne($this->user->id);
-        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post()) && $model->address->load(Yii::$app->request->post())) {
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             Yii::$app->response->format = Response::FORMAT_JSON;
-            return array_merge(ActiveForm::validate($model), ActiveForm::validate($model->address));
+            return array_merge(ActiveForm::validate($model));
         }
 
         if (
-            $model->load(Yii::$app->request->post()) && $model->validate() &&
-            $model->address->load(Yii::$app->request->post()) && $model->address->validate()
+            $model->load(Yii::$app->request->post()) && $model->validate()
         ) {
+            Model::loadMultiple($model->phones, Yii::$app->request->post());
+            foreach ($model->phones as $phone) {
+                $phone->save();
+            }
+            Model::loadMultiple($model->address, Yii::$app->request->post());
+            foreach ($model->address as $address) {
+                $address->save();
+            }
+            $post = Yii::$app->request->post();
+
+            if (!empty($post['phones'])) {
+                foreach ($post['phones'] as $phone) {
+                    if (empty($phone)) continue;
+
+                    $phoneModel = new CustomerPhone();
+                    $phoneModel->customerId = $this->user->id;
+                    $phoneModel->phone = $phone;
+                    $phoneModel->save();
+                }
+            }
+
+            if (!empty($post['address'])) {
+                foreach ($post['address'] as $index => $address) {
+                    if (!is_numeric($index)) continue;
+
+                    $phoneModel = new CustomerAddress();
+                    $phoneModel->customerId = $this->user->id;
+                    $phoneModel->city = $address['city'];
+                    $phoneModel->address = $address['address'];
+                    $phoneModel->zip = $address['zip'];
+                    $phoneModel->save();
+                }
+            }
+
             $model->save();
-            $model->address->save();
+            $model = Customer::findOne($this->user->id);
             \Yii::$app->session->set('user', $model);
+            \Yii::$app->response->redirect(['cabinet/index']);
         }
 
         return $this->render(Yii::$app->controller->action->id, [
+            'model' => $model
         ]);
     }
 
@@ -296,10 +334,39 @@ class CabinetController extends AbstractController
 
         if (Yii::$app->request->isAjax && $orderForm->load(Yii::$app->request->post())) {
             Yii::$app->response->format = Response::FORMAT_JSON;
-            return ActiveForm::validate($orderForm);
+
+            if (empty($this->user) && empty($orderForm->email))
+                    $orderForm->addError('email', 'Необходимо заполнить «E-mail».');
+
+            $orderForm->validate();
+
+            return $orderForm->errors;
         }
 
         if ($orderForm->load(Yii::$app->request->post()) && $orderForm->validate()) {
+
+            $post = Yii::$app->request->post();
+            if (!empty($post['newPhone'])) {
+                $phoneModel = new CustomerPhone();
+                $phoneModel->customerId = $this->user->id;
+                $phoneModel->phone = $post['newPhone'];
+                $phoneModel->save();
+                $orderForm->phone = $phoneModel->phone;
+            }
+
+            if (!empty($post['newAddress']['address'])) {
+                $AddressModel = new CustomerAddress();
+                $AddressModel->customerId = $this->user->id;
+                $AddressModel->city = $post['newAddress']['city'];
+                $AddressModel->address = $post['newAddress']['address'];
+                $AddressModel->zip = $post['newAddress']['zip'];
+                $AddressModel->save();
+            } elseif(!empty($orderForm->address)) {
+                $AddressModel = CustomerAddress::findOne($orderForm->address);
+            } elseif (!empty($post['guestAddress']['address'])) {
+                $AddressModel = (object) $post['guestAddress'];
+            }
+
             $shippingMethod = ShippingMethod::findOne($orderForm->shipping);
             $paymentMethod = PaymentMethod::findOne($orderForm->payment);
 
@@ -327,7 +394,9 @@ class CabinetController extends AbstractController
             $customerInfo = new OrderCustomerInfo();
             $customerInfo->orderId = $order->id;
             $customerInfo->countryCode = $shippingMethod->countryCode;
-            $customerInfo->address = $orderForm->address;
+            $customerInfo->city = $AddressModel->city;
+            $customerInfo->address = $AddressModel->address;
+            $customerInfo->zip = $AddressModel->zip;
             $customerInfo->fullName = $orderForm->fullName;
             $customerInfo->phone1 = $orderForm->phone;
             $customerInfo->save();
@@ -375,7 +444,7 @@ class CabinetController extends AbstractController
             }
 
             //@todo Добавить для не авторизированого юзера ввод email.
-            $email = !empty($this->user) ? $this->user->email : 'default@mail.com';
+            $email = !empty($this->user) ? $this->user->email : $orderForm->email;
             $this->sendEmail($email, Yii::$app->params['newOrderSubject'], $this->renderPartial('emailTemplates/new-order', ['order' => $order]));
             BasketProduct::deleteAll('basketId = :id', [':id' => $this->_basket->id]);
         }
