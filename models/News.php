@@ -27,6 +27,8 @@ class News extends \yii\db\ActiveRecord
 {
     public $image;
 
+    public $_products = false;
+
     /**
      * @inheritdoc
      */
@@ -89,5 +91,30 @@ class News extends \yii\db\ActiveRecord
     public function getCreateUser()
     {
         return $this->hasOne(User::className(), ['id' => 'createUserId']);
+    }
+
+    public function getProducts()
+    {
+        if (!empty($this->_products))
+            return $this->_products;
+
+        $articles = [];
+        preg_match_all("|{(.*)}|iU", $this->content, $parts);
+
+        if (empty($parts[0]))
+                return $articles;
+
+        foreach ($parts[0] as $part) {
+            $articles[] = substr(strip_tags($part),1,-1);
+            $this->content = str_replace($part, '', $this->content);
+        }
+
+        $this->_products = Product::find()
+            ->where([
+                'sku' => $articles
+            ])->all();
+
+
+        return $this->_products;
     }
 }

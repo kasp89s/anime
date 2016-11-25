@@ -1,6 +1,7 @@
 <?php
     use yii\widgets\Breadcrumbs;
     use yii\helpers\Url;
+    use yii\helpers\Html;
 ?>
 <div class="breadcrumbs-block clearfix">
     <ul>
@@ -95,6 +96,7 @@
         <a href="<?= Url::to('/'. Yii::$app->controller->id .'/change')?>" class="edit">
             РЕДАКТИРОВАТЬ
         </a>
+        <?php if(!empty($purchasedProducts)):?>
         <div class="help-block">
             <p>
                 Помогите сделать наш сервис лучше!
@@ -104,36 +106,14 @@
                     </span>
         </div>
         <div class="random-product ">
+            <?php foreach ($purchasedProducts as $orderProduct):?>
             <div class="product">
-                <a href="#"><img src="img/ran-item1.png" alt=""></a>
+                <a href="<?= Url::to('/product/' . $orderProduct->product->id)?>">
+                    <?= Html::img('/uploads/product/' . $orderProduct->product->id .'/' . $orderProduct->product->imageFileName, []);?>
+                </a>
             </div>
-            <div class="product">
-                <a href="#"><img src="img/ran-item2.png" alt=""></a>
-            </div>
-            <div class="product">
-                <a href="#"><img src="img/ran-item3.png" alt=""></a>
-            </div>
-            <div class="product">
-                <a href="#"><img src="img/ran-item5.png" alt=""></a>
-            </div>
-            <div class="product">
-                <a href="#"><img src="img/ran-item2.png" alt=""></a>
-            </div>
-            <div class="product">
-                <a href="#"><img src="img/ran-item1.png" alt=""></a>
-            </div>
-            <div class="product">
-                <a href="#"><img src="img/ran-item3.png" alt=""></a>
-            </div>
-            <div class="product">
-                <a href="#"><img src="img/ran-item1.png" alt=""></a>
-            </div>
-            <div class="product">
-                <a href="#"><img src="img/ran-item2.png" alt=""></a>
-            </div>
-            <div class="product">
-                <a href="#"><img src="img/ran-item3.png" alt=""></a>
-            </div>
+            <?php endforeach;?>
         </div>
+        <?php endif;?>
     </div>
 </div>

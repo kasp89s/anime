@@ -4,6 +4,7 @@ use yii\widgets\LinkPager;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
+$record->products;
 ?>
 <div class="breadcrumbs-block clearfix">
     <ul>
@@ -22,43 +23,23 @@ use yii\helpers\Html;
             <?= Html::img('/uploads/news/' . $record->id .'/' . $record->imageFileName, []);?>
         </div>
         <?= $record->content?>
+
+        <?php if (!empty($record->products)):?>
         <div class="product-to-buy">
             <div class="list owl-catalog-1">
+                <?php foreach ($record->products as $product):?>
                 <div class="item">
-                    <a class="link">
-                        <div class="image corner-message" message="Скидка - 25%">
-                            <img src="img/news2.png" alt="">
+                    <a href="<?= Url::to('/product/' . $product->id)?>" class="link">
+                        <div class="image <?= ($product->discount->value != 0) ? 'corner-message' : ''?>" message="<?= $product->discount->description?>">
+                            <?= Html::img('/uploads/product/' . $product->id .'/' . $product->imageFileName, []);?>
                         </div>
-                        <h3>Бэтмен. Суд Сов. Том 1</h3>
+                        <h3><?= $product->name?></h3>
                     </a>
                 </div>
-                <div class="item">
-                    <a class="link">
-                        <div class="image corner-message" message="Скидка - 25%">
-                            <img src="img/dummy-img1.png" alt="">
-                        </div>
-                        <h3>Бэтмен. Суд Сов. Том 1  Бэтмен. Суд Сов. Том 1 </h3>
-                    </a>
-                </div>
-                <div class="item">
-                    <a class="link">
-                        <div class="image corner-message" message="Скидка - 25%">
-                            <img src="img/dummy-img1.png" alt="">
-                        </div>
-                        <h3>Бэтмен. Суд Сов. Том 1</h3>
-                    </a>
-                </div>
-                <div class="item">
-                    <a class="link">
-                        <div class="image corner-message" message="Скидка - 25%">
-                            <img src="img/dummy-img1.png" alt="">
-                        </div>
-                        <h3>Бэтмен. Суд Сов. Том 1</h3>
-                    </a>
-                </div>
-
+                <?php endforeach;?>
             </div>
         </div>
+        <?php endif;?>
         <div class="social-block-horizontal">
             <img src="/img/social-horizontal.png" alt="">
         </div>

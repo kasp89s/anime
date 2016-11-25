@@ -114,6 +114,10 @@ class NewsController extends AbstractController
 
         $records = $query->all();
 
+        foreach ($records as $record) {
+            $record->products;
+        }
+
         return $this->render(Yii::$app->controller->action->id, [
             'records' => $records,
             'pages' => $pages,

@@ -118,7 +118,17 @@ class CabinetController extends AbstractController
             'url' => ['/cabinet']
         ];
 
+        $purchasedProducts = OrderProduct::find()
+            ->joinWith('order')
+            ->joinWith('order.status')
+            ->joinWith('product')
+            ->where([
+                'order.customerId' => $this->user->id,
+                'orderstatus.isFinished' => 1,
+            ])
+            ->all();
         return $this->render(Yii::$app->controller->action->id, [
+            'purchasedProducts' => $purchasedProducts
         ]);
     }
 
