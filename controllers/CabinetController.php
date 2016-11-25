@@ -16,6 +16,8 @@ use app\models\OrderProduct;
 use app\models\OrderProductAttribute;
 use app\models\OrderStatus;
 use app\models\OrderTotal;
+use app\models\Product;
+use app\models\QuickOrderForm;
 use app\models\User;
 use Yii;
 use app\models\Category;
@@ -379,6 +381,75 @@ class CabinetController extends AbstractController
         }
 
         return $this->render(Yii::$app->controller->action->id, [
+            'order' => $order
+        ]);
+    }
+
+    public function actionQuickOrder()
+    {
+        $model = new QuickOrderForm();
+
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
+
+        if (!$model->load(Yii::$app->request->post())) {
+            return $this->goHome();
+        }
+
+        $shipping = ShippingMethod::find()->one();
+        $payment = PaymentMethod::find()->one();
+        $product = Product::findOne($model->productId);
+
+        $order = new Order();
+        $order->customerId = !empty ($this->user) ? $this->user->id : Customer::DEFAULT_CUSTOMER_ID;
+        $order->shippingId = $shipping->id;
+        $order->paymentId = $payment->id;
+        $order->currencyCode = Order::CURRENCY_CODE;
+        $order->orderStatus = OrderStatus::getDefault();
+        $order->couponCode = null;
+        $order->createTime = date('Y-m-d H:i:s', time());
+        $order->save();
+
+        $customerInfo = new OrderCustomerInfo();
+        $customerInfo->orderId = $order->id;
+        $customerInfo->countryCode = $shipping->countryCode;
+        $customerInfo->address = 'не указан';
+        $customerInfo->fullName = $model->name;
+        $customerInfo->phone1 = $model->phone;
+        $customerInfo->save();
+
+        $orderTotal = new OrderTotal();
+        $orderTotal->orderId = $order->id;
+        $orderTotal->amount = $product->realPrice;
+        $orderTotal->currencyCode = Order::CURRENCY_CODE;
+        $orderTotal->save();
+
+        $orderHistory = new OrderHistory();
+        $orderHistory->orderId = $order->id;
+        $orderHistory->orderStatus = $order->orderStatus;
+        $orderHistory->isCustomerNotified = !empty ($this->user) ? 1 : 0;
+        $orderHistory->createTime = date('Y-m-d H:i:s', time());
+        $orderHistory->createUserId = User::DEFAULT_USER;
+        $orderHistory->save();
+
+        $orderProduct = new OrderProduct();
+        $orderProduct->orderId = $order->id;
+        $orderProduct->productId = $product->id;
+        $orderProduct->productSku = $product->sku;
+        $orderProduct->productName = $product->name;
+        $orderProduct->productQuantity = Product::DEFAULT_QUANTITY;
+        $orderProduct->productPrice = $product->realPrice;
+        $orderProduct->productIncomingPrice = $product->incomingPrice->price;
+        $orderProduct->currencyCode = $product->currencyCode;
+        $orderProduct->save();
+
+        if (!empty ($this->user)) {
+            $this->sendEmail($this->user->email, Yii::$app->params['newOrderSubject'], $this->renderPartial('emailTemplates/new-order', ['order' => $order]));
+        }
+
+        return $this->render('order-complete', [
             'order' => $order
         ]);
     }
