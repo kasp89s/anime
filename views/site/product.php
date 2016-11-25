@@ -53,7 +53,7 @@ use app\components\CommentWidget;
                     Добавить в корзину
                 </button>
                 <br />
-                <button class="enter-modal-btn">
+                <button class="enter-modal-btn quick-button">
                     Заказать в один клик
                 </button>
                 <div class="rating-info">
