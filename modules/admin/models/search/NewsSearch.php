@@ -67,7 +67,7 @@ class NewsSearch extends News
                 'createUserId' => $this->createUserId,
                 'updateUserId' => $this->updateUserId,
             ]);
-
+        $query->orderBy('id desc');
         $query->andFilterWhere(['like', 'title', $this->title])
             ->andFilterWhere(['like', 'shortContent', $this->shortContent])
             ->andFilterWhere(['like', 'content', $this->content])

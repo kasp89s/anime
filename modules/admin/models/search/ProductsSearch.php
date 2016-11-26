@@ -70,7 +70,7 @@ class ProductsSearch extends Product
                 'productDisountId' => $this->productDisountId,
                 'productManufactureId' => $this->productManufactureId,
             ]);
-
+        $query->orderBy('id desc');
         $query->andFilterWhere(['like', 'sku', $this->sku])
             ->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'description', $this->description])

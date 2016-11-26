@@ -14,6 +14,7 @@ use Yii;
  * @property integer $rating
  * @property string $message
  * @property string $date
+ * @property string $isActive
  *
  * @property Product $product
  */
@@ -34,7 +35,7 @@ class Comment extends \yii\db\ActiveRecord
     {
         return [
             [['productId', 'userName', 'userEmail', 'message'], 'required'],
-            [['productId', 'rating'], 'integer'],
+            [['productId','isActive', 'rating'], 'integer'],
             [['message'], 'string'],
             [['date'], 'safe'],
             ['userEmail', 'email', 'message' => 'Поле должно содержать корректный E-mail'],
@@ -53,9 +54,10 @@ class Comment extends \yii\db\ActiveRecord
             'productId' => 'Product ID',
             'userName' => 'Ваше имя',
             'userEmail' => 'E-mail',
-            'rating' => 'Rating',
+            'rating' => 'Рейтинг',
             'message' => 'Текст отзыва',
-            'date' => 'Date',
+            'date' => 'Время',
+            'isActive' => 'Активность',
         ];
     }
 

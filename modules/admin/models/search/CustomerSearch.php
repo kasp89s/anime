@@ -64,7 +64,7 @@ class CustomerSearch extends Customer
                 'isActive' => $this->isActive,
                 'registrationTime' => $this->registrationTime,
             ]);
-
+        $query->orderBy('id desc');
         $query->andFilterWhere(['like', 'email', $this->email])
             ->andFilterWhere(['like', 'password', $this->password])
             ->andFilterWhere(['like', 'code', $this->code])

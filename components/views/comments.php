@@ -11,6 +11,7 @@ $comment = new \app\models\Comment();
         Последние отзывы
     </h4>
         <?php foreach($model->comments as $comment):?>
+            <?php if($comment->isActive == 0) continue;?>
             <div class="comments-row">
         <div class="comments-row-info">
                             <span class="name">

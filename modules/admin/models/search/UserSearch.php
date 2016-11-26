@@ -63,7 +63,7 @@ class UserSearch extends User
             'userGroupId' => $this->userGroupId,
             'isActive' => $this->isActive,
         ]);
-
+        $query->orderBy('id desc');
         $query->andFilterWhere(['like', 'email', $this->email])
             ->andFilterWhere(['like', 'password', $this->password])
             ->andFilterWhere(['like', 'description', $this->description]);

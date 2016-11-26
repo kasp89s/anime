@@ -67,7 +67,7 @@ class OrderSearch extends Order
             'updateTime' => $this->updateTime,
             'isFinished' => $this->isFinished,
         ]);
-
+        $query->orderBy('id desc');
         $query->andFilterWhere(['like', 'currencyCode', $this->currencyCode])
             ->andFilterWhere(['like', 'orderStatus', $this->orderStatus])
             ->andFilterWhere(['like', 'couponCode', $this->couponCode]);

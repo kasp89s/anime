@@ -64,7 +64,7 @@ class PaymentMethodSearch extends PaymentMethod
                 'price' => $this->price,
                 'feePercent' => $this->feePercent,
             ]);
-
+        $query->orderBy('id desc');
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'countryCode', $this->countryCode])
             ->andFilterWhere(['like', 'description', $this->description])

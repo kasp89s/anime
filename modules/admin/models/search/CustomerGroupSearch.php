@@ -67,7 +67,7 @@ class CustomerGroupSearch extends CustomerGroup
                 'isDefault' => $this->isDefault,
                 'groupAccumulatedLimit' => $this->groupAccumulatedLimit,
             ]);
-
+        $query->orderBy('id desc');
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'description', $this->description]);
 

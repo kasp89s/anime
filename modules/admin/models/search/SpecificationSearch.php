@@ -61,7 +61,7 @@ class SpecificationSearch extends Specification
         $query->andFilterWhere([
                 'id' => $this->id,
             ]);
-
+        $query->orderBy('id desc');
         $query->andFilterWhere(['like', 'name', $this->name]);
 
         return $dataProvider;

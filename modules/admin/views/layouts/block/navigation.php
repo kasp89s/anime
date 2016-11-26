@@ -49,6 +49,11 @@
     <a href="<?= Url::to('/admin/banner/list')?>"><i class="fa fa-youtube-play"></i> <span class="nav-label">Банер</span> </a>
 </li>
     <?php endif;?>
+    <?php if (in_array('comment', \Yii::$app->user->getIdentity()->group->availableActions)):?>
+<li <?php echo (Yii::$app->controller->id == 'comment') ? 'class="active"' : '';?>>
+    <a href="<?= Url::to('/admin/comment/list')?>"><i class="fa fa-youtube-play"></i> <span class="nav-label">Комментарии</span> </a>
+</li>
+    <?php endif;?>
     <?php if (in_array('info-page', \Yii::$app->user->getIdentity()->group->availableActions)):?>
 <li <?php echo (Yii::$app->controller->id == 'info-page') ? 'class="active"' : '';?>>
     <a href="<?= Url::to('/admin/info-page/list')?>"><i class="fa fa-eye"></i> <span class="nav-label">Страници</span> </a>

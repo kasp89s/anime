@@ -68,7 +68,7 @@ class OrderStatusSearch extends OrderStatus
             'isPenalty' => $this->isPenalty,
             'isFinished' => $this->isFinished,
         ]);
-
+        $query->orderBy('id desc');
         $query->andFilterWhere(['like', 'statusCode', $this->statusCode])
             ->andFilterWhere(['like', 'name', $this->name]);
 

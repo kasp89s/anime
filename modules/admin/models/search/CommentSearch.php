@@ -5,12 +5,12 @@ namespace app\modules\admin\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Manufacture;
+use app\models\Comment;
 
 /**
- * ManufactureSearch represents the model behind the search form about `app\models\Manufacture`.
+ * CommentSearch represents the model behind the search form about `app\models\Comment`.
  */
-class ManufactureSearch extends Manufacture
+class CommentSearch extends Comment
 {
     /**
      * @inheritdoc
@@ -18,8 +18,8 @@ class ManufactureSearch extends Manufacture
     public function rules()
     {
         return [
-            [['id'], 'integer'],
-            [['name', 'description', 'image'], 'safe'],
+            [['id', 'productId', 'rating', 'isActive'], 'integer'],
+            [['userName', 'userEmail', 'message', 'date'], 'safe'],
         ];
     }
 
@@ -41,7 +41,7 @@ class ManufactureSearch extends Manufacture
      */
     public function search($params)
     {
-        $query = Manufacture::find();
+        $query = Comment::find();
 
         // add conditions that should always apply here
 
@@ -59,12 +59,16 @@ class ManufactureSearch extends Manufacture
 
         // grid filtering conditions
         $query->andFilterWhere([
-                'id' => $this->id,
-            ]);
+            'id' => $this->id,
+            'productId' => $this->productId,
+            'rating' => $this->rating,
+            'date' => $this->date,
+            'isActive' => $this->isActive,
+        ]);
         $query->orderBy('id desc');
-        $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'description', $this->description])
-            ->andFilterWhere(['like', 'image', $this->image]);
+        $query->andFilterWhere(['like', 'userName', $this->userName])
+            ->andFilterWhere(['like', 'userEmail', $this->userEmail])
+            ->andFilterWhere(['like', 'message', $this->message]);
 
         return $dataProvider;
     }

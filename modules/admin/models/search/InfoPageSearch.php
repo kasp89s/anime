@@ -65,7 +65,7 @@ class InfoPageSearch extends InfoPage
                 'createUserId' => $this->createUserId,
                 'updateUserId' => $this->updateUserId,
             ]);
-
+        $query->orderBy('id desc');
         $query->andFilterWhere(['like', 'code', $this->code])
             ->andFilterWhere(['like', 'title', $this->title])
             ->andFilterWhere(['like', 'content', $this->content]);

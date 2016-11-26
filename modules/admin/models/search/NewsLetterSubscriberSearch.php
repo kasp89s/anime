@@ -64,7 +64,7 @@ class NewsLetterSubscriberSearch extends NewsLetterSubscriber
                 'isActive' => $this->isActive,
                 'createTime' => $this->createTime,
             ]);
-
+        $query->orderBy('id desc');
         $query->andFilterWhere(['like', 'email', $this->email])
             ->andFilterWhere(['like', 'code', $this->code]);
 

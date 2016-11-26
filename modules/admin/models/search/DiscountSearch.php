@@ -65,7 +65,7 @@ class DiscountSearch extends Discount
                 'endTime' => $this->endTime,
                 'value' => $this->value,
             ]);
-
+        $query->orderBy('id desc');
         $query->andFilterWhere(['like', 'description', $this->description])
             ->andFilterWhere(['like', 'type', $this->type]);
 

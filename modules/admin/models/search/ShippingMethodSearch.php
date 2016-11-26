@@ -64,7 +64,7 @@ class ShippingMethodSearch extends ShippingMethod
                 'price' => $this->price,
                 'insurancePercent' => $this->insurancePercent,
             ]);
-
+        $query->orderBy('id desc');
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'countryCode', $this->countryCode])
             ->andFilterWhere(['like', 'description', $this->description])

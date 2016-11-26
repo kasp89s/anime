@@ -68,7 +68,7 @@ class BannerSearch extends Banner
                 'createUserId' => $this->createUserId,
                 'updateUserId' => $this->updateUserId,
             ]);
-
+        $query->orderBy('id desc');
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'content', $this->content])
             ->andFilterWhere(['like', 'imageFileName', $this->imageFileName]);

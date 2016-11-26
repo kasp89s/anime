@@ -71,7 +71,7 @@ class CouponSearch extends Coupon
                 'createUserId' => $this->createUserId,
                 'updateUserId' => $this->updateUserId,
             ]);
-
+        $query->orderBy('id desc');
         $query->andFilterWhere(['like', 'code', $this->code])
             ->andFilterWhere(['like', 'description', $this->description])
             ->andFilterWhere(['like', 'type', $this->type]);

@@ -7,7 +7,7 @@ use yii\helpers\Html;
     <?php foreach ($models as $item):?>
     <div class="item">
         <a href="<?= Url::to('/product/' . $item->id)?>" class="link">
-            <div class="image corner-message" message="<?= $item->discount->description?>">
+            <div class="image <?= ($product->discount->value != 0) ? 'corner-message' : ''?>" message="<?= $product->discount->description?>">
                 <?= Html::img('/uploads/product/' . $item->id .'/' . $item->imageFileName, []);?>
             </div>
             <h3><?= $item->name?></h3>
