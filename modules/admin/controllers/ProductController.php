@@ -279,8 +279,23 @@ class ProductController extends AdminController {
                 }
             }
 
+            if (!empty($category->parent) && !empty($category->parent->options)) {
+                foreach ($category->parent->options as $option) {
+                    if (empty($option->values)) continue;
+                    foreach ($option->values as $optionValue) {
+                        $attributes[$option->id . ';' . $optionValue->id] = $option->name . ' - ' . $optionValue->name . ' - ' . $optionValue->price;
+                    }
+                }
+            }
+
             if (!empty($category->specifications)) {
                 foreach ($category->specifications as $specification) {
+                    $specifications[$specification->id] = $specification->name;
+                }
+            }
+
+            if (!empty($category->parent) && !empty($category->parent->specifications)) {
+                foreach ($category->parent->specifications as $specification) {
                     $specifications[$specification->id] = $specification->name;
                 }
             }
