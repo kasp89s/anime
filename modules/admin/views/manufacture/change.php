@@ -31,7 +31,7 @@
                     <div class="hr-line-dashed"></div>
                     <?= $form->field($model, 'description')->textArea(['rows' => '3']) ?>
                     <div class="hr-line-dashed"></div>
-                    <?= Html::img('/uploads/banners/' . $model->id .'/' . $model->imageFileName, ['class' => 'img-rounded img-md']);?>
+                    <?= Html::img('/uploads/manufacture/' . $model->id .'/' . $model->image, ['class' => 'img-rounded img-md']);?>
                     <?= $form->field($model, 'file')->fileInput(['accept' => 'image/*'])?>
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">
