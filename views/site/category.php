@@ -25,13 +25,13 @@ use yii\helpers\Html;
             <?php endforeach;?>
         </ul>
         <?php endif;?>
-        <?php if (!empty($category->specifications)):?>
-            <?php foreach ($category->specifications as $specification):?>
+        <?php if (!empty($availableSpecifications)):?>
+            <?php foreach ($availableSpecifications as $specification):?>
+                <?php if (!empty($specification->valuesByProductsCount)):?>
                 <h3>
                     <?= $specification->name?>
                 </h3>
                 <ul>
-                <?php if (!empty($specification->valuesByProductsCount)):?>
                 <?php foreach ($specification->valuesByProductsCount as $record):?>
                     <li>
                     <a href="<?= Url::to('/specification/' . $record['value'])?>">
@@ -105,7 +105,9 @@ use yii\helpers\Html;
                     </a>
                     <div class="price">
                         <div class="new-price-block">
-                            <span class="old-price"><?= number_format($product->price, 0, '', ' ')?> <?= $product->currencyCode?>.</span>
+                            <?php if($product->discount->value != 0):?>
+                                <span class="old-price"><?= number_format($product->price, 0, '', ' ')?> <?= $product->currencyCode?>.</span>
+                            <?php endif;?>
                             <b class="new-price"><?= number_format($product->realPrice, 0, '', ' ')?> <?= $product->currencyCode?>.</b>
                         </div>
 

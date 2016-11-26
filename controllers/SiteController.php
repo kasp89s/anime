@@ -145,11 +145,18 @@ class SiteController extends AbstractController
         if (empty($category))
             throw new \yii\web\NotFoundHttpException();
 
+        $categoriesForSearch = [$id];
+        if (!empty($category->categories)) {
+            foreach ($category->categories as $categoryChild) {
+                $categoriesForSearch[] = $categoryChild->id;
+            }
+        }
+
         $query = Product::find();
         $query->joinWith('categoryRelation');
         $query->joinWith('marker');
         $query->joinWith('discount');
-        $query->where(['productcategoryrelation.productCategoryId' => $id]);
+        $query->where(['productcategoryrelation.productCategoryId' => $categoriesForSearch]);
         $query->andWhere('productmarker.isActive = 1 AND productmarker.isSale = 1');
 
         if (!empty($_GET['time']))
@@ -180,15 +187,33 @@ class SiteController extends AbstractController
             ->limit($pages->limit)
             ->all();
 
+        $availableSpecifications = [];
+        if (!empty($category->parent) && !empty($category->parent->specifications)) {
+            Yii::$app->view->params['breadcrumbs'][] = [
+                'template' => "<li>{link}</li>\n",
+                'label' => " {$category->parent->name}",
+                'url' => ['/category/' . $category->parent->id]
+            ];
+            foreach ($category->parent->specifications as $specification) {
+                $availableSpecifications[$specification->id] = $specification;
+            }
+        }
+
+        if (!empty($category->specifications)) {
+            foreach ($category->specifications as $specification) {
+                $availableSpecifications[$specification->id] = $specification;
+            }
+        }
+
         Yii::$app->view->params['breadcrumbs'][] = [
             'template' => "<li>{link}</li>\n",
             'label' => " {$category->name}",
             'url' => false
         ];
 
-
         return $this->render(Yii::$app->controller->action->id, [
             'category' => $category,
+            'availableSpecifications' => $availableSpecifications,
             'productBlocks' => array_chunk($products, 5),
             'pages' => $pages,
         ]);
