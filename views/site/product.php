@@ -95,7 +95,7 @@ use app\components\CommentWidget;
                         <?php foreach ($product->specificationRelations as $relation):?>
                             <li>
                                 <?php if ($relation->isSearch):?>
-                                    <?= $relation->specification->name?>: <a href="<?= Url::to('/specification?id=' . $relation->specification->id . '&value=' . $relation->value)?>"><?= $relation->value?></a>
+                                    <?= $relation->specification->name?>: <a href="<?= Url::to('/specification/' . $relation->id)?>"><?= $relation->value?></a>
                                 <?php else:?>
                                     <?= $relation->specification->name?>: <span><?= $relation->value?></span>
                                 <?php endif;?>
