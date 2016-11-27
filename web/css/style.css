@@ -3250,3 +3250,6 @@ footer h3 {
 .show {
   display: block;
 }
+.static {
+  padding-left: 30px;
+}
