@@ -25,7 +25,7 @@ class ManufactureController extends AdminController {
     {
         Yii::$app->view->params['breadcrumbs'][] = [
             'template' => "<li>{link}</li>\n",
-            'label' => 'Создать группу',
+            'label' => 'Создать производителя',
             'url' => ['/'. Yii::$app->controller->module->id .'/'. Yii::$app->controller->id .'/'. Yii::$app->controller->action->id]
         ];
 
@@ -60,7 +60,7 @@ class ManufactureController extends AdminController {
     {
         Yii::$app->view->params['breadcrumbs'][] = [
             'template' => "<li>{link}</li>\n",
-            'label' => 'Редактировать группу',
+            'label' => 'Редактировать производителя',
             'url' => ['/'. Yii::$app->controller->module->id .'/'. Yii::$app->controller->id .'/'. Yii::$app->controller->action->id]
         ];
 

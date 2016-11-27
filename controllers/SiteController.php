@@ -195,12 +195,14 @@ class SiteController extends AbstractController
                 'url' => ['/category/' . $category->parent->id]
             ];
             foreach ($category->parent->specifications as $specification) {
+                $specification->findProducts($categoriesForSearch);
                 $availableSpecifications[$specification->id] = $specification;
             }
         }
 
         if (!empty($category->specifications)) {
             foreach ($category->specifications as $specification) {
+                $specification->findProducts($categoriesForSearch);
                 $availableSpecifications[$specification->id] = $specification;
             }
         }

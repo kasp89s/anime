@@ -15,6 +15,8 @@ use Yii;
  */
 class Specification extends \yii\db\ActiveRecord
 {
+    protected $productsCount = null;
+
     /**
      * @inheritdoc
      */
@@ -61,17 +63,27 @@ class Specification extends \yii\db\ActiveRecord
         return $this->hasMany(Product::className(), ['id' => 'productId'])->viaTable('productproductspecificationrelation', ['productSpecificationId' => 'id']);
     }
 
+    public function findProducts($categories)
+    {
+        $categories = implode(',', $categories);
+        $connection = Yii::$app->getDb();
+        $command = $connection->createCommand("
+        SELECT COUNT(`productproductspecificationrelation`.`productId`) as `count`, `value`
+            FROM `productproductspecificationrelation`
+            LEFT JOIN `product` ON `productproductspecificationrelation`.`productId` = `product`.`id`
+            LEFT JOIN `productcategoryrelation` ON `product`.`id` = `productcategoryrelation`.`productId`
+            LEFT JOIN `productcategory` ON `productcategoryrelation`.`productCategoryId` = `productcategory`.`id`
+                WHERE (`productcategory`.`id` IN ({$categories})) AND (`productSpecificationId`= :productSpecificationId) AND (`isSearch`=1)
+              GROUP BY `value` ORDER BY `count` DESC",
+            [
+                ':productSpecificationId' => $this->id,
+            ]);
+
+        $this->productsCount = $command->queryAll();
+    }
+
     public function getValuesByProductsCount()
     {
-        return ProductSpecificationRelation::find()
-            ->select('COUNT(`productId`) as `count`, `value`')
-            ->where([
-                    'productSpecificationId' => $this->id,
-                    'isSearch' => 1
-                ])
-            ->groupBy('`value`')
-            ->orderBy('`count` DESC')
-            ->asArray()
-            ->all();
+        return $this->productsCount;
     }
 }
