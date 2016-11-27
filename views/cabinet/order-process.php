@@ -48,14 +48,30 @@ use yii\widgets\ActiveForm;
                             <label class="label-info left add-number-order" style="cursor: pointer">
                                 Указать другой +
                             </label>
-                            <?= Html::textInput('newPhone', null, [
-                                'placeholder' => 'Например, (066) 123-23-32',
-                                'class' => 'order-input new-number-order',
-                                'style' => 'display: none;'
-                            ])?>
+                            <?php
+                            echo \yii\widgets\MaskedInput::widget([
+                                'name' => 'newPhone',
+                                'mask' => '+380999999999',
+                                'options'=>[
+                                    'class' => 'order-input new-number-order',
+                                    'style' => 'display: none;'
+                                ],
+                                'clientOptions'=>[
+                                    'clearIncomplete' => true
+                                ]
+                            ]);
+                            ?>
                         </div>
                     <?php else:?>
-                        <?= $form->field($orderForm, 'phone')->textInput(['placeholder' => 'Например, (066) 123-23-32']) ?>
+                        <?= $form->field($orderForm, 'phone')->widget(\yii\widgets\MaskedInput::className(), [
+                            'mask' => '+380999999999',
+                            'options'=>[
+                                'class' => 'order-input',
+                            ],
+                            'clientOptions'=>[
+                                'clearIncomplete' => true
+                            ]
+                        ]); ?>
                     <?php endif;?>
 
                 </div>

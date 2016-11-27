@@ -42,17 +42,42 @@ use yii\helpers\Html;
             <?php if (!empty($model->phones)):?>
                 <div class="info left">
                 <?php foreach ($model->phones as $index => $phone):?>
-                        <?= $form->field($phone, '['.$index.']phone')->textInput(['placeholder' => 'Например, (066) 123-23-32'])->label(false)?>
+                        <?= $form->field($phone, '['.$index.']phone')->widget(\yii\widgets\MaskedInput::className(), [
+                        'mask' => '+380999999999',
+                        'options'=>[
+                            'class' => 'input',
+                        ],
+                    ])->label(false)?>
                 <?php endforeach;?>
                 </div>
             <?php else:?>
                 <div class="info left">
-                    <?= Html::textInput('phones[]', null, ['placeholder' => 'Например, (066) 123-23-32']);?>
+                    <?php
+                    echo \yii\widgets\MaskedInput::widget([
+                        'name' => 'phones[]',
+                        'mask' => '+380999999999',
+                        'options'=>[
+                        ],
+                        'clientOptions'=>[
+                            'clearIncomplete' => true
+                        ]
+                    ]);
+                    ?>
                 </div>
             <?php endif;?>
             </div>
             <div class="form-row clearfix new-number template">
-                <?= Html::textInput('phones[]', null, ['placeholder' => 'Например, (066) 123-23-32']);?>
+                <?php
+                echo \yii\widgets\MaskedInput::widget([
+                    'name' => 'phones[]',
+                    'mask' => '+380999999999',
+                    'options'=>[
+                    ],
+                    'clientOptions'=>[
+                        'clearIncomplete' => true
+                    ]
+                ]);
+                ?>
                 <a href="javascript:void(0)" class="remove-number-block">
                     <img src="/img/remove-button.png" alt="">
                 </a>

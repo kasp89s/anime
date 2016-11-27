@@ -195,7 +195,15 @@ use app\components\CommentWidget;
 
                 <?= $form->field($quickOrder, 'name') ?>
 
-                <?= $form->field($quickOrder, 'phone') ?>
+                <?= $form->field($quickOrder, 'phone')->widget(\yii\widgets\MaskedInput::className(), [
+                    'mask' => '+380999999999',
+                    'options'=>[
+                        'class' => 'input',
+                    ],
+                    'clientOptions'=>[
+                        'clearIncomplete' => true
+                    ]
+                ]); ?>
 
                 <div class="enter-row">
                     <?= Html::submitButton('Заказать', ['class' => 'button submit']) ?>

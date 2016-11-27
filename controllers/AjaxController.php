@@ -169,4 +169,9 @@ class AjaxController extends AbstractController
 
         return ['success' => 'add'];
     }
+
+    public function actionGetNumberField()
+    {
+        return $this->renderPartial('number-field', ['maskedValidator' => $this->_post['maskedValidator']]);
+    }
 }

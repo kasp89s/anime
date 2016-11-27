@@ -111,8 +111,19 @@ $(document).ready(function(){
 	});
 
 	$(".add-number").click(function(){
-		var newNumber = $(".new-number.template");
-			newNumber.clone().removeClass("template").addClass("active").insertAfter($(".new-number").last()).find('input').val('');
+		// var newNumber = $(".new-number.template");
+		// 	newNumber.clone().removeClass("template").addClass("active").insertAfter($(".new-number").last()).find('input').val('');
+
+		$.post(
+			'/ajax/get-number-field',
+			{
+				_csrf: $('[name="_csrf"]').val(),
+				maskedValidator: $('.new-number.template').find('input').data('plugin-inputmask')
+			},
+			function (response) {
+				$(response).insertAfter($(".new-number").last());
+			}
+		);
 	});
 
 	//add address
