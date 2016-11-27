@@ -55,7 +55,7 @@ use yii\helpers\Html;
                 </div>
                 <div class="news-bloc clearfix">
                     <div class="news-image left">
-                        <a class="link">
+                        <a href="<?= Url::to('/'. Yii::$app->controller->id .'/article/' . $record->id)?>" class="link">
                             <div class="image corner-message">
                                 <?= Html::img('/uploads/news/' . $record->id .'/' . $record->imageFileName, []);?>
                             </div>
