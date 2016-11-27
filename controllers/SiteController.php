@@ -138,6 +138,54 @@ class SiteController extends AbstractController
         ]);
     }
 
+    public function actionSearch()
+    {
+        $search = \Yii::$app->request->get('s');
+        $products = Product::find()
+            ->joinWith('specificationRelations')
+            ->joinWith('discount')
+            ->joinWith('marker')
+            ->filterWhere(['like', 'name', $search])
+            ->all();
+
+        Yii::$app->view->params['breadcrumbs'][] = [
+            'template' => "<li>{link}</li>\n",
+            'label' => " Поиск по \"{$search}\"",
+            'url' => false
+        ];
+
+        return $this->render(Yii::$app->controller->action->id, [
+            'searchCount' => count($products),
+            'productBlocks' => array_chunk($products, 5),
+            'value' => " Поиск по \"{$search}\"",
+        ]);
+    }
+
+    public function actionSpecification($id)
+    {
+        $productSpecificationRelation = ProductSpecificationRelation::findOne($id);
+
+        $products = Product::find()
+            ->joinWith('specificationRelations')
+            ->joinWith('discount')
+            ->joinWith('marker')
+            ->where(['productproductspecificationrelation.value' => $productSpecificationRelation->value])
+            ->all();
+
+        Yii::$app->view->params['breadcrumbs'][] = [
+            'template' => "<li>{link}</li>\n",
+            'label' => " {$productSpecificationRelation->specification->name} {$productSpecificationRelation->value}",
+            'url' => false
+        ];
+
+        return $this->render(Yii::$app->controller->action->id, [
+            'searchCount' => count($products),
+            'productBlocks' => array_chunk($products, 5),
+            'value' => $productSpecificationRelation->specification->name . ' ' . $productSpecificationRelation->value,
+            'id' => $id,
+        ]);
+    }
+
     public function actionCategory($id)
     {
         //Yii::$app->cache

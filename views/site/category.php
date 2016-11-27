@@ -34,7 +34,7 @@ use yii\helpers\Html;
                 <ul>
                 <?php foreach ($specification->valuesByProductsCount as $record):?>
                     <li>
-                    <a href="<?= Url::to('/specification/' . $record['value'])?>">
+                    <a href="<?= Url::to('/specification/' . $record['id'])?>">
                         <?= $record['value']?> <span>(<?php echo $record['count']?>)</span>
                     </a>
                     </li>

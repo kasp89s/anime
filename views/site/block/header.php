@@ -159,8 +159,8 @@ $registration = new \app\models\RegisterForm();
             Время работы: пн-вс. с 10:00 до 18:00 / +38 (063) <span>467-27-36</span>
             <a href="<?= Url::to('/page/'. $this->params['pages']['contacts']->code)?>">все контакты</a>
         </div>
-        <form action="" class="search">
-            <input type="text" name="s" placeholder="ПОИСК ПО САЙТУ">
+        <form action="/search" class="search">
+            <input type="text" name="s" placeholder="ПОИСК ПО САЙТУ" pattern=".{3,}"   required title="введите не мение трех символов">
             <button type="submit"></button>
         </form>
         <div class="example">

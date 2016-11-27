@@ -12,7 +12,6 @@ use yii\helpers\Html;
 <div class="content-container clearfix">
     <div class="fix-size-aside left">
         <h3>&nbsp;</h3>
-
     </div>
     <div class="responsive-container left">
         <h3>

@@ -68,7 +68,7 @@ class Specification extends \yii\db\ActiveRecord
         $categories = implode(',', $categories);
         $connection = Yii::$app->getDb();
         $command = $connection->createCommand("
-        SELECT COUNT(`productproductspecificationrelation`.`productId`) as `count`, `value`
+        SELECT COUNT(`productproductspecificationrelation`.`productId`) as `count`, `value`, `productproductspecificationrelation`.`id`
             FROM `productproductspecificationrelation`
             LEFT JOIN `product` ON `productproductspecificationrelation`.`productId` = `product`.`id`
             LEFT JOIN `productcategoryrelation` ON `product`.`id` = `productcategoryrelation`.`productId`
