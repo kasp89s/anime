@@ -43,6 +43,7 @@ $record->products;
         <div class="social-block-horizontal">
             <img src="/img/social-horizontal.png" alt="">
         </div>
+        <?php if(!empty($viewProductList)):?>
         <div class="last-product-row">
             <div class="last-view clearfix">
                 <h4 class="left">
@@ -56,5 +57,6 @@ $record->products;
             </div>
             <?= \app\components\LastViewWidget::widget(['models' => $viewProductList]) ?>
         </div>
+        <?php endif;?>
     </div>
 </div>

@@ -20,15 +20,6 @@ use yii\helpers\Html;
     <div class="col-lg-12">
         <div class="ibox float-e-margins">
             <div class="ibox-content">
-                <div class="row">
-                    <div class="col-sm-2 m-b-xs">
-                        <div class="col-sm-6">
-                            <div class="input-group">
-                                <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/create')?>" class="btn btn-primary">Создать</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <?= \yii\grid\GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,

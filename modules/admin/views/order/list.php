@@ -38,6 +38,9 @@ foreach (\app\models\OrderStatus::find()->asArray()->all() as $status) {
                 'label' => 'Имя',
                 'format' => 'raw',
                 'value' => function($model) {
+                    if (empty($model->customerInfo->fullName))
+                        return null;
+
                     return $model->customerInfo->fullName;
                 }
             ],
@@ -56,6 +59,9 @@ foreach (\app\models\OrderStatus::find()->asArray()->all() as $status) {
                 'label' => 'Итого',
                 'format' => 'raw',
                 'value' => function($model) {
+                    if (empty($model->total->amount))
+                        return null;
+
                     return $model->total->amount . ' ' . $model->total->currencyCode;
                 }
             ],

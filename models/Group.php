@@ -73,6 +73,7 @@ class Group extends \yii\db\ActiveRecord
             'specification' => 'Спецификации',
             'option' => 'Опции',
             'order' => 'Заказы',
+            'order-status' => 'Статусы заказов',
             'comment' => 'Комментарии'
         ];
     }

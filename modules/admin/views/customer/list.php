@@ -49,6 +49,7 @@ use yii\helpers\Html;
                                     }
                                 }
                             ],
+                            /*
                             [
                                 'format' => 'raw',
                                 'value' => function($model) {
@@ -81,6 +82,7 @@ use yii\helpers\Html;
                                 </div>';
                                 }
                             ],
+                            */
                             [
                                 'format' => 'raw',
                                 'value' => function($model) {
