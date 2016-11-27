@@ -205,3 +205,21 @@ use app\components\CommentWidget;
     </div>
 
 </div>
+
+
+<div id="modal_form">
+    <div class="clearfix">
+        <div class="close right">
+            <img src="/img/remove-button.png" alt="">
+        </div>
+    </div>
+    <div class="modal-slide">
+        <?php if ($product->images):?>
+        <?php foreach ($product->images as $image):?>
+            <div class="item">
+                <?= Html::img('/uploads/product/' . $product->id .'/' . $image->imageFileName, []);?>
+            </div>
+        <?php endforeach;?>
+        <?php endif;?>
+    </div>
+</div>
