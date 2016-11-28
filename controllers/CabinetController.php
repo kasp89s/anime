@@ -290,7 +290,7 @@ class CabinetController extends AbstractController
         ]);
     }
 
-    public function actionOrderProcess()
+    public function actionOrderCheckout()
     {
         if (empty($this->_basket->basketProducts))
             throw new \yii\web\NotFoundHttpException();
@@ -340,17 +340,14 @@ class CabinetController extends AbstractController
         if (empty($this->_basket->basketProducts))
             throw new \yii\web\NotFoundHttpException();
 
-        $orderForm = new OrderProcessForm();
+        $orderForm = new OrderProcessForm(
+            ['scenario' => !empty($this->user) ? OrderProcessForm::SCENARIO_REGISTERED : OrderProcessForm::SCENARIO_GUEST]
+        );
 
         if (Yii::$app->request->isAjax && $orderForm->load(Yii::$app->request->post())) {
             Yii::$app->response->format = Response::FORMAT_JSON;
 
-            if (empty($this->user) && empty($orderForm->email))
-                    $orderForm->addError('email', 'Необходимо заполнить «E-mail».');
-
-            $orderForm->validate();
-
-            return $orderForm->errors;
+            return ActiveForm::validate($orderForm);
         }
 
         if ($orderForm->load(Yii::$app->request->post()) && $orderForm->validate()) {
@@ -371,10 +368,14 @@ class CabinetController extends AbstractController
                 $AddressModel->address = $post['newAddress']['address'];
                 $AddressModel->zip = $post['newAddress']['zip'];
                 $AddressModel->save();
-            } elseif(!empty($orderForm->address)) {
+            } elseif(!empty($orderForm->address) && !empty($this->user)) {
                 $AddressModel = CustomerAddress::findOne($orderForm->address);
-            } elseif (!empty($post['guestAddress']['address'])) {
-                $AddressModel = (object) $post['guestAddress'];
+            } elseif (empty($this->user)) {
+                $AddressModel = (object) [
+                    'city' => $orderForm->city,
+                    'address' => $orderForm->address,
+                    'zip' => $orderForm->zip,
+                ];
             }
 
             $shippingMethod = ShippingMethod::findOne($orderForm->shipping);
@@ -409,6 +410,7 @@ class CabinetController extends AbstractController
             $customerInfo->zip = $AddressModel->zip;
             $customerInfo->fullName = $orderForm->fullName;
             $customerInfo->phone1 = $orderForm->phone;
+            $customerInfo->shippingValue = !empty($post['shippingValue']) ? $post['shippingValue'] : '';
             $customerInfo->save();
 
             $orderTotal = new OrderTotal();
@@ -423,6 +425,7 @@ class CabinetController extends AbstractController
             $orderHistory->isCustomerNotified = 1;
             $orderHistory->createTime = date('Y-m-d H:i:s', time());
             $orderHistory->createUserId = User::DEFAULT_USER;
+            $orderHistory->comment = !empty($orderForm->comment) ? $orderForm->comment : null;
             $orderHistory->save();
 
             foreach ($this->_basket->basketProducts as $basketProduct) {

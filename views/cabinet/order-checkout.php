@@ -105,7 +105,9 @@ use yii\widgets\ActiveForm;
                             ])?>
                         </div>
                         <?php else:?>
+                        <?= $form->field($orderForm, 'city')->textInput() ?>
                         <?= $form->field($orderForm, 'address')->textInput() ?>
+                        <?= $form->field($orderForm, 'zip')->textInput() ?>
                     <?php endif;?>
                 </div>
                 <div class="order-info-row">
@@ -127,6 +129,7 @@ use yii\widgets\ActiveForm;
                                         data-insurance-value="<?= round($method->insurancePercent)?>"
                                         data-price-message="<?= ($method->price > 0) ? '* Доставка ' . $method->name . ': + ' . round($method->price). ' грн к стоимости заказа.' : ''?>"
                                         data-insurance-message="<?= ($method->insurancePercent > 0) ? '* Доставка ' . $method->name . ': + ' . round($method->insurancePercent) . '% к стоимости заказа.' : ''?>"
+                                        data-required-value="<?= (!empty($method->requiredValue)) ? '* ' . $method->requiredValue . ':' : ''?>"
                                         <?= ($key == 0) ? 'checked' : ''?>
                                     />
                                     <span class="label-text"><?= $method->name?></span>

@@ -100,7 +100,7 @@ $totalAmount = 0;
                         <span>
                             Всего к оплате: <strong><?= number_format($totalAmount, 0, '', ' ')?> грн.</strong>
                         </span>
-                <button onclick="window.location.href='<?= Url::to('/cabinet/order-process')?>'">
+                <button onclick="window.location.href='<?= Url::to('/cabinet/order-checkout')?>'">
                     ОФОРМИТЬ ЗАКАЗ
                 </button>
             </div>

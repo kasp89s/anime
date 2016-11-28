@@ -408,6 +408,15 @@ $(document).ready(function(){
 	});
 
     $('.done-order.left').on('click', function () {
+    	var shippingValue = $('.delivery-block').find('[name="shippingValue"]');
+
+    	if (shippingValue.attr('type') !== undefined && shippingValue.val().length == 0) {
+			shippingValue.next('.text-danger').text('Необходимо заполнить «Номер отделения».');
+			return;
+		} else {
+			shippingValue.next('.text-danger').text('');
+		}
+
         $('[action="/cabinet/order-complete"]').submit();
     });
 
@@ -415,53 +424,75 @@ $(document).ready(function(){
         var price = $(this).data('price-message'),
             insurance = $(this).data('insurance-message'),
             priceValue = parseInt($(this).data('price-value')),
+			requiredValue = $(this).data('required-value'),
             insuranceValue = parseInt($(this).data('insurance-value')),
             totalAmount = parseInt($('.totalAmount').text()),
-            info = $('.delivery-info');
+            info = $('.delivery-info'),
+			unsetCommission = function () {
+				// Вычетаем стоимость если уже была.
+				var deliveryAmount = parseInt($('.delivery-commission').text()),
+					totalAmount = parseInt($('.totalAmount').text());
+
+					$('.delivery-info > .delivery-price').text('');
+				if (deliveryAmount > 0) {
+					$('.delivery-commission').text('—');
+					$('.totalAmount').text(totalAmount - deliveryAmount);
+				}
+			};
 
         info.hide();
 
         // Добавляем стоимость за доставку.
         if (price.length > 0) {
+			unsetCommission();
             $('.delivery-info > .delivery-price').text(price);
             $('.delivery-commission').text('+' + priceValue + ' грн');
             $('.totalAmount').text(totalAmount + priceValue);
             info.show();
         } else if (insurance.length > 0) {
+			unsetCommission();
             var insuranceAmount = parseInt(totalAmount / 100 * insuranceValue);
             $('.delivery-info > .delivery-price').text(insurance);
             $('.delivery-commission').text('+' + insuranceAmount + ' грн');
             $('.totalAmount').text(totalAmount + insuranceAmount);
             info.show();
+        } else if (requiredValue.length > 0) {
+			unsetCommission();
+			$('.delivery-info > .delivery-price')
+				.html(requiredValue + ' <input type="text" class="order-input" name="shippingValue" /><div class="error text-danger"></div>');
+			info.show();
         } else {
-            // Вычетаем стоимость если уже была.
-            var deliveryAmount = parseInt($('.delivery-commission').text());
-                if (deliveryAmount > 0) {
-                    $('.delivery-commission').text('—');
-                    $('.totalAmount').text(totalAmount - deliveryAmount);
-                }
+			unsetCommission();
         }
     });
 
 	$('.payment-type').find('[name="OrderProcessForm[payment]"]').on('change', function () {
 		var price = parseInt($(this).data('price')),
-			totalAmount = parseInt($('.totalAmount').text()),
-			feePercent = parseInt($(this).data('fee'));
+			feePercent = parseInt($(this).data('fee')),
+		    unsetCommission = function () {
+				// Вычетаем стоимость если уже была.
+				var paymentAmount = parseInt($('.payment-commission').text()),
+					totalAmount = parseInt($('.totalAmount').text());
+
+				if (paymentAmount > 0) {
+					$('.payment-commission').text('—');
+					$('.totalAmount').text(totalAmount - paymentAmount);
+				}
+			};
 
 		if (price > 0) {
+			unsetCommission();
+			var totalAmount = parseInt($('.totalAmount').text());
 			$('.payment-commission').text('+' + price + ' грн');
 			$('.totalAmount').text(totalAmount + price);
 		} else if (feePercent > 0) {
-			var feeAmount = parseInt(totalAmount / 100 * feePercent);
+			unsetCommission();
+			var totalAmount = parseInt($('.totalAmount').text()),
+				feeAmount = parseInt(totalAmount / 100 * feePercent);
 			$('.payment-commission').text('+' + feeAmount + ' грн');
 			$('.totalAmount').text(totalAmount + feeAmount);
 		} else {
-			// Вычетаем стоимость если уже была.
-			var paymentAmount = parseInt($('.payment-commission').text());
-			if (paymentAmount > 0) {
-				$('.payment-commission').text('—');
-				$('.totalAmount').text(totalAmount - paymentAmount);
-			}
+			unsetCommission();
 		}
 	});
 

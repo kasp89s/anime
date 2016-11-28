@@ -213,14 +213,19 @@ foreach (\app\models\OrderStatus::find()->asArray()->all() as $status) {
                                 <dt><?= $model->shipping->attributeLabels()['description']?></dt>
                                 <dd><?= $model->shipping->description?></dd>
                                 <dt><?= $model->shipping->attributeLabels()['price']?></dt>
-                                <dd><?= $model->shipping->description?></dd>
+                                <dd><?= $model->shipping->price?></dd>
                                 <dt><?= $model->shipping->attributeLabels()['insurancePercent']?></dt>
-                                <dd><?= $model->shipping->description?></dd>
+                                <dd><?= $model->shipping->insurancePercent?></dd>
                             </dl>
                             <?php $form = ActiveForm::begin(); ?>
 
                             <?= $form->field($model, 'shippingId')->dropDownList($shippings);?>
-
+                            <?php if (!empty($model->customerInfo->shippingValue)):?>
+                            <dl class="dl-horizontal m-t-md small">
+                                <dt><?= $model->shipping->requiredValue?>:</dt>
+                                <dd><?= $model->customerInfo->shippingValue?></dd>
+                            </dl>
+                            <?php endif;?>
                             <div class="form-group">
                                 <?= Html::submitInput('Сохранить', ['class' => 'btn btn-primary']) ?>
                                 <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/list')?>" class="btn btn-white" type="submit">Cancel</a>
@@ -236,9 +241,9 @@ foreach (\app\models\OrderStatus::find()->asArray()->all() as $status) {
                                 <dt><?= $model->payment->attributeLabels()['description']?></dt>
                                 <dd><?= $model->payment->description?></dd>
                                 <dt><?= $model->payment->attributeLabels()['price']?></dt>
-                                <dd><?= $model->payment->description?></dd>
+                                <dd><?= $model->payment->price?></dd>
                                 <dt><?= $model->payment->attributeLabels()['feePercent']?></dt>
-                                <dd><?= $model->payment->description?></dd>
+                                <dd><?= $model->payment->feePercent?></dd>
                             </dl>
                             <?php $form = ActiveForm::begin(); ?>
 

@@ -111,17 +111,19 @@ use app\components\CommentWidget;
 
             <div class="product-delivery left">
                 <?php if (!empty($shippingMethods)):?>
-                <p>
                     <?php foreach ($shippingMethods as $method):?>
-                        <span><?= $method->name?> - <?= ($method->price) ? round($method->price) . ' ' . $method->countryCode : 'бесплатно'?></span><br>
+                        <p>
+                        <span>«<?= $method->name?>»</span> -
+                            <?php if ($method->price):?>
+                                <?= round($method->price)?> <?= $method->countryCode?>
+                            <?php elseif ($method->description):?>
+                                <?= $method->description?>
+                            <?php else:?>
+                                бесплатно
+                            <?php endif;?>
+                        </p>
                     <?php endforeach;?>
-                </p>
                 <?php endif;?>
-                <p>
-                    <span>«Транспортные компании»</span>
-                    - Стоимость доставки расчитывается по тарифам транспортной компании.
-                    Расчёт идёт при получении заказа в отделении транспортной компании.
-                </p>
                 <p>
                     <a href="<?= Url::to('/page/'. $this->params['pages']['delivery']->code)?>">
                         Читать подробнее...

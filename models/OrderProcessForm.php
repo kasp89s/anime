@@ -10,7 +10,15 @@ use yii\base\Model;
  */
 class OrderProcessForm extends Model
 {
+    const SCENARIO_REGISTERED = 'REGISTERED';
+
+    const SCENARIO_GUEST = 'GUEST';
+
     public $email;
+
+    public $city;
+
+    public $zip;
 
     public $fullName;
 
@@ -33,10 +41,12 @@ class OrderProcessForm extends Model
     {
         return [
             // email and password are both required
-            [['fullName', 'phone', 'address', 'shipping', 'payment'], 'required'],
+            [['fullName', 'phone', 'shipping', 'payment'], 'required'],
+            [['address'], 'required', 'on' => self::SCENARIO_REGISTERED],
+            [['email', 'address', 'city', 'zip'], 'required', 'on' => self::SCENARIO_GUEST],
             [['comment'], 'string'],
             ['email', 'email', 'message' => 'Поле должно содержать корректный E-mail'],
-            [['couponCode'], 'string'],
+            [['couponCode', 'city', 'zip', 'address'], 'string'],
         ];
     }
 
@@ -50,6 +60,8 @@ class OrderProcessForm extends Model
             'fullName' => 'Имя Фамилия',
             'phone' => 'Моб. телефон',
             'address' => 'Адрес',
+            'city' => 'Город',
+            'zip' => 'Индекс',
             'shipping' => 'Доставка',
             'payment' => 'Оплата',
             'comment' => 'Добавить комментарий к заказу',

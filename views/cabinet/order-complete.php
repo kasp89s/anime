@@ -53,6 +53,9 @@ use yii\helpers\Html;
                                     <span class="label-text"></span>
                                 </label>
                                 <span><?= $order->shipping->name?></span>
+                                <?php if (!empty($order->customerInfo->shippingValue)):?>
+                                    <div><?= $order->shipping->requiredValue?>: <?= $order->customerInfo->shippingValue?></div>
+                                <?php endif;?>
                             </div>
                         </div>
                     </div>

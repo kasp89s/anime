@@ -358,11 +358,11 @@ class SiteController extends AbstractController
                 Yii::$app->params['NewsLetterSubscriberSubject'],
                 $this->renderPartial('emailTemplates/subscribe', ['model' => $model])
             );
-        }
 
-        return $this->render(Yii::$app->controller->action->id, [
-            'model' => $model
-        ]);
+            return $this->render(Yii::$app->controller->action->id, [
+                'model' => $model
+            ]);
+        }
     }
 
     public function actionSubscribeApprove($code)

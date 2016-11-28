@@ -16,6 +16,7 @@ use Yii;
  * @property string $fullName
  * @property string $phone1
  * @property string $phone2
+ * @property string $shippingValue
  *
  * @property Order $order
  */
@@ -38,7 +39,7 @@ class OrderCustomerInfo extends \yii\db\ActiveRecord
             [['orderId', 'countryCode', 'address', 'fullName', 'phone1'], 'required'],
             [['orderId'], 'integer'],
             [['countryCode'], 'string', 'max' => 3],
-            [['city', 'address', 'fullName'], 'string', 'max' => 255],
+            [['city', 'address', 'fullName', 'shippingValue'], 'string', 'max' => 255],
             [['zip'], 'string', 'max' => 10],
             [['phone1'], 'string', 'max' => 15],
             [['phone2'], 'string', 'max' => 45],
@@ -61,6 +62,7 @@ class OrderCustomerInfo extends \yii\db\ActiveRecord
             'fullName' => 'Имя Фамилия',
             'phone1' => 'Моб. телефон',
             'phone2' => 'Доп. телефон',
+            'shippingValue' => 'Значение атрибута доставки',
         ];
     }
 
