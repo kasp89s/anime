@@ -19,11 +19,12 @@ $registration = new \app\models\RegisterForm();
     <div class="panel col-xs-12 col-sm-8 col-md-3 col-lg-4">
         <div class="account">
 						<span>
-							Личный кабинет
                             <?php if (empty($this->params['user'])):?>
+                             Личный кабинет
 							<a href="/" class="open-build-in" data-popup="#enter-modal">Войдите в личный кабинет</a>
                             <?php else:?>
                             <span class="user-login show">
+                                <a href="<?= Url::to('/cabinet') ?>">Личный кабинет</a>
                                 Привет, <?= !empty($this->params['user']->fullName) ? $this->params['user']->fullName : $this->params['user']->email?>
                             </span>
                             <?php endif;?>

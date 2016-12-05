@@ -6,7 +6,7 @@ use yii\base\Model;
 /**
  * RegisterForm is the model behind the login form.
  */
-class RegisterForm extends Model
+class RegisterForm extends Customer
 {
     /**
      * Email.
@@ -29,6 +29,7 @@ class RegisterForm extends Model
             ['password', 'string', 'min' => 6, 'max' => 32, 'message' => 'Парольдолжен быть от 6 до 16 символов'],
             ['passwordConfirm', 'compare', 'compareAttribute'=>'password', 'message'=>"Пароли не совпадают" ],
             ['email', 'email', 'message' => 'Поле должно содержать корректный E-mail'],
+            ['email', 'unique', 'message' => 'Пользователь с таким E-mail уже зарегистрирован в системе'],
         ];
     }
 
