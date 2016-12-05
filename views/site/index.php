@@ -19,7 +19,7 @@ use yii\helpers\Html;
                 <a href=".list2">Популярные товары</a>
                 <a href=".list3">Распродажи</a>
             </div>
-            <a href="/" class="show-all">показать все</a>
+            <a href="javascript:void(0)" class="show-all index">показать все</a>
         </div>
         <div class="switch-list">
             <div class="list list1 owl-catalog-1">

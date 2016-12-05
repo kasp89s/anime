@@ -24,35 +24,35 @@ use yii\helpers\Html;
                     </span>
                 <ul>
                     <li class="<?= !empty($_GET['time']) ? 'active' : ''?>"
-                        data-url="<?= Url::to('/specification/'. $id . '?' . http_build_query(array_merge($_GET, ['time' => !empty($_GET['time']) ? 0 : 1])))?>">
+                        data-url="<?= Url::to('/specification/'. $id . '?' . http_build_query(['time' => !empty($_GET['time']) ? 0 : 1]))?>">
                         Новинки
                     </li>
                     <li class="<?= !empty($_GET['price_d']) ? 'active' : ''?>"
-                        data-url="<?= Url::to('/specification/'. $id . '?' . http_build_query(array_merge($_GET, ['price_d' => !empty($_GET['price_d']) ? 0 : 1])))?>">
+                        data-url="<?= Url::to('/specification/'. $id . '?' . http_build_query(['price_d' => !empty($_GET['price_d']) ? 0 : 1]))?>">
                         Дорогие
                     </li>
                     <li class="<?= !empty($_GET['price_a']) ? 'active' : ''?>"
-                        data-url="<?= Url::to('/specification/'. $id . '?' . http_build_query(array_merge($_GET, ['price_a' => !empty($_GET['price_a']) ? 0 : 1])))?>">
+                        data-url="<?= Url::to('/specification/'. $id . '?' . http_build_query(['price_a' => !empty($_GET['price_a']) ? 0 : 1]))?>">
                         Недорогие
                     </li>
                     <li class="<?= !empty($_GET['name_a']) ? 'active' : ''?>"
-                        data-url="<?= Url::to('/specification/'. $id . '?' . http_build_query(array_merge($_GET, ['name_a' => !empty($_GET['name_a']) ? 0 : 1])))?>">
+                        data-url="<?= Url::to('/specification/'. $id . '?' . http_build_query(['name_a' => !empty($_GET['name_a']) ? 0 : 1]))?>">
                         А-Я
                     </li>
                     <li class="<?= !empty($_GET['name_d']) ? 'active' : ''?>"
-                        data-url="<?= Url::to('/specification/'. $id . '?' . http_build_query(array_merge($_GET, ['name_d' => !empty($_GET['name_d']) ? 0 : 1])))?>">
+                        data-url="<?= Url::to('/specification/'. $id . '?' . http_build_query(['name_d' => !empty($_GET['name_d']) ? 0 : 1]))?>">
                         Я-А
                     </li>
                     <li class="<?= !empty($_GET['stock']) ? 'active' : ''?>"
-                        data-url="<?= Url::to('/specification/'. $id . '?' . http_build_query(array_merge($_GET, ['stock' => !empty($_GET['stock']) ? 0 : 1])))?>">
+                        data-url="<?= Url::to('/specification/'. $id . '?' . http_build_query(['stock' => !empty($_GET['stock']) ? 0 : 1]))?>">
                         Наличие
                     </li>
                     <li class="<?= !empty($_GET['sold']) ? 'active' : ''?>"
-                        data-url="<?= Url::to('/specification/'. $id . '?' . http_build_query(array_merge($_GET, ['sold' => !empty($_GET['sold']) ? 0 : 1])))?>">
+                        data-url="<?= Url::to('/specification/'. $id . '?' . http_build_query(['sold' => !empty($_GET['sold']) ? 0 : 1]))?>">
                         Популярные
                     </li>
                 </ul>
-                <span class="reset-filter" data-url="<?= Url::to('/category/'. $id)?>">Сбросить сортировку</span>
+                <span class="reset-filter" data-url="<?= Url::to('/specification/'. $id)?>">Сбросить сортировку</span>
             </div>
             <div class="right">
                         <span>

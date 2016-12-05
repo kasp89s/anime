@@ -38,6 +38,7 @@ $config = [
                     'category/<id:\d+>' => 'site/category',
                     'product/<id:\d+>' => 'site/product',
                     'specification/<id:\d+>' => 'site/specification',
+                    'all-products' => 'site/all-products',
                     'search' => 'site/search',
                     'subscribe' => 'site/subscribe',
                     'registration' => 'site/registration',

@@ -118,7 +118,7 @@ class SiteController extends AbstractController
         $overstock = Product::find()
             ->joinWith('discount')
             ->joinWith('marker')
-            ->where('productmarker.isActive = 1 AND productmarker.isSale = 1 AND productmarker.isNew = 1 AND productdiscount.value > 0')
+            ->where('productmarker.isActive = 1 AND productmarker.isSale = 1 AND productdiscount.value > 0')
             ->orderBy('id desc')
             ->limit(10)
             ->all();
@@ -165,12 +165,40 @@ class SiteController extends AbstractController
     {
         $productSpecificationRelation = ProductSpecificationRelation::findOne($id);
 
-        $products = Product::find()
+        $query = Product::find()
             ->joinWith('specificationRelations')
             ->joinWith('discount')
             ->joinWith('marker')
-            ->where(['productproductspecificationrelation.value' => $productSpecificationRelation->value])
-            ->all();
+            ->where(['productproductspecificationrelation.value' => $productSpecificationRelation->value]);
+
+        if (!empty($_GET['time']))
+            $query->orderBy('updateTime desc');
+
+        if (!empty($_GET['price_d']))
+            $query->orderBy('price desc');
+
+        if (!empty($_GET['price_a']))
+            $query->orderBy('price asc');
+
+        if (!empty($_GET['name_a']))
+            $query->orderBy('name asc');
+
+        if (!empty($_GET['name_d']))
+            $query->orderBy('name desc');
+
+        if (!empty($_GET['stock']))
+            $query->orderBy('quantityInStock desc');
+
+        if (!empty($_GET['sold']))
+            $query->orderBy('quantityOfSold desc');
+
+        $products = $query->all();
+
+        Yii::$app->view->params['breadcrumbs'][] = [
+            'template' => "<li>{link}</li>\n",
+            'label' => " Поиск по параметрам",
+            'url' => false
+        ];
 
         Yii::$app->view->params['breadcrumbs'][] = [
             'template' => "<li>{link}</li>\n",
@@ -388,5 +416,76 @@ class SiteController extends AbstractController
         $model->delete();
 
         return $this->render(Yii::$app->controller->action->id, []);
+    }
+
+    public function actionAllProducts()
+    {
+        $filter = Yii::$app->request->get('filter');
+
+        if (empty($filter) || !in_array($filter, ['.list1', '.list2', '.list3'])) {
+
+        }
+            $query = Product::find();
+
+            if ($filter == '.list1') {
+                $page = 'Новинки';
+                $query->joinWith('discount')
+                    ->joinWith('marker')
+                    ->where('productmarker.isActive = 1 AND productmarker.isSale = 1 AND productmarker.isNew = 1');
+            }
+
+            if ($filter == '.list2') {
+                $page = 'Популярные товары';
+                $query->joinWith('discount')
+                    ->joinWith('marker')
+                    ->where('productmarker.isActive = 1 AND productmarker.isSale = 1');
+            }
+
+            if ($filter == '.list3') {
+                $page = 'Распродажи';
+                $query->joinWith('discount')
+                    ->joinWith('marker')
+                    ->where('productmarker.isActive = 1 AND productmarker.isSale = 1 AND productdiscount.value > 0');
+            }
+
+            if (!empty($_GET['time']))
+                $query->orderBy('product.updateTime desc');
+
+            if (!empty($_GET['price_d']))
+                $query->orderBy('product.price desc');
+
+            if (!empty($_GET['price_a']))
+                $query->orderBy('product.price asc');
+
+            if (!empty($_GET['name_a']))
+                $query->orderBy('product.name asc');
+
+            if (!empty($_GET['name_d']))
+                $query->orderBy('product.name desc');
+
+            if (!empty($_GET['stock']))
+                $query->orderBy('product.quantityInStock desc');
+
+            if (!empty($_GET['sold']))
+                $query->orderBy('product.quantityOfSold desc');
+
+            $countQuery = clone $query;
+            $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 20]);
+            $pages->pageSizeParam = false;
+            $products = $query->offset($pages->offset)
+                ->limit($pages->limit)
+                ->all();
+
+        Yii::$app->view->params['breadcrumbs'][] = [
+            'template' => "<li>{link}</li>\n",
+            'label' => " " . $page,
+            'url' => false
+        ];
+
+        return $this->render(Yii::$app->controller->action->id, [
+            'productBlocks' => array_chunk($products, 5),
+            'pages' => $pages,
+            'page' => $page,
+        ]);
     }
 }

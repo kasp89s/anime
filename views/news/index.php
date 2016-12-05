@@ -55,7 +55,7 @@ use yii\helpers\Html;
                 </div>
                 <div class="news-bloc clearfix">
                     <div class="news-image left">
-                        <a href="<?= Url::to('/'. Yii::$app->controller->id .'/article/' . $record->id)?>" class="link">
+                        <a href="<?= Url::to('/'. Yii::$app->controller->id .'/item/' . $record->id)?>" class="link">
                             <div class="image corner-message">
                                 <?= Html::img('/uploads/news/' . $record->id .'/' . $record->imageFileName, []);?>
                             </div>
@@ -63,7 +63,7 @@ use yii\helpers\Html;
                     </div>
                     <div class="news-description left">
                         <?= $record->shortContent?>
-                        <a href="<?= Url::to('/'. Yii::$app->controller->id .'/article/' . $record->id)?>"> читать полностью...</a>
+                        <a href="<?= Url::to('/'. Yii::$app->controller->id .'/item/' . $record->id)?>"> читать полностью...</a>
                     </div>
                 </div>
             </div>

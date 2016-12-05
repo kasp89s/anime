@@ -94,12 +94,6 @@ class NewsController extends AbstractController
      */
     public function actionIndex()
     {
-        Yii::$app->view->params['breadcrumbs'][] = [
-            'template' => "<li>{link}</li>\n",
-            'label' => ' Архив',
-            'url' => false
-        ];
-
         $query = News::find()->where(['isActive' => 1]);
         $countQuery = clone $query;
         $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 5]);
@@ -125,7 +119,7 @@ class NewsController extends AbstractController
         ]);
     }
 
-    public function actionArticle($id)
+    public function actionItem($id)
     {
         $record = News::findOne($id);
 

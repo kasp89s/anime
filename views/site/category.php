@@ -120,9 +120,9 @@ use yii\helpers\Html;
             <?php endforeach;?>
             <div class="pagination clearfix">
                 <div class="show-all left">
-                    <a href="#">
-                        Показать еще
-                    </a>
+<!--                    <a href="#">-->
+<!--                        Показать еще-->
+<!--                    </a>-->
                 </div>
                 <div class="pagination-counter right">
                     <?php
