@@ -244,6 +244,7 @@ $(document).ready(function(){
 				 .animate({opacity: 0, top: '45%'}, 100,
 					 function(){
 						 $(this).css('display', 'none');
+                         $('.modal-slide').slick('unslick');
 						 $('#overlay').fadeOut(100);
 					 }
 				 );
@@ -507,6 +508,13 @@ $(document).ready(function(){
 			win.print();
 		}
 	);
+
+    $('.open-login').on(
+        'click',
+        function () {
+            $('.enter-link').trigger('click');
+        }
+    );
 
     $('.forgot-password').on(
         'click',

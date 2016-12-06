@@ -3213,8 +3213,17 @@ footer h3 {
 .modal-slide .item {
   text-align: center;
 }
+
 .modal-slide .item img {
-  display: inline-block;
+    display: inline-block;
+    width: 100%;
+    max-width: 500px;
+}
+
+@media (max-width: 768px) {
+    .modal-slide .item img {
+        max-width: 460px;
+    }
 }
 .modal-slide .slick-dots {
   margin: 30px 0 0 0;

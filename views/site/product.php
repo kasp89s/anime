@@ -84,6 +84,7 @@ use app\components\CommentWidget;
                                     <div>
                                         <input type="radio" name="option[<?= $optionId?>]" data-price="<?= $optionValue['price']?>" value="<?= $optionValueId?>" class="attribute-checked">
                                         <?= $optionValue['name']?>
+                                        <?php if ($optionValue['price'] > 0):?>+ (<?= $optionValue['price']?> <?php echo $product->currencyCode?>.)<?php endif;?>
                                     </div>
                                 <?php endforeach;?>
                             </div>

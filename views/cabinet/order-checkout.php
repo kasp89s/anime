@@ -85,24 +85,42 @@ use yii\widgets\ActiveForm;
                     <?php if (!empty($this->params['user']->address)):?>
                         <?= $form->field($orderForm, 'address')->dropDownList($this->params['user']->addressArray); ?>
                         <div class="form-row clearfix">
-                            <label class="label-info left add-address-order" style="cursor: pointer">
-                                Указать другой +
-                            </label>
-                            <?= Html::textInput('newAddress[city]', null, [
-                                'placeholder' => 'Город',
-                                'class' => 'order-input new-address-order',
-                                'style' => 'display: none;'
-                            ])?>
-                            <?= Html::textInput('newAddress[address]', null, [
-                                'placeholder' => 'Улица, дом, квартира, район, домофон, этаж...',
-                                'class' => 'order-input new-address-order',
-                                'style' => 'display: none;'
-                            ])?>
-                            <?= Html::textInput('newAddress[zip]', null, [
-                                'placeholder' => 'Индекс',
-                                'class' => 'order-input new-address-order',
-                                'style' => 'display: none;'
-                            ])?>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <label class="label-info left add-address-order" style="cursor: pointer">
+                                            Добавить +
+                                        </label>
+                                    </td>
+                                    <td style="width: 100%;">
+                                        <?= Html::textInput('newAddress[city]', null, [
+                                                'placeholder' => 'Город',
+                                                'class' => 'order-input new-address-order',
+                                                'style' => 'display: none;'
+                                            ])?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td style="width: 100%">
+                                        <?= Html::textInput('newAddress[address]', null, [
+                                                'placeholder' => 'Улица, дом, квартира, район, домофон, этаж...',
+                                                'class' => 'order-input new-address-order',
+                                                'style' => 'display: none;'
+                                            ])?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td style="width: 100%">
+                                        <?= Html::textInput('newAddress[zip]', null, [
+                                                'placeholder' => 'Индекс',
+                                                'class' => 'order-input new-address-order',
+                                                'style' => 'display: none;'
+                                            ])?>
+                                    </td>
+                                </tr>
+                            </table>
                         </div>
                         <?php else:?>
                         <?= $form->field($orderForm, 'city')->textInput() ?>

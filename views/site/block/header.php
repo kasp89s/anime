@@ -21,7 +21,7 @@ $registration = new \app\models\RegisterForm();
 						<span>
                             <?php if (empty($this->params['user'])):?>
                              Личный кабинет
-							<a href="/" class="open-build-in" data-popup="#enter-modal">Войдите в личный кабинет</a>
+							<a href="/" class="open-build-in enter-link" data-popup="#enter-modal">Войдите в личный кабинет</a>
                             <?php else:?>
                             <span class="user-login show">
                                 <a href="<?= Url::to('/cabinet') ?>">Личный кабинет</a>
@@ -48,7 +48,7 @@ $registration = new \app\models\RegisterForm();
                         ]); ?>
                         <?= $form->field($recover, 'email') ?>
                         <?= Html::submitButton('Отправить новый пароль', ['class' => 'button submit']) ?>
-                        <a href="javascript:void(0)" class="cancel open-build-in" data-popup="#recover-password">Я вспомнил свой пароль</a>
+                        <a href="javascript:void(0)" class="cancel open-build-in open-login" data-popup="#recover-password">Я вспомнил свой пароль</a>
                     <?php ActiveForm::end(); ?>
                     <div class="login">
                         <a href="">Войдите как пользователь</a>

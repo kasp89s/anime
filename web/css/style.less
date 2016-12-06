@@ -3178,9 +3178,14 @@ footer{
 	text-align: center;
 	.item{
 		text-align: center;
-		img{
-			display: inline-block;
-		}
+      img {
+        display: inline-block;
+        width: 100%;
+        max-width: 500px;
+        @media (max-width: 768px) {
+          max-width: 460px;
+        }
+      }
 	}
 	.slick-dots{
 		margin: 30px 0 0 0;
