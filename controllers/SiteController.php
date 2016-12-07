@@ -547,7 +547,7 @@ class SiteController extends AbstractController
     public function actionWaitGuest()
     {
         $model = new WaitForm();
-        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post()) && empty(Yii::$app->request->post('save'))) {
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post()) && empty($_POST['save'])) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return ActiveForm::validate($model);
         }
