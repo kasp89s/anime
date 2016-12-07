@@ -6,6 +6,7 @@
  */
 namespace app\controllers;
 
+use app\models\Customer;
 use app\models\InfoPage;
 use app\models\News;
 use app\models\NewsLetterSubscriber;
@@ -16,6 +17,8 @@ use app\models\ProductCategoryRelation;
 use app\models\ProductSpecificationRelation;
 use app\models\QuickOrderForm;
 use app\models\ShippingMethod;
+use app\models\WaitForm;
+use app\models\WaitingList;
 use app\models\WishList;
 use Yii;
 use app\models\Banner;
@@ -487,5 +490,55 @@ class SiteController extends AbstractController
             'pages' => $pages,
             'page' => $page,
         ]);
+    }
+
+    public function actionWaitGuest()
+    {
+        $model = new WaitForm();
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
+
+        if (!$model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ['error' => true];
+        }
+
+        $waitListItem = new WaitingList();
+        $waitListItem->customerId = Customer::DEFAULT_CUSTOMER_ID;
+        $waitListItem->productId = $model->productId;
+        $waitListItem->email = $model->email;
+        $waitListItem->save();
+
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return ['success' => true];
+    }
+
+    public function actionWait()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $waitListItem = WaitingList::find()
+            ->where([
+                'customerId' => $this->user->id,
+                'productId' => Yii::$app->request->post('productId'),
+            ])->one();
+
+        if (!empty($waitListItem)) {
+            return ['already' => true];
+        }
+
+        $waitListItem = new WaitingList();
+        $waitListItem->customerId = $this->user->id;
+        $waitListItem->productId = Yii::$app->request->post('productId');
+        $waitListItem->email = $this->user->email;
+
+        if (!$waitListItem->validate())
+        {
+            return $waitListItem->errors;
+        }
+        $waitListItem->save();
+
+        return ['success' => true];
     }
 }

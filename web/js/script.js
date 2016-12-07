@@ -281,8 +281,6 @@ $(document).ready(function(){
 
 	});
 
-
-
 	$('.close, #overlay').click( function(){
 		$('.modal')
 				.animate({opacity: 0, top: '45%'}, 100,
@@ -302,6 +300,38 @@ $(document).ready(function(){
             $('[name="Comment[rating]"]').val(count + 1);
         }
     );
+
+	$('.wait-modal-btn').click( function(){
+		event.preventDefault();
+
+		if ($(this).data('user') > 0) {
+			$.post(
+				'/site/wait',
+				{
+					productId: $(this).data('product'),
+					_csrf: $('[name="_csrf"]').val()
+				},
+				function (response) {
+					if (response.success) {
+						// location.href = '/cabinet/waiting-list'
+					} else if (response.already){
+						alert("Вы уже подписаны на уведомление");
+					}
+				},
+				'json'
+			);
+			return;
+		}
+
+		$('#waitform-productid').val($(this).data('product'));
+		$('#overlay').fadeIn(100,
+			function(){
+				$('.wait-modal')
+					.css('display', 'block') //
+					.animate({opacity: 1}, 100);
+			});
+
+	});
 
 	$('.add-wish').on('click', function () {
 		var element = $(this);

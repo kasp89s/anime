@@ -24,6 +24,7 @@ use Yii;
  * @property CustomerAddress[] $address
  * @property CustomerPhone[] $phones
  * @property WishList[] $wishes
+ * @property WaitingList[] $waitingProducts
  * @property Product[] $wishProducts
  */
 class Customer extends \yii\db\ActiveRecord
@@ -113,6 +114,15 @@ class Customer extends \yii\db\ActiveRecord
     public function getWishes()
     {
         return $this->hasMany(WishList::className(), ['customerId' => 'id']);
+
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getWaitingProducts()
+    {
+        return $this->hasMany(WaitingList::className(), ['customerId' => 'id']);
     }
 
     /**

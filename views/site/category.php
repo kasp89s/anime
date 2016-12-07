@@ -3,6 +3,9 @@ use yii\widgets\Breadcrumbs;
 use yii\widgets\LinkPager;
 use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\widgets\ActiveForm;
+
+$waitForm = new \app\models\WaitForm();
 ?>
 <div class="breadcrumbs-block clearfix">
     <ul>
@@ -110,8 +113,15 @@ use yii\helpers\Html;
                             <?php endif;?>
                             <b class="new-price"><?= number_format($product->realPrice, 0, '', ' ')?> <?= $product->currencyCode?>.</b>
                         </div>
-
-                        <a href="<?= Url::to('/product/' . $product->id)?>" class="button">В КОРЗИНУ</a>
+                        <?php if($product->quantityInStock > 0):?>
+                            <a href="<?= Url::to('/product/' . $product->id)?>" class="button">В КОРЗИНУ</a>
+                        <?php else:?>
+                            <a
+                                href="javascript:void(0)"
+                                data-product="<?= $product->id?>"
+                                data-user="<?= (!empty($this->params['user'])) ? $this->params['user']->id : ''?>"
+                                class="button wait-modal-btn">уведомить о наличии</a>
+                        <?php endif;?>
                     </div>
                 </div>
                     <?php endforeach;?>
@@ -139,4 +149,43 @@ use yii\helpers\Html;
         </div>
 
     </div>
+</div>
+
+<div id="overlay" style="display: none;"></div>
+<div class="modal wait-modal" style="opacity: 0; top: 45%; display: none;">
+
+    <div class="build-in-popup" id="recover-password">
+
+        <div class="close right">
+            <img src="/img/remove-button.png" alt="">
+        </div>
+
+        <h2>Уведомить о наличие</h2>
+        <div class="table">
+            <?php $form = ActiveForm::begin([
+                'action' => '/site/wait-guest',
+                'enableAjaxValidation' => true,
+                'options'=>['class'=>'row'],
+                'fieldConfig' => [
+                    'template' => '{label}{input}{error}',
+                    'errorOptions' => ['class' => 'error text-danger'],
+                    'labelOptions' => ['class' => ''],
+                    'inputOptions' => ['class' => 'input'],
+                    'options' => [
+                        'tag' => 'div',
+                    ],
+                ],
+            ]); ?>
+
+            <?= $form->field($waitForm, 'productId')->hiddenInput(['value' => ''])->label(false) ?>
+
+            <?= $form->field($waitForm, 'email') ?>
+
+            <div class="enter-row">
+                <?= Html::submitButton('Подтвердить', ['class' => 'button submit']) ?>
+            </div>
+            <?php ActiveForm::end(); ?>
+        </div>
+    </div>
+
 </div>

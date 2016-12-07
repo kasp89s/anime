@@ -4,6 +4,8 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\components\CommentWidget;
+
+$waitForm = new \app\models\WaitForm();
 ?>
 <div class="breadcrumbs-block clearfix">
     <ul>
@@ -49,6 +51,7 @@ use app\components\CommentWidget;
                         <span>Нет в наличии. </span>
                     <?php endif;?>
                 </p>
+                <?php if($product->quantityInStock > 0):?>
                 <button class="add-product" data-id="<?php echo $product->id?>">
                     Добавить в корзину
                 </button>
@@ -56,6 +59,13 @@ use app\components\CommentWidget;
                 <button class="enter-modal-btn quick-button">
                     Заказать в один клик
                 </button>
+                <?php else:?>
+                    <a
+                        href="javascript:void(0)"
+                        data-product="<?= $product->id?>"
+                        data-user="<?= (!empty($this->params['user'])) ? $this->params['user']->id : ''?>"
+                        class="quick-button wait-modal-btn">Уведомить о наличии</a>
+                <?php endif;?>
                 <div class="rating-info">
                     <?php if (!empty($this->params['user']->id)):?>
                     <button class="add-wish<?= ($isWish) ? ' active' : ''?>" data-id="<?php echo $product->id?>">
@@ -217,6 +227,43 @@ use app\components\CommentWidget;
 
 </div>
 
+<div class="modal wait-modal" style="opacity: 0; top: 45%; display: none;">
+
+    <div class="build-in-popup" id="recover-password">
+
+        <div class="close right">
+            <img src="/img/remove-button.png" alt="">
+        </div>
+
+        <h2>Уведомить о наличие</h2>
+        <div class="table">
+            <?php $form = ActiveForm::begin([
+                'action' => '/site/wait-guest',
+                'enableAjaxValidation' => true,
+                'options'=>['class'=>'row'],
+                'fieldConfig' => [
+                    'template' => '{label}{input}{error}',
+                    'errorOptions' => ['class' => 'error text-danger'],
+                    'labelOptions' => ['class' => ''],
+                    'inputOptions' => ['class' => 'input'],
+                    'options' => [
+                        'tag' => 'div',
+                    ],
+                ],
+            ]); ?>
+
+            <?= $form->field($waitForm, 'productId')->hiddenInput(['value' => ''])->label(false) ?>
+
+            <?= $form->field($waitForm, 'email') ?>
+
+            <div class="enter-row">
+                <?= Html::submitButton('Подтвердить', ['class' => 'button submit']) ?>
+            </div>
+            <?php ActiveForm::end(); ?>
+        </div>
+    </div>
+
+</div>
 
 <div id="modal_form">
     <div class="clearfix">

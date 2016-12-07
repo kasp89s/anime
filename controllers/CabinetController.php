@@ -21,6 +21,7 @@ use app\models\OrderTotal;
 use app\models\Product;
 use app\models\QuickOrderForm;
 use app\models\User;
+use app\models\WaitingList;
 use Yii;
 use app\models\Category;
 use app\models\LoginForm;
@@ -251,7 +252,21 @@ class CabinetController extends AbstractController
             'url' => false
         ];
 
+        $models = WaitingList::find()->where(
+            [
+                'customerId' => $this->user->id
+            ]
+        )->all();
+        $totalAmount = 0;
+
+        foreach ($models as $model) {
+            $totalAmount+= $model->product->realPrice;
+        }
+
         return $this->render(Yii::$app->controller->action->id, [
+            'totalAmount' => $totalAmount,
+            'productsCount' => count($models),
+            'viewProductList' => array_chunk($models, 5),
         ]);
     }
 
