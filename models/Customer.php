@@ -5,27 +5,27 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "customer".
+ * Это модель класса для таблицы "customer".
  *
- * @property string $id
- * @property string $email
- * @property string $password
- * @property string $customerGroupId
- * @property integer $isActive
- * @property string $fullName
- * @property string $code
- * @property string $registrationIp
- * @property string $registrationTime
- * @property string $memo
- * @property string $authID
- * @property string $authMethod
+ * @property string  $id               ID.
+ * @property string  $email            E-mail.
+ * @property string  $password         Пароль.
+ * @property string  $customerGroupId  Связь с группой.
+ * @property integer $isActive         Признак активности.
+ * @property string  $fullName         Полное имя.
+ * @property string  $code             Код активации.
+ * @property string  $registrationIp   ИП адресс.
+ * @property string  $registrationTime Время регистрации.
+ * @property string  $memo             Заметки.
+ * @property string  $authID           Идентификатор в соц. сетях.
+ * @property string  $authMethod       Метод авторизации соц. сети.
  *
- * @property CustomerGroup $group
- * @property CustomerAddress[] $address
- * @property CustomerPhone[] $phones
- * @property WishList[] $wishes
- * @property WaitingList[] $waitingProducts
- * @property Product[] $wishProducts
+ * @property CustomerGroup     $group           Группа.
+ * @property CustomerAddress[] $address         Адресс.
+ * @property CustomerPhone[]   $phones          Телефоны.
+ * @property WishList[]        $wishes          Желания.
+ * @property WaitingList[]     $waitingProducts Лист ожидания (Уведомить о наличие).
+ * @property Product[]         $wishProducts    Избранные продукты.
  */
 class Customer extends \yii\db\ActiveRecord
 {
@@ -126,13 +126,24 @@ class Customer extends \yii\db\ActiveRecord
     }
 
     /**
+     * Список желаний с сортировкой.
+     *
+     * @param string $sortColumn Столбец.
+     * @param int    $sortType   Тип сортировки.
+     *
      * @return \yii\db\ActiveQuery
      */
-    public function getWishProducts()
+    public function getWishProducts($sortColumn = 'id', $sortType = SORT_DESC)
     {
-        return $this->hasMany(Product::className(), ['id' => 'productId'])->viaTable('wishlist', ['customerId' => 'id']);
+        return $this->hasMany(Product::className(), ['id' => 'productId'])->viaTable('wishlist', ['customerId' => 'id'])
+            ->orderBy([$sortColumn => $sortType]);
     }
 
+    /**
+     * Массив телефонов пользователя.
+     *
+     * @return array
+     */
     public function getPhonesArray()
     {
         $result = [];
@@ -144,6 +155,11 @@ class Customer extends \yii\db\ActiveRecord
         return $result;
     }
 
+    /**
+     * Массив адресов пользователя.
+     *
+     * @return array
+     */
     public function getAddressArray()
     {
         $result = [];
@@ -155,6 +171,11 @@ class Customer extends \yii\db\ActiveRecord
         return $result;
     }
 
+    /**
+     * Возвращает сумму покупок пользователя.
+     *
+     * @return int
+     */
     public function getPurchaseAmount()
     {
         $finishedStatuses = OrderStatus::find()->select('statusCode')->where(['isFinished' => 1])->asArray()->one();

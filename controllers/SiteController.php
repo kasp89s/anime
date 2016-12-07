@@ -217,6 +217,58 @@ class SiteController extends AbstractController
         ]);
     }
 
+    public function actionLoadProducts($id)
+    {
+        $category = Category::findOne($id);
+
+        $categoriesForSearch = [$id];
+        if (!empty($category->categories)) {
+            foreach ($category->categories as $categoryChild) {
+                $categoriesForSearch[] = $categoryChild->id;
+            }
+        }
+
+        $query = Product::find();
+        $query->joinWith('categoryRelation');
+        $query->joinWith('marker');
+        $query->joinWith('discount');
+        $query->where(['productcategoryrelation.productCategoryId' => $categoriesForSearch]);
+        $query->andWhere('productmarker.isActive = 1 AND productmarker.isSale = 1');
+
+        if (!empty($_GET['time']))
+            $query->orderBy('updateTime desc');
+
+        if (!empty($_GET['price_d']))
+            $query->orderBy('price desc');
+
+        if (!empty($_GET['price_a']))
+            $query->orderBy('price asc');
+
+        if (!empty($_GET['name_a']))
+            $query->orderBy('name asc');
+
+        if (!empty($_GET['name_d']))
+            $query->orderBy('name desc');
+
+        if (!empty($_GET['stock']))
+            $query->orderBy('quantityInStock desc');
+
+        if (!empty($_GET['sold']))
+            $query->orderBy('quantityOfSold desc');
+
+        $countQuery = clone $query;
+        $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => \Yii::$app->params['categoryPageSize']]);
+
+        $pages->pageSizeParam = false;
+        $products = $query->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
+
+        return $this->renderPartial(Yii::$app->controller->action->id,
+            ['productBlocks' => array_chunk($products, 5)]
+        );
+    }
+
     public function actionCategory($id)
     {
         //Yii::$app->cache
@@ -260,7 +312,7 @@ class SiteController extends AbstractController
             $query->orderBy('quantityOfSold desc');
 
         $countQuery = clone $query;
-        $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 20]);
+        $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => \Yii::$app->params['categoryPageSize']]);
         $pages->pageSizeParam = false;
         $products = $query->offset($pages->offset)
             ->limit($pages->limit)
@@ -495,7 +547,7 @@ class SiteController extends AbstractController
     public function actionWaitGuest()
     {
         $model = new WaitForm();
-        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post()) && empty(Yii::$app->request->post('save'))) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return ActiveForm::validate($model);
         }

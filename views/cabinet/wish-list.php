@@ -21,15 +21,28 @@ use yii\helpers\Html;
                                 Сортировка:
                             </span>
                     <ul>
-                        <li>Дата добавления</li>
-                        <li>Дорогие</li>
-                        <li>Недорогие</li>
-                        <li>Наличие</li>
-                        <li>Популярные</li>
+                        <li class="<?= !empty($_GET['time']) ? 'active' : ''?>"
+                            data-url="<?= Url::to('/cabinet/wish-list?' . http_build_query(['time' => !empty($_GET['time']) ? 0 : 1]))?>">
+                            Дата добавления
+                        </li>
+                        <li class="<?= !empty($_GET['price_d']) ? 'active' : ''?>"
+                            data-url="<?= Url::to('/cabinet/wish-list?' . http_build_query(['price_d' => !empty($_GET['price_d']) ? 0 : 1]))?>">
+                            Дорогие
+                        </li>
+                        <li class="<?= !empty($_GET['price_a']) ? 'active' : ''?>"
+                            data-url="<?= Url::to('/cabinet/wish-list?' . http_build_query(['price_a' => !empty($_GET['price_a']) ? 0 : 1]))?>">
+                            Недорогие
+                        </li>
+                        <li class="<?= !empty($_GET['stock']) ? 'active' : ''?>"
+                            data-url="<?= Url::to('/cabinet/wish-list?' . http_build_query(['stock' => !empty($_GET['stock']) ? 0 : 1]))?>">
+                            Наличие
+                        </li>
+                        <li class="<?= !empty($_GET['sold']) ? 'active' : ''?>"
+                            data-url="<?= Url::to('/cabinet/wish-list?' . http_build_query(['sold' => !empty($_GET['sold']) ? 0 : 1]))?>">
+                            Популярные
+                        </li>
                     </ul>
-                    <span class="reset-filter">
-                                Сбросить сортировку
-                            </span>
+                    <span class="reset-filter" data-url="<?= Url::to('/cabinet/wish-list')?>">Сбросить сортировку</span>
                 </div>
                 <div class="favorite-product-price right">
                             <span>

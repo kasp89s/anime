@@ -14,6 +14,8 @@ return [
     'NewRegistrationSubject' => 'NewRegistrationSubject',
     'newOrderSubject' => 'newOrderSubject',
     'phone' => '+380 (93) 716–54–65',
+    'categoryPageSize' => 1,
+    'newsPageSize' => 1,
     'seo' => [
         'title' => '',
         'keywords' => '',

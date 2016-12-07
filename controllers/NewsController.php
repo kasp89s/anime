@@ -96,7 +96,7 @@ class NewsController extends AbstractController
     {
         $query = News::find()->where(['isActive' => 1]);
         $countQuery = clone $query;
-        $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 5]);
+        $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => \Yii::$app->params['newsPageSize']]);
         $pages->pageSizeParam = false;
         $query->offset($pages->offset)->limit($pages->limit);
 
@@ -117,6 +117,31 @@ class NewsController extends AbstractController
             'pages' => $pages,
             'count' => $query->count(),
         ]);
+    }
+
+    public function actionLoad()
+    {
+        $query = News::find()->where(['isActive' => 1]);
+        $countQuery = clone $query;
+        $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => \Yii::$app->params['newsPageSize']]);
+        $pages->pageSizeParam = false;
+        $query->offset($pages->offset)->limit($pages->limit);
+
+        if (!empty($_GET['time']))
+            $query->orderBy('publishTime desc');
+
+        if (!empty($_GET['view']))
+            $query->orderBy('publishTime desc');
+
+        $records = $query->all();
+
+        foreach ($records as $record) {
+            $record->products;
+        }
+
+        return $this->renderPartial(Yii::$app->controller->action->id,
+            ['records' => $records]
+        );
     }
 
     public function actionItem($id)

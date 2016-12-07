@@ -203,7 +203,32 @@ class CabinetController extends AbstractController
             'url' => false
         ];
 
-        $models = $this->getLastViewListProduct();
+        $currentList = json_decode(Yii::$app->request->cookies->getValue('LastView'), true);
+
+        if (empty($currentList))
+            return [];
+
+        $query = Product::find()
+            ->where(['product.id' => $currentList])
+            ->joinWith('discount')
+            ->joinWith('marker');
+
+        if (!empty($_GET['time']))
+            $query->orderBy('product.updateTime desc');
+
+        if (!empty($_GET['price_d']))
+            $query->orderBy('product.price desc');
+
+        if (!empty($_GET['price_a']))
+            $query->orderBy('product.price asc');
+
+        if (!empty($_GET['stock']))
+            $query->orderBy('product.quantityInStock desc');
+
+        if (!empty($_GET['sold']))
+            $query->orderBy('product.quantityOfSold desc');
+
+        $models = $query->all();
         $totalAmount = 0;
 
         foreach ($models as $model) {
@@ -252,11 +277,25 @@ class CabinetController extends AbstractController
             'url' => false
         ];
 
-        $models = WaitingList::find()->where(
+        $query = WaitingList::find()->where(
             [
                 'customerId' => $this->user->id
             ]
-        )->all();
+        );
+
+        if (!empty($_GET['price_d']))
+            $query->orderBy('product.price desc');
+
+        if (!empty($_GET['price_a']))
+            $query->orderBy('product.price asc');
+
+        if (!empty($_GET['stock']))
+            $query->orderBy('product.quantityInStock desc');
+
+        if (!empty($_GET['sold']))
+            $query->orderBy('product.quantityOfSold desc');
+
+        $models = $query->all();
         $totalAmount = 0;
 
         foreach ($models as $model) {
@@ -290,10 +329,38 @@ class CabinetController extends AbstractController
             'url' => false
         ];
 
-        $model = Customer::findOne($this->user->id);
-        $models = $model->wishProducts;
-        $totalAmount = 0;
+        $sortColumn = 'product.id';
+        $sortType = SORT_DESC;
 
+        if (!empty($_GET['time'])) {
+            $sortColumn = 'product.updateTime';
+            $sortType = SORT_DESC;
+        }
+
+        if (!empty($_GET['price_d'])) {
+            $sortColumn = 'product.price';
+            $sortType = SORT_DESC;
+        }
+
+        if (!empty($_GET['price_a'])) {
+            $sortColumn = 'product.price';
+            $sortType = SORT_ASC;
+        }
+
+        if (!empty($_GET['stock'])) {
+            $sortColumn = 'product.quantityInStock';
+            $sortType = SORT_DESC;
+        }
+
+        if (!empty($_GET['sold'])) {
+            $sortColumn = 'product.quantityOfSold';
+            $sortType = SORT_DESC;
+        }
+
+        $model = Customer::findOne($this->user->id);
+        $models = $model->getWishProducts($sortColumn, $sortType)->all();
+        $totalAmount = 0;
+//        var_dump($models); exit();
         foreach ($models as $model) {
             $totalAmount+= $model->realPrice;
         }
@@ -471,7 +538,6 @@ class CabinetController extends AbstractController
                 $orderProduct->save();
             }
 
-            //@todo Добавить для не авторизированого юзера ввод email.
             $email = !empty($this->user) ? $this->user->email : $orderForm->email;
             $this->sendEmail($email, Yii::$app->params['newOrderSubject'], $this->renderPartial('emailTemplates/new-order', ['order' => $order]));
             BasketProduct::deleteAll('basketId = :id', [':id' => $this->_basket->id]);

@@ -72,7 +72,14 @@ use yii\helpers\Html;
         </div>
         <div class="pagination clearfix">
             <div class="show-all left">
-                <a href="#">
+                <a
+                    href="javascript:void(0)"
+                    class="show-next"
+                    data-page="<?= $pages->page + 2?>"
+                    data-last="<?= $pages->pageCount?>"
+                    data-url="/news/load?<?= http_build_query($_GET)?>"
+                    data-block=".news-row"
+                >
                     Показать еще
                 </a>
             </div>
@@ -86,34 +93,6 @@ use yii\helpers\Html;
                     'nextPageLabel' => '<img src="/img/next-page.png">',
                 ]);
                 ?>
-                <!--
-                <ul>
-                    <li>
-                        <a href="#">1</a>
-                    </li>
-                    <li>
-                        <a href="#">2</a>
-                    </li>
-                    <li>
-                        <a href="#">3</a>
-                    </li>
-                    <li>
-                        <a href="#">4</a>
-                    </li>
-                    <li>
-                        <a href="#">5</a>
-                    </li>
-                    <li>
-                        <a href="#">...</a>
-                    </li>
-                    <li>
-                        <a href="#">25</a>
-                    </li>
-                </ul>
-                <button class="next-page">
-                    <img src="/img/next-page.png" alt="">
-                </button>
-                -->
             </div>
         </div>
     </div>

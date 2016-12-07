@@ -40,6 +40,8 @@ AppAsset::register($this);
     </div>
 </div>
 
+<?= $this->render('//site/block/modals'); ?>
+
 <?php $this->endBody() ?>
 </body>
 </html>

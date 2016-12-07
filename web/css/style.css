@@ -3262,3 +3262,10 @@ footer h3 {
 .static {
   padding-left: 30px;
 }
+.wait-success {
+  display: none;
+}
+.pagination > li.active {
+  background: #3a87ad;
+  border-radius: 4px;
+}

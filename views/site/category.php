@@ -6,6 +6,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 $waitForm = new \app\models\WaitForm();
+$quickOrder = new \app\models\QuickOrderForm();
 ?>
 <div class="breadcrumbs-block clearfix">
     <ul>
@@ -58,31 +59,31 @@ $waitForm = new \app\models\WaitForm();
                     </span>
                 <ul>
                     <li class="<?= !empty($_GET['time']) ? 'active' : ''?>"
-                        data-url="<?= Url::to('/category/'. $category->id . '?' . http_build_query(array_merge($_GET, ['time' => !empty($_GET['time']) ? 0 : 1])))?>">
+                        data-url="<?= Url::to('/category/'. $category->id . '?' . http_build_query(['time' => !empty($_GET['time']) ? 0 : 1]))?>">
                         Новинки
                     </li>
                     <li class="<?= !empty($_GET['price_d']) ? 'active' : ''?>"
-                        data-url="<?= Url::to('/category/'. $category->id . '?' . http_build_query(array_merge($_GET, ['price_d' => !empty($_GET['price_d']) ? 0 : 1])))?>">
+                        data-url="<?= Url::to('/category/'. $category->id . '?' . http_build_query(['price_d' => !empty($_GET['price_d']) ? 0 : 1]))?>">
                         Дорогие
                     </li>
                     <li class="<?= !empty($_GET['price_a']) ? 'active' : ''?>"
-                        data-url="<?= Url::to('/category/'. $category->id . '?' . http_build_query(array_merge($_GET, ['price_a' => !empty($_GET['price_a']) ? 0 : 1])))?>">
+                        data-url="<?= Url::to('/category/'. $category->id . '?' . http_build_query(['price_a' => !empty($_GET['price_a']) ? 0 : 1]))?>">
                         Недорогие
                     </li>
                     <li class="<?= !empty($_GET['name_a']) ? 'active' : ''?>"
-                        data-url="<?= Url::to('/category/'. $category->id . '?' . http_build_query(array_merge($_GET, ['name_a' => !empty($_GET['name_a']) ? 0 : 1])))?>">
+                        data-url="<?= Url::to('/category/'. $category->id . '?' . http_build_query(['name_a' => !empty($_GET['name_a']) ? 0 : 1]))?>">
                         А-Я
                     </li>
                     <li class="<?= !empty($_GET['name_d']) ? 'active' : ''?>"
-                        data-url="<?= Url::to('/category/'. $category->id . '?' . http_build_query(array_merge($_GET, ['name_d' => !empty($_GET['name_d']) ? 0 : 1])))?>">
+                        data-url="<?= Url::to('/category/'. $category->id . '?' . http_build_query(['name_d' => !empty($_GET['name_d']) ? 0 : 1]))?>">
                         Я-А
                     </li>
                     <li class="<?= !empty($_GET['stock']) ? 'active' : ''?>"
-                        data-url="<?= Url::to('/category/'. $category->id . '?' . http_build_query(array_merge($_GET, ['stock' => !empty($_GET['stock']) ? 0 : 1])))?>">
+                        data-url="<?= Url::to('/category/'. $category->id . '?' . http_build_query(['stock' => !empty($_GET['stock']) ? 0 : 1]))?>">
                         Наличие
                     </li>
                     <li class="<?= !empty($_GET['sold']) ? 'active' : ''?>"
-                        data-url="<?= Url::to('/category/'. $category->id . '?' . http_build_query(array_merge($_GET, ['sold' => !empty($_GET['sold']) ? 0 : 1])))?>">
+                        data-url="<?= Url::to('/category/'. $category->id . '?' . http_build_query(['sold' => !empty($_GET['sold']) ? 0 : 1]))?>">
                         Популярные
                     </li>
                 </ul>
@@ -130,9 +131,16 @@ $waitForm = new \app\models\WaitForm();
             <?php endforeach;?>
             <div class="pagination clearfix">
                 <div class="show-all left">
-<!--                    <a href="#">-->
-<!--                        Показать еще-->
-<!--                    </a>-->
+                    <a
+                        href="javascript:void(0)"
+                        class="show-next"
+                        data-page="<?= $pages->page + 2?>"
+                        data-last="<?= $pages->pageCount?>"
+                        data-url="/site/load-products/<?= $category->id?>?<?= http_build_query($_GET)?>"
+                        data-block=".catalog-row.list.random-product"
+                    >
+                        Показать еще
+                    </a>
                 </div>
                 <div class="pagination-counter right">
                     <?php
@@ -151,41 +159,4 @@ $waitForm = new \app\models\WaitForm();
     </div>
 </div>
 
-<div id="overlay" style="display: none;"></div>
-<div class="modal wait-modal" style="opacity: 0; top: 45%; display: none;">
 
-    <div class="build-in-popup" id="recover-password">
-
-        <div class="close right">
-            <img src="/img/remove-button.png" alt="">
-        </div>
-
-        <h2>Уведомить о наличие</h2>
-        <div class="table">
-            <?php $form = ActiveForm::begin([
-                'action' => '/site/wait-guest',
-                'enableAjaxValidation' => true,
-                'options'=>['class'=>'row'],
-                'fieldConfig' => [
-                    'template' => '{label}{input}{error}',
-                    'errorOptions' => ['class' => 'error text-danger'],
-                    'labelOptions' => ['class' => ''],
-                    'inputOptions' => ['class' => 'input'],
-                    'options' => [
-                        'tag' => 'div',
-                    ],
-                ],
-            ]); ?>
-
-            <?= $form->field($waitForm, 'productId')->hiddenInput(['value' => ''])->label(false) ?>
-
-            <?= $form->field($waitForm, 'email') ?>
-
-            <div class="enter-row">
-                <?= Html::submitButton('Подтвердить', ['class' => 'button submit']) ?>
-            </div>
-            <?php ActiveForm::end(); ?>
-        </div>
-    </div>
-
-</div>

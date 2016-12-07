@@ -301,6 +301,64 @@ $(document).ready(function(){
         }
     );
 
+    $('[action="/site/wait-guest"]').on('beforeSubmit', function(event, jqXHR, settings) {
+        var form = $(this),
+            formData = new FormData;
+
+        if(form.find('.has-error').length) {
+            return false;
+        }
+
+        $.each(form.serializeArray(), function (key, value){
+            formData.append(value.name, value.value);
+        });
+        formData.append('save', 1);
+        $.ajax({
+            url: form.attr('action'),
+            type: 'post',
+            data: formData,
+			contentType: false,
+			processData: false,
+            success: function(response) {
+                if (response.success) {
+					$('.wait-form').css('display', 'none');
+					$('.wait-success').css('display', 'block');
+				}
+            }
+        });
+
+        return false;
+    });
+
+	$('.show-next').on(
+		'click',
+		function () {
+			var $this = $(this),
+				page = parseInt($this.data('page')),
+				url = $this.data('url'),
+				nextPage = page + 1,
+				lastPage = $this.data('last'),
+				block = $this.data('block'),
+				paginationPage = page - 1;
+			$(this).data('page', nextPage);
+
+			$.post(
+				url + '&page=' + page,
+				{
+					_csrf: $('[name="_csrf"]').val()
+				},
+				function (data) {
+					$(block).last().after(data);
+					$('a[data-page="'+paginationPage+'"]').closest('li[class != next-page]').addClass('active');
+
+					if (lastPage == page) {
+						$this.remove();
+					}
+				}
+			);
+		}
+	);
+
 	$('.wait-modal-btn').click( function(){
 		event.preventDefault();
 
@@ -313,7 +371,7 @@ $(document).ready(function(){
 				},
 				function (response) {
 					if (response.success) {
-						// location.href = '/cabinet/waiting-list'
+						 location.href = '/cabinet/waiting-list'
 					} else if (response.already){
 						alert("Вы уже подписаны на уведомление");
 					}
@@ -326,6 +384,8 @@ $(document).ready(function(){
 		$('#waitform-productid').val($(this).data('product'));
 		$('#overlay').fadeIn(100,
 			function(){
+				$('.wait-form').css('display', 'block');
+				$('.wait-success').css('display', 'none');
 				$('.wait-modal')
 					.css('display', 'block') //
 					.animate({opacity: 1}, 100);

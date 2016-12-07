@@ -178,7 +178,7 @@ $waitForm = new \app\models\WaitForm();
     <?php endif;?>
 </div>
 
-<div id="overlay" style="display: none;"></div>
+
 <div class="modal enter-modal" style="opacity: 0; top: 45%; display: none;">
 
     <div class="build-in-popup" id="recover-password">
@@ -204,60 +204,22 @@ $waitForm = new \app\models\WaitForm();
                 ],
             ]); ?>
 
-                <?= $form->field($quickOrder, 'productId')->hiddenInput(['value' => $product->id])->label(false) ?>
+            <?= $form->field($quickOrder, 'productId')->hiddenInput(['value' => $product->id])->label(false) ?>
 
-                <?= $form->field($quickOrder, 'name') ?>
+            <?= $form->field($quickOrder, 'name') ?>
 
-                <?= $form->field($quickOrder, 'phone')->widget(\yii\widgets\MaskedInput::className(), [
-                    'mask' => '+380999999999',
-                    'options'=>[
-                        'class' => 'input',
-                    ],
-                    'clientOptions'=>[
-                        'clearIncomplete' => true
-                    ]
-                ]); ?>
-
-                <div class="enter-row">
-                    <?= Html::submitButton('Заказать', ['class' => 'button submit']) ?>
-                </div>
-            <?php ActiveForm::end(); ?>
-        </div>
-    </div>
-
-</div>
-
-<div class="modal wait-modal" style="opacity: 0; top: 45%; display: none;">
-
-    <div class="build-in-popup" id="recover-password">
-
-        <div class="close right">
-            <img src="/img/remove-button.png" alt="">
-        </div>
-
-        <h2>Уведомить о наличие</h2>
-        <div class="table">
-            <?php $form = ActiveForm::begin([
-                'action' => '/site/wait-guest',
-                'enableAjaxValidation' => true,
-                'options'=>['class'=>'row'],
-                'fieldConfig' => [
-                    'template' => '{label}{input}{error}',
-                    'errorOptions' => ['class' => 'error text-danger'],
-                    'labelOptions' => ['class' => ''],
-                    'inputOptions' => ['class' => 'input'],
-                    'options' => [
-                        'tag' => 'div',
-                    ],
+            <?= $form->field($quickOrder, 'phone')->widget(\yii\widgets\MaskedInput::className(), [
+                'mask' => '+380999999999',
+                'options'=>[
+                    'class' => 'input',
                 ],
+                'clientOptions'=>[
+                    'clearIncomplete' => true
+                ]
             ]); ?>
 
-            <?= $form->field($waitForm, 'productId')->hiddenInput(['value' => ''])->label(false) ?>
-
-            <?= $form->field($waitForm, 'email') ?>
-
             <div class="enter-row">
-                <?= Html::submitButton('Подтвердить', ['class' => 'button submit']) ?>
+                <?= Html::submitButton('Заказать', ['class' => 'button submit']) ?>
             </div>
             <?php ActiveForm::end(); ?>
         </div>
