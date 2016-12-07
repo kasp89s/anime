@@ -21,6 +21,7 @@ class WaitForm extends Model
     {
         return [
             [['email', 'productId'], 'required'],
+            ['productId', 'validateProduct'],
             ['email', 'email', 'message' => 'Поле должно содержать корректный E-mail'],
         ];
     }
@@ -33,5 +34,19 @@ class WaitForm extends Model
         return [
             'email' => 'E-mail',
         ];
+    }
+
+    public function validateProduct()
+    {
+        $model = WaitingList::find()
+            ->where([
+                    'productId' => $this->productId,
+                    'email' => $this->email
+                ])
+            ->one();
+
+        if (!empty($model)) {
+            $this->addError('productId', 'Вы уже подписаны на указаный товар.');
+        }
     }
 }
