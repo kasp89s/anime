@@ -47,6 +47,9 @@ use yii\helpers\Html;
                         'options'=>[
                             'class' => 'input',
                         ],
+                            'clientOptions'=>[
+                                'clearIncomplete' => true
+                            ]
                     ])->label(false)?>
                 <?php endforeach;?>
                 </div>

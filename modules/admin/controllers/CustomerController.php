@@ -8,11 +8,13 @@ namespace app\modules\admin\controllers;
 
 use app\models\Customer;
 use app\models\CustomerAddress;
+use app\models\CustomerPhone;
 use Yii;
-
+use yii\base\Model;
 use app\modules\admin\models\search\CustomerSearch;
 use yii\web\NotFoundHttpException;
-
+use yii\web\Response;
+use yii\widgets\ActiveForm;
 class CustomerController extends AdminController {
 
     public function actionList()
@@ -55,7 +57,6 @@ class CustomerController extends AdminController {
             } else {
                 $_POST['Customer']['hashedPassword'] = md5($this->_post['Customer']['password']);
             }
-
         }
 
         return parent::actionChange($id);
@@ -63,32 +64,64 @@ class CustomerController extends AdminController {
 
     public function actionChangeAddress($id)
     {
-        Yii::$app->view->params['breadcrumbs'][] = [
-            'template' => "<li>{link}</li>\n",
-            'label' => 'Редактировать адрес пользователя',
-            'url' => ['/admin/customer/change-address']
-        ];
-
         $customer = Customer::findOne($id);
 
         if (empty($customer))
             throw new \yii\web\NotFoundHttpException();
 
-        $model = CustomerAddress::find()->where(['customerId' => $customer->id])->one();
+            if (Model::loadMultiple($customer->address, Yii::$app->request->post())) {
+                foreach ($customer->address as $address) {
+                    $address->save();
+                }
+                Yii::$app->session->setFlash('save', 'Изменения успешно сохранены.');
+                Yii::$app->session->setFlash('tab', 2);
 
-        if (empty($model)) {
-            $model = new CustomerAddress();
-            $model->customerId = $customer->id;
+                Yii::$app->response->redirect(array("admin/" . Yii::$app->controller->id . "/change/" . $id));
+            }
+
+            if (Model::loadMultiple($customer->phones, Yii::$app->request->post())) {
+                foreach ($customer->phones as $phone) {
+                    $phone->save();
+                }
+                Yii::$app->session->setFlash('save', 'Изменения успешно сохранены.');
+                Yii::$app->session->setFlash('tab', 3);
+
+                Yii::$app->response->redirect(array("admin/" . Yii::$app->controller->id . "/change/" . $id));
+            }
+    }
+
+    public function actionNewAddress()
+    {
+        $model = new CustomerAddress();
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return array_merge(ActiveForm::validate($model));
         }
-
-        if ($model->load($this->_post) && $model->validate()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->save();
-            Yii::$app->session->setFlash('save', 'Изменения успешно сохранены.');
-        }
 
-        return $this->render(Yii::$app->controller->action->id, [
-                'model' => $model,
-            ]);
+            Yii::$app->session->setFlash('save', 'Изменения успешно сохранены.');
+            Yii::$app->session->setFlash('tab', 2);
+
+            Yii::$app->response->redirect(array("admin/" . Yii::$app->controller->id . "/change/" . $model->customerId));
+        }
+    }
+
+    public function actionNewPhone()
+    {
+        $model = new CustomerPhone();
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return array_merge(ActiveForm::validate($model));
+        }
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->save();
+
+            Yii::$app->session->setFlash('save', 'Изменения успешно сохранены.');
+            Yii::$app->session->setFlash('tab', 3);
+
+            Yii::$app->response->redirect(array("admin/" . Yii::$app->controller->id . "/change/" . $model->customerId));
+        }
     }
 
     /**
