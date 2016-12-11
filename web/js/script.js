@@ -623,7 +623,7 @@ $(document).ready(function(){
 	$('.show-all.index').on(
 		'click',
 		function () {
-			location.href = "/all-products?filter=" + $(this).parent().find('.switch > a.selected').attr('href');
+			location.href = "/all-products?filter=" + $(this).parent().find('.switch > a.selected').data('filter');
 		}
 	);
     function showAddProductNotification ($success) {

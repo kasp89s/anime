@@ -15,9 +15,9 @@ use yii\helpers\Html;
     <div class="container type2">
         <div class="panel clearfix">
             <div class="switch">
-                <a href=".list1">Новинки</a>
-                <a href=".list2">Популярные товары</a>
-                <a href=".list3">Распродажи</a>
+                <a href=".list1" data-filter="new">Новинки</a>
+                <a href=".list2" data-filter="popular">Популярные товары</a>
+                <a href=".list3" data-filter="sale">Распродажи</a>
             </div>
             <a href="javascript:void(0)" class="show-all index">показать все</a>
         </div>

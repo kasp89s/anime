@@ -47,7 +47,9 @@ use yii\helpers\Html;
                     <div class="news-row clearfix">
                 <div class="news-title">
                     <p>
-                        <?= $record->title?>
+                        <a href="<?= Url::to('/'. Yii::$app->controller->id .'/item/' . $record->id)?>">
+                            <?= $record->title?>
+                        </a>
                     </p>
                     <p class="time">
                         <?= date('d.m.Y', strtotime($record->publishTime))?>

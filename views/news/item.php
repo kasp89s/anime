@@ -35,6 +35,23 @@ $record->products;
                         </div>
                         <h3><?= $product->name?></h3>
                     </a>
+                    <div class="price">
+                        <div class="new-price-block">
+                            <?php if($product->discount->value != 0):?>
+                                <span class="old-price"><?= number_format($product->price, 0, '', ' ')?> <?= $product->currencyCode?>.</span>
+                            <?php endif;?>
+                            <b class="new-price"><?= number_format($product->realPrice, 0, '', ' ')?> <?= $product->currencyCode?>.</b>
+                        </div>
+                        <?php if($product->quantityInStock > 0):?>
+                            <a href="<?= Url::to('/product/' . $product->id)?>" class="button">В КОРЗИНУ</a>
+                        <?php else:?>
+                            <a
+                                    href="javascript:void(0)"
+                                    data-product="<?= $product->id?>"
+                                    data-user="<?= (!empty($this->params['user'])) ? $this->params['user']->id : ''?>"
+                                    class="button wait-modal-btn">уведомить о наличии</a>
+                        <?php endif;?>
+                    </div>
                 </div>
                 <?php endforeach;?>
             </div>

@@ -148,7 +148,9 @@ class SiteController extends AbstractController
             ->joinWith('specificationRelations')
             ->joinWith('discount')
             ->joinWith('marker')
-            ->filterWhere(['like', 'name', $search])
+            ->filterWhere(['like', 'product.name', $search])
+            ->orFilterWhere(['=', 'product.sku', $search])
+            ->orFilterWhere(['like', 'product.description', $search])
             ->all();
 
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -362,6 +364,7 @@ class SiteController extends AbstractController
 
         if ($comment->load(Yii::$app->request->post()) && $comment->validate()) {
             $comment->save();
+            return $this->redirect(['product', 'id' => $id]);
         }
 
         $product = Product::findOne($id);
@@ -477,26 +480,26 @@ class SiteController extends AbstractController
     {
         $filter = Yii::$app->request->get('filter');
 
-        if (empty($filter) || !in_array($filter, ['.list1', '.list2', '.list3'])) {
+        if (empty($filter) || !in_array($filter, ['new', 'popular', 'sale'])) {
 
         }
             $query = Product::find();
 
-            if ($filter == '.list1') {
+            if ($filter == 'new') {
                 $page = 'Новинки';
                 $query->joinWith('discount')
                     ->joinWith('marker')
                     ->where('productmarker.isActive = 1 AND productmarker.isSale = 1 AND productmarker.isNew = 1');
             }
 
-            if ($filter == '.list2') {
+            if ($filter == 'popular') {
                 $page = 'Популярные товары';
                 $query->joinWith('discount')
                     ->joinWith('marker')
                     ->where('productmarker.isActive = 1 AND productmarker.isSale = 1');
             }
 
-            if ($filter == '.list3') {
+            if ($filter == 'sale') {
                 $page = 'Распродажи';
                 $query->joinWith('discount')
                     ->joinWith('marker')
