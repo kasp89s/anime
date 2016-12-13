@@ -61,7 +61,9 @@ use yii\helpers\Html;
                                     <div class="price">
                                         <b><?= number_format($model->product->realPrice, 0, '', ' ')?> <?= $model->product->currencyCode?>.</b>
                                         <?php if($model->product->quantityInStock > 0):?>
-                                            <button class="button">В КОРЗИНУ</button>
+                                            <a href="<?= Url::to('/product/' . $model->product->id)?>" class="button">В КОРЗИНУ</a>
+                                        <?php else:?>
+                                            <a class="button">нет в наличие</a>
                                         <?php endif;?>
                                     </div>
                                 </div>

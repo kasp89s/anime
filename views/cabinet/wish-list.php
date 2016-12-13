@@ -67,7 +67,15 @@ use yii\helpers\Html;
                         </a>
                         <div class="price">
                             <b><?= number_format($product->realPrice, 0, '', ' ')?> <?= $product->currencyCode?>.</b>
-                            <button class="button">В КОРЗИНУ</button>
+                            <?php if($product->quantityInStock > 0):?>
+                                <a href="<?= Url::to('/product/' . $product->id)?>" class="button">В КОРЗИНУ</a>
+                            <?php else:?>
+                                <a
+                                    href="javascript:void(0)"
+                                    data-product="<?= $product->id?>"
+                                    data-user="<?= (!empty($this->params['user'])) ? $this->params['user']->id : ''?>"
+                                    class="button wait-modal-btn">уведомить о наличии</a>
+                            <?php endif;?>
                         </div>
                     </div>
                     <?php endforeach;?>

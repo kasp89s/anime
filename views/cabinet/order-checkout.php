@@ -304,10 +304,11 @@ use yii\widgets\ActiveForm;
                         </div>
                         <div class="promo-block">
                             <button class="enter-promo">
-                                Ввести пропокод
+                                Ввести промокод
                             </button>
                             <?= Html::beginForm([''], 'post') ?>
                             <input class="promo-field" name="code" placeholder="Промокод" type="text">
+                            <p class="error text-danger"><?= $couponError?></p>
                         </div>
                         <button  type="submit" class="make-order" style="display: none;">
                             подтвердить

@@ -50,5 +50,10 @@ use yii\helpers\Url;
                 Просмотренные товары
             </a>
         </li>
+        <li>
+            <a href="<?= Url::to('/site/logout')?>">
+                Выйти
+            </a>
+        </li>
     </ul>
 </div>

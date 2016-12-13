@@ -1,3 +1,8 @@
 <div class="content-container clearfix">
-    Активация успешна. Можно войти на сайт используя свой логин и пароль.
+    <div class="article-row">
+            <p class="article-title">
+                    Спасибо, ваш электронный адрес потверждён
+            </p>
+            <p class="article-info"></p>
+        </div>
 </div>

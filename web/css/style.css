@@ -3176,7 +3176,7 @@ footer h3 {
 #overlay {
   z-index: 250;
   position: fixed;
-  background: rgba(254, 196, 24, 0.9);
+  background: rgba(66, 54, 18, 0.9);
   width: 100%;
   height: 100%;
   top: 0;
@@ -3268,4 +3268,35 @@ footer h3 {
 .pagination > li.active {
   background: #3a87ad;
   border-radius: 4px;
+}
+
+.b-share__handle {
+  float: left;
+  height: 16px;
+  padding: 5px 3px 5px 2px!important;
+  cursor: pointer;
+  text-align: left;
+  text-decoration: none!important;
+}
+
+.b-share-icon {
+  float: left;
+  display: inline;
+  overflow: hidden;
+  width: 16px;
+  height: 16px;
+  padding: 0!important;
+  vertical-align: top;
+  border: 0;
+  background: url("//yastatic.net/share/static/b-share-icon.png") 0 99px no-repeat;
+}
+
+.b-share-icon_vkontakte, .b-share-icon_custom {
+  background-position: 0 0;
+}
+.b-share-icon_facebook {
+  background-position: 0 -68px;
+}
+.b-share-icon_twitter {
+  background-position: 0 -51px;
 }

@@ -116,7 +116,15 @@ $waitForm = new \app\models\WaitForm();
                 </ul>
                 <?= Html::endForm();?>
                 <div class="horizontal-share">
-                    <img src="/img/horizonyal-share.png" alt="">
+                    <a rel="nofollow"  title="ВКонтакте" class="b-share__handle b-share__link b-share-btn__vkontakte"
+                        href="http://vk.com/share.php?url=http://<?= Yii::$app->getRequest()->serverName?>/product/<?= $product->id?>&title=<?= urlencode($product->name)?>&description=<?= urlencode($product->description)?>&image=<?= urlencode($product->images[0]->imageFileName);?>"
+                        onclick="window.open(this.href, 'mywin', 'left=20,top=20,width=600,height=500,toolbar=1,resizable=0'); return false;"><span class="b-share-icon b-share-icon_vkontakte"></span></a>
+                    <a rel="nofollow" target="_blank" title="Facebook" class="b-share__handle b-share__link b-share-btn__facebook"
+                        href="https://www.facebook.com/sharer/sharer.php?sdk=joey&u=http://<?= Yii::$app->getRequest()->serverName?>/product/<?= $product->id?>&title=<?= urlencode($product->name)?>&description=<?= urlencode($product->description)?>&image=<?= urlencode($product->images[0]->imageFileName);?>"
+                       onclick="window.open(this.href, 'mywin', 'left=20,top=20,width=600,height=500,toolbar=1,resizable=0'); return false;"><span class="b-share-icon b-share-icon_facebook"></span></a>
+                    <a rel="nofollow" target="_blank" title="Twitter" class="b-share__handle b-share__link b-share-btn__twitter"
+                        href="https://twitter.com/home?status=<?= urlencode($product->name)?> http://<?= Yii::$app->getRequest()->serverName?>/product/<?= $product->id?>"
+                       onclick="window.open(this.href, 'mywin', 'left=20,top=20,width=600,height=500,toolbar=1,resizable=0'); return false;"><span class="b-share-icon b-share-icon_twitter"></span></a>
                 </div>
             </div>
 

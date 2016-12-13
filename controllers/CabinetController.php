@@ -76,6 +76,9 @@ class CabinetController extends AbstractController
     {
         parent::init();
 
+        if (empty($this->user->id))
+            \Yii::$app->response->redirect(['/']);
+
         $this->facebook = new \Facebook\Facebook([
             'app_id' => Yii::$app->params['social']['facebook']['id'],
             'app_secret' => Yii::$app->params['social']['facebook']['secret'],
@@ -360,7 +363,7 @@ class CabinetController extends AbstractController
         $model = Customer::findOne($this->user->id);
         $models = $model->getWishProducts($sortColumn, $sortType)->all();
         $totalAmount = 0;
-//        var_dump($models); exit();
+
         foreach ($models as $model) {
             $totalAmount+= $model->realPrice;
         }
@@ -389,6 +392,8 @@ class CabinetController extends AbstractController
 
         $couponDiscount = null;
 
+        $couponError = null;
+
         if (Yii::$app->request->isPost && !empty($_POST['code'])) {
             $coupon = Coupon::find()
                 ->where(
@@ -402,7 +407,11 @@ class CabinetController extends AbstractController
                         ':orderAmount' => $totalAmount
                     ])
                 ->one();
-            $couponDiscount = $coupon->getDiscountByAmount($totalAmount);
+            if (!empty($coupon)) {
+                $couponDiscount = $coupon->getDiscountByAmount($totalAmount);
+            } else {
+                $couponError = 'Введеный код купона не актуален!';
+            }
         }
 
         return $this->render(Yii::$app->controller->action->id, [
@@ -414,6 +423,7 @@ class CabinetController extends AbstractController
                 'totalAmount' => $totalAmount,
                 'shippingMethods' => $shippingMethods,
                 'paymentMethods' => $paymentMethods,
+                'couponError' => $couponError,
         ]);
     }
 
