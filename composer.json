@@ -22,7 +22,8 @@
         "facebook/php-sdk-v4": "^5.2",
         "bocharsky-bw/vkontakte-php-sdk": "^2.0",
         "google/apiclient": "^2.0",
-        "xiaosier/libweibo": "dev-master"
+        "xiaosier/libweibo": "dev-master",
+        "yiisoft/yii2-jui": "^2.0"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

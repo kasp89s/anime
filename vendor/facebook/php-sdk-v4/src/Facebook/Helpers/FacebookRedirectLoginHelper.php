@@ -122,7 +122,7 @@ class FacebookRedirectLoginHelper
      */
     private function makeUrl($redirectUrl, array $scope, array $params = [], $separator = '&')
     {
-        $state = $this->pseudoRandomStringGenerator->getPseudoRandomString(static::CSRF_LENGTH);
+        $state = $this->persistentDataHandler->get('state') ?: $this->pseudoRandomStringGenerator->getPseudoRandomString(static::CSRF_LENGTH);
         $this->persistentDataHandler->set('state', $state);
 
         return $this->oAuth2Client->getAuthorizationUrl($redirectUrl, $state, $scope, $params, $separator);
@@ -218,7 +218,8 @@ class FacebookRedirectLoginHelper
             return null;
         }
 
-        //$this->validateCsrf();
+        $this->validateCsrf();
+        $this->resetCsrf();
 
         $redirectUrl = $redirectUrl ?: $this->urlDetectionHandler->getCurrentUrl();
         // At minimum we need to remove the state param
@@ -248,6 +249,14 @@ class FacebookRedirectLoginHelper
         }
 
         throw new FacebookSDKException('Cross-site request forgery validation failed. The "state" param from the URL and session do not match.');
+    }
+
+    /**
+     * Resets the CSRF so that it doesn't get reused.
+     */
+    private function resetCsrf()
+    {
+        $this->persistentDataHandler->set('state', null);
     }
 
     /**

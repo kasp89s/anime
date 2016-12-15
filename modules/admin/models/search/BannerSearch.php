@@ -41,6 +41,9 @@ class BannerSearch extends Banner
      */
     public function search($params)
     {
+        if (!empty($params['BannerSearch']))
+            $params['BannerSearch'] = array_map("trim", $params['BannerSearch']);
+
         $query = Banner::find();
 
         // add conditions that should always apply here
@@ -60,8 +63,6 @@ class BannerSearch extends Banner
         // grid filtering conditions
         $query->andFilterWhere([
                 'id' => $this->id,
-                'startTime' => $this->startTime,
-                'endTime' => $this->endTime,
                 'isActive' => $this->isActive,
                 'createTime' => $this->createTime,
                 'updateTime' => $this->updateTime,
@@ -70,6 +71,8 @@ class BannerSearch extends Banner
             ]);
         $query->orderBy('id desc');
         $query->andFilterWhere(['like', 'name', $this->name])
+            ->andFilterWhere(['like', 'startTime', $this->startTime])
+            ->andFilterWhere(['like', 'endTime', $this->endTime])
             ->andFilterWhere(['like', 'content', $this->content])
             ->andFilterWhere(['like', 'imageFileName', $this->imageFileName]);
 

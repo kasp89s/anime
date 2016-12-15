@@ -44,13 +44,26 @@ use yii\helpers\Html;
                                    return Html::img('/uploads/banners/' . $model->id .'/' . $model->imageFileName, ['class' => 'img-rounded img-md']);
                                 }
                             ],
-                            'startTime',
-//                            [
-//                                'attribute' => 'startTime',
-//                                'value' => 'startTime',
-//                                'filter' => \yii\jui\DatePicker::widget(\yii\jui\DatePicker::className(), ['language' => 'ru', 'dateFormat' => 'dd-MM-yyyy']),
-//                            ],
-                             'endTime',
+                            [
+                                'attribute' => 'startTime',
+                                'filter' => \yii\jui\DatePicker::widget([
+                                    'model'=>$searchModel,
+                                    'attribute'=>'startTime',
+                                    'language' => 'ru',
+                                    'dateFormat' => 'yyyy-MM-dd',
+                                    'options' => ['class' => 'datepicker']
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'endTime',
+                                'filter' => \yii\jui\DatePicker::widget([
+                                    'model'=>$searchModel,
+                                    'attribute'=>'endTime',
+                                    'language' => 'ru',
+                                    'dateFormat' => 'yyyy-MM-dd',
+                                    'options' => ['class' => 'datepicker']
+                                ]),
+                            ],
                             // 'isActive',
                             // 'createTime',
                             // 'updateTime',
@@ -63,9 +76,11 @@ use yii\helpers\Html;
                                 'format' => 'raw',
                                 'value' => function($model) {
                                     if ($model->isActive) {
-                                        return '<span class="badge badge-primary">Активен</span>';
+                                        return '<a href="' . Url::to('/admin/'. Yii::$app->controller->id .'/active/' . $model->id) . '">
+                                        <span class="badge badge-primary">Активен</span></a>';
                                     } else {
-                                        return '<span class="badge badge-danger">Не активен</span>';
+                                        return '<a href="' . Url::to('/admin/'. Yii::$app->controller->id .'/active/' . $model->id) . '">
+                                        <span class="badge badge-danger">Не активен</span></a>';
                                     }
                                 }
                             ],
