@@ -95,6 +95,19 @@ abstract class AdminController extends Controller {
         return $this->redirect(Yii::$app->request->referrer);
     }
 
+    public function actionActive($id)
+    {
+        $this->_activeModel = $this->getCurrentModel(Yii::$app->controller->id);
+
+        eval("\$model = $this->_activeModel::findOne($id);");
+        if (!empty($model) && isset($model->isActive)) {
+            $model->isActive = empty($model->isActive) ? 1 : 0;
+            $model->save();
+        }
+
+        return $this->redirect(Yii::$app->request->referrer);
+    }
+
     protected function getCurrentModel($controllerId)
     {
         $modelName = str_ireplace('-', ' ', $controllerId);

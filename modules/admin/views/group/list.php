@@ -43,6 +43,15 @@ use yii\helpers\Url;
                             <tr>
                                 <?php foreach ($record->attributeLabels() as $column => $label):?>
                                     <?php if ($column == 'availableActions') continue;?>
+                                    <?php if ($column == 'actions'):?>
+                                        <?php $actions = explode(',', $record->{$column});?>
+                                        <td>
+                                        <?php foreach ($actions as $action):?>
+                                            <u><?= $record->getActionList()[$action]?></u>
+                                        <?php endforeach;?>
+                                        </td>
+                                        <?php continue;?>
+                                    <?php endif;?>
                                     <td><?= $record->{$column}?></td>
                                 <?php endforeach;?>
                                 <td class="text-right footable-visible footable-last-column">

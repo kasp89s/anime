@@ -1,8 +1,11 @@
 <?php
-use yii\widgets\LinkPager;
 use yii\widgets\Breadcrumbs;
 use yii\helpers\Url;
-use yii\helpers\Html;
+
+$groups = [];
+foreach (\app\models\CustomerGroup::find()->all() as $record) {
+    $groups[$record['id']] = $record['name'];
+}
 ?>
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
@@ -33,9 +36,17 @@ use yii\helpers\Html;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'columns' => [
-                            ['class' => 'yii\grid\SerialColumn'],
+//                            ['class' => 'yii\grid\SerialColumn'],
+                            'id',
                             'email:email',
-                            'group.name',
+                            [
+                                'attribute' => 'customerGroupId',
+                                'filter' => $groups,
+                                'format' => 'raw',
+                                'value' => function($model) {
+                                    return $model->group->name;
+                                }
+                            ],
                             'registrationIp',
                             [
                                 'attribute' => 'isActive',
@@ -43,46 +54,14 @@ use yii\helpers\Html;
                                 'format' => 'raw',
                                 'value' => function($model) {
                                     if ($model->isActive) {
-                                        return '<span class="badge badge-primary">Активен</span>';
+                                        return '<a href="' . Url::to('/admin/'. Yii::$app->controller->id .'/active/' . $model->id) . '">
+                                        <span class="badge badge-primary">Активен</span></a>';
                                     } else {
-                                        return '<span class="badge badge-danger">Не активен</span>';
+                                        return '<a href="' . Url::to('/admin/'. Yii::$app->controller->id .'/active/' . $model->id) . '">
+                                        <span class="badge badge-danger">Не активен</span></a>';
                                     }
                                 }
                             ],
-                            /*
-                            [
-                                'format' => 'raw',
-                                'value' => function($model) {
-                                    $item = '';
-                                    if (!empty($model->address)) {
-                                        $item.= '<ul class="unstyled">';
-                                            foreach($model->address->attributeLabels() as $key => $label) {
-                                                $item.= '<li><strong>' . $label . '</strong>: ' . $model->address->{$key} . '</li>';
-                                            }
-                                        $item.= '</ul>';
-                                    }
-                                    return ' <div class="ibox float-e-margins border-bottom">
-                                    <div class="ibox-title">
-                                        <h5>Дополнительные данные</h5>
-                                        <div class="ibox-tools">
-                                            <a class="collapse-link">
-                                                <i class="fa fa-chevron-down"></i>
-                                            </a>
-                                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                                <i class="fa fa-wrench"></i>
-                                            </a>
-                                            <ul class="dropdown-menu dropdown-user">
-                                                <li><a href="' . Url::to('/admin/'. Yii::$app->controller->id .'/change-address/' . $model->id) . '">Редактировать</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="ibox-content" style="display: none;">
-                                        ' .$item. '
-                                    </div>
-                                </div>';
-                                }
-                            ],
-                            */
                             [
                                 'format' => 'raw',
                                 'value' => function($model) {

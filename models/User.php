@@ -57,7 +57,7 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
             'email' => 'Почта',
             'password' => 'Пароль',
             'passwordConfirm' => 'Пароль еще раз',
-            'userGroupId' => 'User Group ID',
+            'userGroupId' => 'Группа пользователя',
             'isActive' => 'Активен',
             'description' => 'Описание',
         ];

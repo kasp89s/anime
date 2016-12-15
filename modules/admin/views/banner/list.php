@@ -45,6 +45,11 @@ use yii\helpers\Html;
                                 }
                             ],
                             'startTime',
+//                            [
+//                                'attribute' => 'startTime',
+//                                'value' => 'startTime',
+//                                'filter' => \yii\jui\DatePicker::widget(\yii\jui\DatePicker::className(), ['language' => 'ru', 'dateFormat' => 'dd-MM-yyyy']),
+//                            ],
                              'endTime',
                             // 'isActive',
                             // 'createTime',

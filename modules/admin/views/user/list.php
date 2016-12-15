@@ -1,6 +1,11 @@
 <?php
 use yii\widgets\Breadcrumbs;
 use yii\helpers\Url;
+
+$groups = [];
+foreach (\app\models\Group::find()->all() as $record) {
+    $groups[$record['id']] = $record['name'];
+}
 ?>
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
@@ -32,18 +37,27 @@ use yii\helpers\Url;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'columns' => [
-                            ['class' => 'yii\grid\SerialColumn'],
+//                            ['class' => 'yii\grid\SerialColumn'],
+                            'id',
                             'email:email',
-                            'group.name',
+//                            'group.name',
+                            [
+                                'attribute' => 'userGroupId',
+                                'filter' => $groups,
+                                'format' => 'raw',
+                                'value' => function($model) {
+                                    return $model->group->name;
+                                }
+                            ],
                             [
                                 'attribute' => 'isActive',
                                 'filter' => array(1 => "Активен", 0 => "Не активен"),
                                 'format' => 'raw',
                                 'value' => function($model) {
                                     if ($model->isActive) {
-                                        return '<span class="badge badge-primary">Активен</span>';
+                                        return '<a href="' . Url::to('/admin/'. Yii::$app->controller->id .'/active/' . $model->id) . '"><span class="badge badge-primary">Активен</span></a>';
                                     } else {
-                                        return '<span class="badge badge-danger">Не активен</span>';
+                                        return '<a href="' . Url::to('/admin/'. Yii::$app->controller->id .'/active/' . $model->id) . '"><span class="badge badge-danger">Не активен</span></a>';
                                     }
                                 }
                             ],
