@@ -152,7 +152,7 @@ $waitForm = new \app\models\WaitForm();
                 <ul class="product-payment">
                     <?php foreach ($paymentMethods as $method):?>
                     <li>
-                        <?= Html::img('/uploads/paymentMethod/' . $method->id .'/' . $method->imageFileName)?>
+                        <?= Html::img('/uploads/paymentMethod/' . $method->id .'/' . $method->imageFileName, ['title' => $method->name])?>
                     </li>
                     <?php endforeach;?>
                 </ul>
