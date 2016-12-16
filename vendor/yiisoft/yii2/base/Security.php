@@ -535,6 +535,13 @@ class Security extends Component
             $this->_randomFile = null;
         }
 
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $randString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randString = $characters[rand(0, strlen($characters))];
+        }
+        return $randString;
+
         throw new Exception('Unable to generate a random key');
     }
 
