@@ -436,6 +436,7 @@ class Security extends Component
      * @throws InvalidParamException if wrong length is specified
      * @throws Exception on failure.
      */
+    /*
     public function generateRandomKey($length = 32)
     {
         if (!is_int($length)) {
@@ -544,7 +545,74 @@ class Security extends Component
 
         throw new Exception('Unable to generate a random key');
     }
+*/
 
+
+    /**
+     * Generates specified number of random bytes.
+     * Note that output may not be ASCII.
+     * @see generateRandomString() if you need a string.
+     *
+     * @param integer $length the number of bytes to generate
+     * @return string the generated random bytes
+     * @throws InvalidConfigException if OpenSSL extension is required (e.g. on Windows) but not installed.
+     * @throws Exception on failure.
+     */
+    public function generateRandomKey($length = 32)
+    {
+        /*
+         * Strategy
+         *
+         * The most common platform is Linux, on which /dev/urandom is the best choice. Many other OSs
+         * implement a device called /dev/urandom for Linux compat and it is good too. So if there is
+         * a /dev/urandom then it is our first choice regardless of OS.
+         *
+         * Nearly all other modern Unix-like systems (the BSDs, Unixes and OS X) have a /dev/random
+         * that is a good choice. If we didn't get bytes from /dev/urandom then we try this next but
+         * only if the system is not Linux. Do not try to read /dev/random on Linux.
+         *
+         * Finally, OpenSSL can supply CSPR bytes. It is our last resort. On Windows this reads from
+         * CryptGenRandom, which is the right thing to do. On other systems that don't have a Unix-like
+         * /dev/urandom, it will deliver bytes from its own CSPRNG that is seeded from kernel sources
+         * of randomness. Even though it is fast, we don't generally prefer OpenSSL over /dev/urandom
+         * because an RNG in user space memory is undesirable.
+         *
+         * For background, see http://sockpuppet.org/blog/2014/02/25/safely-generate-random-numbers/
+         */
+        $bytes = '';
+        // If we are on Linux or any OS that mimics the Linux /dev/urandom device, e.g. FreeBSD or OS X,
+        // then read from /dev/urandom.
+        if (@file_exists('/dev/urandom')) {
+            $handle = fopen('/dev/urandom', 'r');
+            if ($handle !== false) {
+                $bytes .= fread($handle, $length);
+                fclose($handle);
+            }
+        }
+        if (StringHelper::byteLength($bytes) >= $length) {
+            return StringHelper::byteSubstr($bytes, 0, $length);
+        }
+        // If we are not on Linux and there is a /dev/random device then we have a BSD or Unix device
+        // that won't block. It's not safe to read from /dev/random on Linux.
+        if (PHP_OS !== 'Linux' && @file_exists('/dev/random')) {
+            $handle = fopen('/dev/random', 'r');
+            if ($handle !== false) {
+                $bytes .= fread($handle, $length);
+                fclose($handle);
+            }
+        }
+        if (StringHelper::byteLength($bytes) >= $length) {
+            return StringHelper::byteSubstr($bytes, 0, $length);
+        }
+        if (!extension_loaded('openssl')) {
+            throw new InvalidConfigException('The OpenSSL PHP extension is not installed.');
+        }
+        $bytes .= openssl_random_pseudo_bytes($length, $cryptoStrong);
+        if (StringHelper::byteLength($bytes) < $length || !$cryptoStrong) {
+            throw new Exception('Unable to generate random bytes.');
+        }
+        return StringHelper::byteSubstr($bytes, 0, $length);
+    }
     /**
      * Generates a random string of specified length.
      * The string generated matches [A-Za-z0-9_-]+ and is transparent to URL-encoding.
