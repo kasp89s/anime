@@ -41,6 +41,9 @@ class InfoPageSearch extends InfoPage
      */
     public function search($params)
     {
+        if (!empty($params[get_class($this)]))
+            $params[get_class($this)] = array_map("trim", $params[get_class($this)]);
+
         $query = InfoPage::find();
 
         // add conditions that should always apply here

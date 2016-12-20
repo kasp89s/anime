@@ -31,7 +31,7 @@ use yii\helpers\Html;
                             'dataProvider' => $dataProvider,
                             'filterModel' => $searchModel,
                             'columns' => [
-                                ['class' => 'yii\grid\SerialColumn'],
+                                'id',
                                 'sku',
                                 'name',
 //                                'description:ntext',
@@ -57,9 +57,24 @@ use yii\helpers\Html;
                                     }
                                 ],
                                 [
+                                    'attribute' => 'marker.isActive',
+                                    'filter' => array(1 => "Активен", 0 => "Не активен"),
+                                    'format' => 'raw',
+                                    'value' => function($model) {
+                                        if ($model->marker->isActive) {
+                                            return '<a href="' . Url::to('/admin/'. Yii::$app->controller->id .'/active/' . $model->id) . '"><span class="badge badge-primary">Активен</span></a>';
+                                        } else {
+                                            return '<a href="' . Url::to('/admin/'. Yii::$app->controller->id .'/active/' . $model->id) . '"><span class="badge badge-danger">Не активен</span></a>';
+                                        }
+                                    }
+                                ],
+                                [
                                     'format' => 'raw',
                                     'value' => function($model) {
                                         return '<div class="btn-group">
+                                            <a href="' . Url::to('/admin/comment/list?CommentSearch%5BproductId%5D=' . $model->id) . '" class="btn btn-w-m btn-link">Мнения покупателей</a>
+                                            <br>
+                                            <a href="' . Url::to('/admin/'. Yii::$app->controller->id .'/clone/' . $model->id) . '" class="btn-white btn btn-xs">Дублировать</a>
                                             <a href="' . Url::to('/admin/'. Yii::$app->controller->id .'/change/' . $model->id) . '" class="btn-white btn btn-xs">Редактировать</a>
                                             <a href="' . Url::to('/admin/'. Yii::$app->controller->id .'/remove/' . $model->id) . '" class="btn-white btn btn-xs">Удалить</a>
                                         </div>';

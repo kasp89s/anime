@@ -31,9 +31,9 @@ use yii\helpers\Url;
                     <div class="hr-line-dashed"></div>
                     <?= $form->field($model, 'description')->textArea(['rows' => '3']) ?>
                     <div class="hr-line-dashed"></div>
-                    <?= $form->field($model, 'startTime')->textInput(['class' => 'form-control datepicker']) ?>
+                    <?= $form->field($model, 'startTime')->textInput(['class' => 'form-control datepicker', 'value' => date('Y-m-d', strtotime($model->startTime))]) ?>
                     <div class="hr-line-dashed"></div>
-                    <?= $form->field($model, 'endTime')->textInput(['class' => 'form-control datepicker']) ?>
+                    <?= $form->field($model, 'endTime')->textInput(['class' => 'form-control datepicker', 'value' => date('Y-m-d', strtotime($model->endTime))]) ?>
                     <div class="hr-line-dashed"></div>
                     <?= $form->field($model, 'type')->dropDownList(['percent' => 'Процент', 'value' => 'Сумма'])?>
                     <div class="hr-line-dashed"></div>

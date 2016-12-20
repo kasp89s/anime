@@ -1,6 +1,7 @@
 $('.datepicker').datepicker({
     todayBtn: "linked",
     keyboardNavigation: false,
+    showTimePicker: false,
     forceParse: false,
     autoclose: true,
     format: "yyyy-mm-dd"

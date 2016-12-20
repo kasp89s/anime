@@ -30,11 +30,23 @@ use yii\helpers\Url;
                             'dataProvider' => $dataProvider,
                             'filterModel' => $searchModel,
                             'columns' => [
-                                ['class' => 'yii\grid\SerialColumn'],
+                                'id',
                                 'code',
                                 'description:ntext',
-                                'startTime',
-                                'endTime',
+                                [
+                                    'attribute' => 'startTime',
+                                    'format' => 'raw',
+                                    'value' => function($model) {
+                                        return date('Y-m-d', strtotime($model->startTime));
+                                    }
+                                ],
+                                [
+                                    'attribute' => 'endTime',
+                                    'format' => 'raw',
+                                    'value' => function($model) {
+                                        return date('Y-m-d', strtotime($model->endTime));
+                                    }
+                                ],
                                  'type',
                                  'value',
                                  'minimalOrderCost',
@@ -44,16 +56,12 @@ use yii\helpers\Url;
                                     'format' => 'raw',
                                     'value' => function($model) {
                                         if ($model->isActive) {
-                                            return '<span class="badge badge-primary">Активен</span>';
+                                            return '<a href="' . Url::to('/admin/'. Yii::$app->controller->id .'/active/' . $model->id) . '"><span class="badge badge-primary">Активен</span></a>';
                                         } else {
-                                            return '<span class="badge badge-danger">Не активен</span>';
+                                            return '<a href="' . Url::to('/admin/'. Yii::$app->controller->id .'/active/' . $model->id) . '"><span class="badge badge-danger">Не активен</span></a>';
                                         }
                                     }
                                 ],
-                                // 'createTime',
-                                // 'updateTime',
-                                // 'createUserId',
-                                // 'updateUserId',
                                 [
                                     'format' => 'raw',
                                     'value' => function($model) {

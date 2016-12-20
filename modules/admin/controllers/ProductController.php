@@ -30,6 +30,84 @@ class ProductController extends AdminController {
             ]);
     }
 
+    public function actionClone($id)
+    {
+        $sourceProduct = Product::findOne($id);
+
+        if (empty($sourceProduct))
+            throw new \yii\web\NotFoundHttpException('Страница не найдена.');
+
+        $model = new Product();
+        $incomingPrice = new IncomingPrice();
+        $relatedProduct = new RelatedProduct();
+        $productMarker = new ProductMarker();
+
+        $model->attributes = $sourceProduct->attributes;
+        $model->sku = uniqid();
+        $model->save();
+
+        $path = Yii::getAlias('@webroot') . '/uploads/product/' . $model->id;
+        if (!is_dir($path)) {
+            BaseFileHelper::createDirectory($path);
+        }
+
+        copy(Yii::getAlias('@webroot') . '/uploads/product/' . $sourceProduct->id . '/' . $sourceProduct->imageFileName , $path . '/' . $model->imageFileName);
+
+        if (!empty($sourceProduct->images)) {
+            foreach ($sourceProduct->images as $image) {
+                $productImage = new ProductImage();
+                $productImage->productId = $model->id;
+                $productImage->imageFileName = $image->imageFileName;
+                $productImage->save();
+                copy(Yii::getAlias('@webroot') . '/uploads/product/' . $sourceProduct->id . '/' . $image->imageFileName , $path . '/' . $productImage->imageFileName);
+            }
+        }
+
+        if (!empty($sourceProduct->categoryRelation)) {
+            foreach ($sourceProduct->categoryRelation as $relation) {
+                $productCategoryRelation = new ProductCategoryRelation();
+                $productCategoryRelation->productId = $model->id;
+                $productCategoryRelation->productCategoryId = $relation->productCategoryId;
+                $productCategoryRelation->save();
+            }
+        }
+
+        if (!empty($sourceProduct->specificationRelations)) {
+            foreach ($sourceProduct->specificationRelations as $relation) {
+                $productSpecificationRelation = new ProductSpecificationRelation();
+                $productSpecificationRelation->productId = $model->id;
+                $productSpecificationRelation->productSpecificationId = $relation->productSpecificationId;
+                $productSpecificationRelation->value = $relation->value;
+                $productSpecificationRelation->isSearch = $relation->isSearch;
+                $productSpecificationRelation->save();
+            }
+        }
+
+        if (!empty($sourceProduct->productAttributes)) {
+            foreach ($sourceProduct->productAttributes as $relation) {
+                $productAttribute = new Attribute();
+                $productAttribute->productId = $model->id;
+                $productAttribute->productOptionId = $relation->productOptionId;
+                $productAttribute->productOptionValueId = $relation->productOptionValueId;
+                $productAttribute->save();
+            }
+        }
+
+        $incomingPrice->attributes = $sourceProduct->incomingPrice->attributes;
+        $incomingPrice->productId = $model->id;
+        $incomingPrice->save();
+
+//        $relatedProduct->attributes = $sourceProduct->attributes;
+//        $relatedProduct->idProduct = $model->id;
+//        $relatedProduct->save();
+
+        $productMarker->attributes = $sourceProduct->marker->attributes;
+        $productMarker->productId = $model->id;
+        $productMarker->save();
+
+        return $this->redirect(Yii::$app->request->referrer);
+    }
+
     public function actionCreate()
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -306,6 +384,18 @@ class ProductController extends AdminController {
                 'specifications' => $specifications,
             ]);
         Yii::$app->end();
+    }
+
+    public function actionActive($id)
+    {
+        $marker = ProductMarker::find()->where(['productId' => $id])->one();
+
+        if (!empty($marker) && isset($marker->isActive)) {
+            $marker->isActive = empty($marker->isActive) ? 1 : 0;
+            $marker->save();
+        }
+
+        return $this->redirect(Yii::$app->request->referrer);
     }
 
     /**

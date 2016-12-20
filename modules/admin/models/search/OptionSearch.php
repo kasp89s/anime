@@ -41,6 +41,9 @@ class OptionSearch extends Option
      */
     public function search($params)
     {
+        if (!empty($params[get_class($this)]))
+            $params[get_class($this)] = array_map("trim", $params[get_class($this)]);
+
         $query = Option::find();
 
         // add conditions that should always apply here

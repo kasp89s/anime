@@ -48,10 +48,10 @@ class NewsLetterSubscriber extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'customerId' => 'Customer ID',
-            'email' => 'Email',
+            'customerId' => 'Клиент',
+            'email' => 'E-mail',
             'isActive' => 'Активность',
-            'code' => 'Code',
+            'code' => 'Код',
             'createTime' => 'Время создания',
         ];
     }

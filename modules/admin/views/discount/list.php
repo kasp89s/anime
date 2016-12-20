@@ -30,10 +30,22 @@ use yii\helpers\Url;
                             'dataProvider' => $dataProvider,
                             'filterModel' => $searchModel,
                             'columns' => [
-                                ['class' => 'yii\grid\SerialColumn'],
+                                'id',
                                 'description:ntext',
-                                'startTime',
-                                'endTime',
+                                [
+                                    'attribute' => 'startTime',
+                                    'format' => 'raw',
+                                    'value' => function($model) {
+                                        return date('Y-m-d', strtotime($model->startTime));
+                                    }
+                                ],
+                                [
+                                    'attribute' => 'endTime',
+                                    'format' => 'raw',
+                                    'value' => function($model) {
+                                        return date('Y-m-d', strtotime($model->endTime));
+                                    }
+                                ],
                                 'type',
                                 'value',
                                 [

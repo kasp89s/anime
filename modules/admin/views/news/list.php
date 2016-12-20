@@ -31,10 +31,9 @@ use yii\helpers\Html;
                             'dataProvider' => $dataProvider,
                             'filterModel' => $searchModel,
                             'columns' => [
-                                ['class' => 'yii\grid\SerialColumn'],
+                                'id',
                                 'title',
                                 'shortContent:ntext',
-                                'content:ntext',
                                 [
                                     'attribute' => 'image',
                                     'format' => 'raw',

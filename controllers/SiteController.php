@@ -364,6 +364,21 @@ class SiteController extends AbstractController
 
         if ($comment->load(Yii::$app->request->post()) && $comment->validate()) {
             $comment->save();
+
+            $users = \app\models\User::find()
+                ->joinWith('group')
+                ->andFilterWhere(['like', 'usergroup.actions', 'comment'])
+                ->asArray()
+                ->all();
+
+            foreach ($users as $user) {
+                $this->sendEmail(
+                    $user['email'],
+                    Yii::$app->params['NewsLetterSubscriberSubject'],
+                    $this->renderPartial('emailTemplates/new-comment', [])
+                );
+            }
+
             return $this->redirect(['product', 'id' => $id]);
         }
 

@@ -51,7 +51,7 @@ class Comment extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'productId' => 'Product ID',
+            'productId' => 'Товар',
             'userName' => 'Ваше имя',
             'userEmail' => 'E-mail',
             'rating' => 'Рейтинг',

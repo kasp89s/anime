@@ -13,6 +13,7 @@ return [
     'RecoverSubject' => 'RecoverSubject',
     'NewRegistrationSubject' => 'NewRegistrationSubject',
     'newOrderSubject' => 'newOrderSubject',
+    'newCommentSubject' => 'newCommentSubject',
     'phone' => '+380 (93) 716–54–65',
     'categoryPageSize' => 1,
     'newsPageSize' => 1,

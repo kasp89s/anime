@@ -41,8 +41,8 @@ class BannerSearch extends Banner
      */
     public function search($params)
     {
-        if (!empty($params['BannerSearch']))
-            $params['BannerSearch'] = array_map("trim", $params['BannerSearch']);
+        if (!empty($params[get_class($this)]))
+            $params[get_class($this)] = array_map("trim", $params[get_class($this)]);
 
         $query = Banner::find();
 

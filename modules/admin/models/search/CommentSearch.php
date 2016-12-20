@@ -41,6 +41,9 @@ class CommentSearch extends Comment
      */
     public function search($params)
     {
+        if (!empty($params[get_class($this)]))
+            $params[get_class($this)] = array_map("trim", $params[get_class($this)]);
+
         $query = Comment::find();
 
         // add conditions that should always apply here
@@ -62,11 +65,11 @@ class CommentSearch extends Comment
             'id' => $this->id,
             'productId' => $this->productId,
             'rating' => $this->rating,
-            'date' => $this->date,
             'isActive' => $this->isActive,
         ]);
         $query->orderBy('id desc');
         $query->andFilterWhere(['like', 'userName', $this->userName])
+            ->andFilterWhere(['like', 'date', $this->date])
             ->andFilterWhere(['like', 'userEmail', $this->userEmail])
             ->andFilterWhere(['like', 'message', $this->message]);
 

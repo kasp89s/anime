@@ -33,7 +33,7 @@ use yii\helpers\Html;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'columns' => [
-                            ['class' => 'yii\grid\SerialColumn'],
+                            'id',
                             'name',
                             'content:ntext',
                             [
@@ -64,12 +64,6 @@ use yii\helpers\Html;
                                     'options' => ['class' => 'datepicker']
                                 ]),
                             ],
-                            // 'isActive',
-                            // 'createTime',
-                            // 'updateTime',
-                            // 'createUserId',
-                            // 'updateUserId',
-
                             [
                                 'attribute' => 'isActive',
                                 'filter' => array(1 => "Активен", 0 => "Не активен"),

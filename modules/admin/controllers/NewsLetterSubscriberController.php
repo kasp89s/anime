@@ -18,6 +18,28 @@ class NewsLetterSubscriberController extends AdminController {
             ]);
     }
 
+    public function actionCreate()
+    {
+        Yii::$app->view->params['breadcrumbs'][] = [
+            'template' => "<li>{link}</li>\n",
+            'label' => 'Создать',
+            'url' => ['/'. Yii::$app->controller->module->id .'/'. Yii::$app->controller->id .'/'. Yii::$app->controller->action->id]
+        ];
+
+        return parent::actionCreate();
+    }
+
+    public function actionChange($id)
+    {
+        Yii::$app->view->params['breadcrumbs'][] = [
+            'template' => "<li>{link}</li>\n",
+            'label' => 'Редактировать',
+            'url' => ['/'. Yii::$app->controller->module->id .'/'. Yii::$app->controller->id .'/'. Yii::$app->controller->action->id]
+        ];
+
+        return parent::actionChange($id);
+    }
+
     /**
      * Finds the NewsLetterSubscriber model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

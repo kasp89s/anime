@@ -24,23 +24,38 @@ use yii\helpers\Html;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'columns' => [
-                            ['class' => 'yii\grid\SerialColumn'],
                             'id',
-                            'product.name',
+//                            'product.name',
+                            [
+                                'attribute' => 'productId',
+                                'format' => 'raw',
+                                'value' => function($model) {
+                                    return $model->product->name;
+                                }
+                            ],
                             'userName',
                             'userEmail:email',
                             'rating',
                             'message:ntext',
-                            'date',
+                            [
+                                'attribute' => 'date',
+                                'filter' => \yii\jui\DatePicker::widget([
+                                    'model' => $searchModel,
+                                    'attribute'=>'date',
+                                    'language' => 'ru',
+                                    'dateFormat' => 'yyyy-MM-dd',
+                                    'options' => ['class' => 'datepicker']
+                                ]),
+                            ],
                             [
                                 'attribute' => 'isActive',
                                 'filter' => array(1 => "Активен", 0 => "Не активен"),
                                 'format' => 'raw',
                                 'value' => function($model) {
                                     if ($model->isActive) {
-                                        return '<span class="badge badge-primary">Активен</span>';
+                                        return '<a href="' . Url::to('/admin/'. Yii::$app->controller->id .'/active/' . $model->id) . '"><span class="badge badge-primary">Активен</span></a>';
                                     } else {
-                                        return '<span class="badge badge-danger">Не активен</span>';
+                                        return '<a href="' . Url::to('/admin/'. Yii::$app->controller->id .'/active/' . $model->id) . '"><span class="badge badge-danger">Не активен</span></a>';
                                     }
                                 }
                             ],
@@ -48,7 +63,6 @@ use yii\helpers\Html;
                                 'format' => 'raw',
                                 'value' => function($model) {
                                     return '<div class="btn-group">
-                                            <a href="' . Url::to('/admin/'. Yii::$app->controller->id .'/apply/' . $model->id) . '" class="btn-white btn btn-xs">Утвердить</a>
                                             <a href="' . Url::to('/admin/'. Yii::$app->controller->id .'/change/' . $model->id) . '" class="btn-white btn btn-xs">Редактировать</a>
                                             <a href="' . Url::to('/admin/'. Yii::$app->controller->id .'/remove/' . $model->id) . '" class="btn-white btn btn-xs">Удалить</a>
                                         </div>';
