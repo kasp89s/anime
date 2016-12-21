@@ -24,7 +24,10 @@
             </p>
 
             <div>
-                <button>
+                <?php
+                    $domain = explode('@', $this->params['user']->email);
+                ?>
+                <button onclick="location.href='//<?= end($domain)?>'">
                     Подтвердить
                 </button>
             </div>
