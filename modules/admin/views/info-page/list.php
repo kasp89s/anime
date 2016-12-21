@@ -31,10 +31,20 @@ use yii\helpers\Html;
                             'dataProvider' => $dataProvider,
                             'filterModel' => $searchModel,
                             'columns' => [
-                                ['class' => 'yii\grid\SerialColumn'],
+                                'id',
                                 'code',
                                 'title',
                                 'createTime',
+                                [
+                                    'attribute' => 'createTime',
+                                    'filter' => \yii\jui\DatePicker::widget([
+                                        'model' => $searchModel,
+                                        'attribute'=>'createTime',
+                                        'language' => 'ru',
+                                        'dateFormat' => 'yyyy-MM-dd',
+                                        'options' => ['class' => 'datepicker']
+                                    ]),
+                                ],
                                 [
                                     'format' => 'raw',
                                     'value' => function($model) {

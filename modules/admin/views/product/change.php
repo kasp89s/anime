@@ -15,6 +15,11 @@ $manufactures = [];
 foreach (\app\models\Manufacture::find()->all() as $record) {
     $manufactures[$record['id']] = $record['name'];
 }
+$currencies = [];
+foreach (\app\models\Currencies::find()->all() as $record) {
+    $currencies[$record['code']] = $record['name'];
+}
+
 $attributes = [];
 $specifications = [];
 foreach ($model->categories as $category) {
@@ -102,9 +107,9 @@ foreach ($model->categories as $category) {
 
                                 <?= $form->field($model, 'availableTime')->textInput(['class' => 'form-control datepicker', 'value' => date('Y-m-d', time())]) ?>
 
-                                <?= $form->field($model, 'price') ?>
+                                <?= $form->field($model, 'price')?>
 
-                                <?= $form->field($model, 'currencyCode') ?>
+                                <?= $form->field($model, 'currencyCode')->dropDownList($currencies)  ?>
 
                                 <?= $form->field($model, 'productDisountId')->dropDownList($discounts);?>
 
@@ -124,9 +129,9 @@ foreach ($model->categories as $category) {
                             <fieldset class="form-horizontal">
                                 <?php $form = ActiveForm::begin();?>
 
-                                    <?= $form->field($model->incomingPrice, 'price') ?>
+                                    <?= $form->field($model->incomingPrice, 'price')?>
 
-                                    <?= $form->field($model->incomingPrice, 'currencyCode') ?>
+                                    <?= $form->field($model->incomingPrice, 'currencyCode')->dropDownList($currencies); ?>
 
                                     <div class="form-group">
                                         <?= Html::submitInput('Сохранить', ['class' => 'btn btn-primary']) ?>

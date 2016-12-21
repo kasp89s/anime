@@ -12,6 +12,8 @@ use app\models\Order;
  */
 class OrderSearch extends Order
 {
+    public $fullName;
+
     /**
      * @inheritdoc
      */
@@ -19,7 +21,7 @@ class OrderSearch extends Order
     {
         return [
             [['id', 'customerId', 'shippingId', 'paymentId', 'isFinished'], 'integer'],
-            [['currencyCode', 'orderStatus', 'couponCode', 'createTime', 'updateTime'], 'safe'],
+            [['currencyCode', 'orderStatus', 'couponCode', 'createTime', 'updateTime', 'fullName'], 'safe'],
         ];
     }
 
@@ -59,7 +61,7 @@ class OrderSearch extends Order
             // $query->where('0=1');
             return $dataProvider;
         }
-
+        $query->joinWith(['customerInfo']);
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
@@ -73,6 +75,7 @@ class OrderSearch extends Order
         $query->orderBy('id desc');
         $query->andFilterWhere(['like', 'currencyCode', $this->currencyCode])
             ->andFilterWhere(['like', 'orderStatus', $this->orderStatus])
+            ->andFilterWhere(['like', 'ordercustomerinfo.fullName', $this->fullName])
             ->andFilterWhere(['like', 'couponCode', $this->couponCode]);
 
         return $dataProvider;

@@ -7,6 +7,8 @@ $('.datepicker').datepicker({
     format: "yyyy-mm-dd"
 });
 
+$('.chosen-select').chosen({width: "100%"});
+
 $(document).ready(function(){
 
     var updateOutput = function (e) {
@@ -64,6 +66,10 @@ $(document).ready(function(){
         }
     );
 
+    $('[data-target="#create-attribute"]').on('click', function () {
+        $('[name="OptionValue[productOptionId]"]').val($(this).data('id'));
+    });
+
     $('#product-specificationsmultiple').on('change', function () {
         $('.specifications-pull').empty();
 
@@ -76,11 +82,6 @@ $(document).ready(function(){
                 })).append($('<input>', {
                     placeholder: 'Значение',
                     name : 'specifications['+$(item).val()+'][value]'
-                })).append('<lable>Поиск</lable>').append($('<input>', {
-                    value: 1,
-                    name : 'specifications['+$(item).val()+'][isSearch]',
-                    type: 'checkbox',
-                    readonly: true
                 })));
         });
     });

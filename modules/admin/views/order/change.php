@@ -114,8 +114,7 @@ foreach (\app\models\OrderStatus::find()->asArray()->all() as $status) {
                                 </dl>
                             <fieldset class="form-horizontal">
                                 <?php $form = ActiveForm::begin();?>
-
-                                    <?= $form->field($model, 'customerId')->dropDownList($customers);?>
+                                    <?= $form->field($model, 'customerId')->dropDownList($customers, ['data-placeholder' => 'Укакжите e-mail', 'class' => 'chosen-select', 'tabindex' => 2]);?>
 
                                     <div class="form-group">
                                         <?= Html::submitInput('Сохранить', ['class' => 'btn btn-primary']) ?>
@@ -150,6 +149,9 @@ foreach (\app\models\OrderStatus::find()->asArray()->all() as $status) {
 
                                         <?= $form->field($model->customerInfo, 'phone2') ?>
 
+                                        <?php if (!empty($model->shipping->requiredValue)):?>
+                                            <?= $form->field($model->customerInfo, 'shippingValue')->label($model->shipping->requiredValue) ?>
+                                        <?php endif;?>
                                         <div class="form-group">
                                             <?= Html::submitInput('Сохранить', ['class' => 'btn btn-primary']) ?>
                                             <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/list')?>" class="btn btn-white" type="submit">Cancel</a>
@@ -220,7 +222,7 @@ foreach (\app\models\OrderStatus::find()->asArray()->all() as $status) {
                             <?php $form = ActiveForm::begin(); ?>
 
                             <?= $form->field($model, 'shippingId')->dropDownList($shippings);?>
-                            <?php if (!empty($model->customerInfo->shippingValue)):?>
+                            <?php if (!empty($model->shipping->requiredValue) && !empty($model->customerInfo->shippingValue)):?>
                             <dl class="dl-horizontal m-t-md small">
                                 <dt><?= $model->shipping->requiredValue?>:</dt>
                                 <dd><?= $model->customerInfo->shippingValue?></dd>

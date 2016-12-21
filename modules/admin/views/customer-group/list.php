@@ -30,7 +30,7 @@ use yii\helpers\Url;
                             'dataProvider' => $dataProvider,
                             'filterModel' => $searchModel,
                             'columns' => [
-                                ['class' => 'yii\grid\SerialColumn'],
+                                'id',
                                 'name',
                                 'description:ntext',
                                 'groupDiscount',

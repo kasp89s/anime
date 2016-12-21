@@ -34,7 +34,7 @@ use yii\helpers\Html;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'columns' => [
-                            ['class' => 'yii\grid\SerialColumn'],
+                            'id',
                             'name',
                             'description:ntext',
                             [

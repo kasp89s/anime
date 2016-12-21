@@ -15,6 +15,10 @@ $manufactures = [];
 foreach (\app\models\Manufacture::find()->all() as $record) {
     $manufactures[$record['id']] = $record['name'];
 }
+$currencies = [];
+foreach (\app\models\Currencies::find()->all() as $record) {
+    $currencies[$record['code']] = $record['name'];
+}
 ?>
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
@@ -59,7 +63,7 @@ foreach (\app\models\Manufacture::find()->all() as $record) {
                     <div class="hr-line-dashed"></div>
                     <?= $form->field($model, 'price') ?>
                     <div class="hr-line-dashed"></div>
-                    <?= $form->field($model, 'currencyCode') ?>
+                    <?= $form->field($model, 'currencyCode')->dropDownList($currencies); ?>
                     <div class="hr-line-dashed"></div>
                 </div>
             </div>
@@ -71,7 +75,7 @@ foreach (\app\models\Manufacture::find()->all() as $record) {
                 <div class="ibox-content">
                     <?= $form->field($incomingPrice, 'price') ?>
                     <div class="hr-line-dashed"></div>
-                    <?= $form->field($incomingPrice, 'currencyCode') ?>
+                    <?= $form->field($incomingPrice, 'currencyCode')->dropDownList($currencies); ?>
                     <div class="hr-line-dashed"></div>
                 </div>
             </div>

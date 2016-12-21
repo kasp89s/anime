@@ -42,7 +42,7 @@ class OptionController extends AdminController {
         return parent::actionChange($id);
     }
 
-    public function actionOptionCreate($id)
+    public function actionOptionCreate()
     {
         Yii::$app->view->params['breadcrumbs'][] = [
             'template' => "<li>{link}</li>\n",
@@ -50,7 +50,7 @@ class OptionController extends AdminController {
             'url' => ['/'. Yii::$app->controller->module->id .'/'. Yii::$app->controller->id .'/'. Yii::$app->controller->action->id]
         ];
 
-        $option = Option::findOne($id);
+        $option = Option::findOne($this->_post['OptionValue']['productOptionId']);
 
         if (empty($option))
             throw new \yii\web\NotFoundHttpException();

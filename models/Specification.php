@@ -9,6 +9,7 @@ use Yii;
  *
  * @property string $id
  * @property string $name
+ * @property string $isSearch
  *
  * @property Category[] $categories
  * @property Product[] $products
@@ -32,6 +33,7 @@ class Specification extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required'],
+            [['isSearch'], 'safe'],
             [['name'], 'string', 'max' => 255],
         ];
     }
@@ -44,6 +46,7 @@ class Specification extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Название',
+            'isSearch' => 'Участвует в поиске',
         ];
     }
 

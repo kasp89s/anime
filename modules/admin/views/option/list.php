@@ -1,6 +1,7 @@
 <?php
-use yii\widgets\LinkPager;
 use yii\widgets\Breadcrumbs;
+use yii\widgets\ActiveForm;
+use yii\helpers\Html;
 use yii\helpers\Url;
 ?>
 <div class="row wrapper border-bottom white-bg page-heading">
@@ -22,7 +23,9 @@ use yii\helpers\Url;
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="input-group">
-                                <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/create')?>" class="btn btn-primary">Создать</a>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create-option">
+                                    Создать
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -30,14 +33,14 @@ use yii\helpers\Url;
                             'dataProvider' => $dataProvider,
                             'filterModel' => $searchModel,
                             'columns' => [
-                                ['class' => 'yii\grid\SerialColumn'],
+                                'id',
                                 'name',
                                 [
                                     'format' => 'raw',
                                     'value' => function($model) {
                                         $item = '<ul class="dd-list">
                                                 <li>
-                                                    <a href="' . Url::to('/admin/'. Yii::$app->controller->id .'/option-create/' . $model->id) . '"><i>[Новое значение]</i></a>
+                                                    <a href="javascript:void(0)" data-id="' . $model->id . '" data-toggle="modal" data-target="#create-attribute"><i>[Новое значение]</i></a>
                                                 </li>';
                                         if (!empty($model->values)) {
                                             $item.= '<ul class="unstyled">';
@@ -68,6 +71,51 @@ use yii\helpers\Url;
                         ]); ?>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal inmodal" id="create-option" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Добавить атрибут</h4>
+            </div>
+            <?php $form = ActiveForm::begin(['action' => '/admin/option/create']); ?>
+            <div class="modal-body">
+                <?= $form->field(new \app\models\Option(), 'name') ?>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Закрыть</button>
+                <?= Html::submitInput('Сохранить', ['class' => 'btn btn-primary']) ?>
+            </div>
+            <?php ActiveForm::end(); ?>
+        </div>
+    </div>
+</div>
+
+<div class="modal inmodal" id="create-attribute" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Добавить атрибут</h4>
+            </div>
+            <?php
+            $model = new \app\models\OptionValue();
+            $form = ActiveForm::begin(['action' => '/admin/option/option-create']); ?>
+            <div class="modal-body">
+                <?= $form->field($model, 'productOptionId')->hiddenInput()->label(false) ?>
+                <?= $form->field($model, 'name') ?>
+                <div class="hr-line-dashed"></div>
+                <?= $form->field($model, 'price') ?>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Закрыть</button>
+                <?= Html::submitInput('Сохранить', ['class' => 'btn btn-primary']) ?>
+            </div>
+            <?php ActiveForm::end(); ?>
         </div>
     </div>
 </div>

@@ -41,16 +41,16 @@ use yii\helpers\Url;
                         $active = ($category->isActive) ? '<span class="badge badge-primary">Активен</span>' : '<span class="badge badge-danger">Не активен</span>';
                         if (empty($category->categories)) {
                             $list.= '<li class="dd-item" data-id="' . $category->id . '">' .
-                                '<a href="' . $addUrl . '"><i class="fa fa-plus-square-o"></i></a>' .
+                                '<div class="category-controls"><a href="' . $addUrl . '"><i class="fa fa-plus-square-o"></i></a>' .
                                 ' <a href="' . $changeUrl . '"><i class="fa fa-edit"></i></a>' .
-                                ' <a href="' . $removeUrl . '"><i class="fa fa-eraser"></i></a>' .
+                                ' <a href="' . $removeUrl . '"><i class="fa fa-eraser"></i></a></div>' .
                             '<div class="dd-handle"><span class="pull-right"> '.$active.' </span>' . $category->name . '</div></li>';
                         } else {
                             $sub = drawCategory($category->categories);
                             $list.= '<li class="dd-item" data-id="' . $category->id . '">' .
-                                '<a href="' . $addUrl . '"><i class="fa fa-plus-square-o"></i></a>' .
+                                '<div class="category-controls"><a href="' . $addUrl . '"><i class="fa fa-plus-square-o"></i></a>' .
                                 ' <a href="' . $changeUrl . '"><i class="fa fa-edit"></i></a>' .
-                                ' <a href="' . $removeUrl . '"><i class="fa fa-eraser"></i></a>' .
+                                ' <a href="' . $removeUrl . '"><i class="fa fa-eraser"></i></a></div>' .
                                 '<div class="dd-handle"><span class="pull-right"> '.$active.' </span>' . $category->name . '</div>'.
                                 $sub .
                                 '</li>';

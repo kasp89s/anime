@@ -30,8 +30,21 @@ use yii\helpers\Url;
                             'dataProvider' => $dataProvider,
                             'filterModel' => $searchModel,
                             'columns' => [
-                                ['class' => 'yii\grid\SerialColumn'],
+                                'id',
                                 'name',
+                                [
+                                    'attribute' => 'isSearch',
+                                    'format' => 'raw',
+                                    'filter' => false,
+                                    'value' => function($model) {
+                                        if ($model->isSearch) {
+                                            return '<span class="badge badge-primary">Да</span>';
+                                        } else {
+                                            return '<span class="badge badge-danger">Нет</span>';
+                                        }
+                                    }
+                                ],
+
                                 [
                                     'format' => 'raw',
                                     'value' => function($model) {

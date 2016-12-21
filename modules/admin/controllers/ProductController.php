@@ -10,6 +10,7 @@ use app\models\ProductMarker;
 use app\models\ProductSpecificationRelation;
 use app\models\RelatedProduct;
 use app\models\ProductImage;
+use app\models\Specification;
 use Yii;
 use yii\data\Pagination;
 use yii\web\UploadedFile;
@@ -272,11 +273,12 @@ class ProductController extends AdminController {
             if (!empty($this->_post['specifications'])) {
                 ProductSpecificationRelation::deleteAll('productId = :id', [':id' => $model->id]);
                 foreach ($this->_post['specifications'] as $specificationId => $specificationData) {
+                    $specification = Specification::findOne($specificationId);
                     $productSpecificationRelation = new ProductSpecificationRelation();
                     $productSpecificationRelation->productId = $model->id;
                     $productSpecificationRelation->productSpecificationId = $specificationId;
                     $productSpecificationRelation->value = $specificationData['value'];
-                    $productSpecificationRelation->isSearch = !empty($specificationData['isSearch']) ? 1 : 0;
+                    $productSpecificationRelation->isSearch = !empty($specification->isSearch) ? 1 : 0;
                     $productSpecificationRelation->save();
                 }
             }

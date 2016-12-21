@@ -17,6 +17,7 @@ class AdminAsset extends AssetBundle
         '/web/admin/css/plugins/datapicker/datepicker3.css',
         '/web/admin/css/plugins/summernote/summernote.css',
         '/web/admin/css/plugins/summernote/summernote-bs3.css',
+        '/web/admin/css/plugins/chosen/bootstrap-chosen.css',
     ];
     public $js = [
         '/web/admin/js/bootstrap.min.js',
@@ -28,6 +29,7 @@ class AdminAsset extends AssetBundle
         '/web/admin/js/plugins/datapicker/bootstrap-datepicker.js',
         '/web/admin/js/plugins/nestable/jquery.nestable.js',
         '/web/admin/js/plugins/summernote/summernote.min.js',
+        '/web/admin/js/plugins/chosen/chosen.jquery.js',
         '/web/admin/js/main.js',
     ];
     public $depends = [

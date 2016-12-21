@@ -76,6 +76,7 @@ class Order extends \yii\db\ActiveRecord
             'createTime' => 'Дата заказа',
             'updateTime' => 'Изменен',
             'isFinished' => 'Закончен',
+            'fullName' => 'Имя и фамилия',
         ];
     }
     /**
@@ -148,6 +149,12 @@ class Order extends \yii\db\ActiveRecord
     public function getTotal()
     {
         return $this->hasOne(OrderTotal::className(), ['orderId' => 'id']);
+    }
+
+
+    public function getFullName()
+    {
+        return $this->customerInfo->fullName;
     }
 
     public function getDiscountByCoupon()
