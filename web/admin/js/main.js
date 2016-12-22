@@ -20,14 +20,39 @@ $(document).ready(function(){
         // } else {
         //     output.val('JSON browser support required for this demo.');
         // }
-    };
+    },
+        uploadFile = function (file, editor) {
+            var data = new FormData();
+            data.append("file", file);
+            $.ajax({
+                data: data,
+                type: "POST",
+                url: "/admin/info-page/upload",
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function(objFile) {
+                    editor.summernote('insertImage', objFile.folder+objFile.file);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                }
+            });
+        };
 
     // activate Nestable for list 1
     $('#nestable').nestable({
         group: 1
     }).on('change', updateOutput);
 
-    $('.summernote').summernote();
+    $('.summernote').summernote(
+        {
+            callbacks: {
+                onImageUpload: function (files) {
+                    uploadFile(files[0], $(this));
+                }
+            }
+        }
+    );
 
     $('#product-categoriesmultiple').on(
         'change',
@@ -84,5 +109,33 @@ $(document).ready(function(){
                     name : 'specifications['+$(item).val()+'][value]'
                 })));
         });
+    });
+
+    $('.orders-change').on('click', function () {
+        $('.orders-form').submit();
+    });
+
+    $('.order-selected').on('change', function () {
+        var size = 0;
+        $('.orders-form').empty().append($('<input>', {
+            type: 'hidden',
+            name: '_csrf',
+            value: $('meta[name="csrf-token"]').attr("content")
+        }));
+
+        $('.order-selected:checked').each(function (key, element) {
+            $('.orders-form').append($('<input>', {
+                type: 'hidden',
+                name: 'orders[]',
+                value: element.value
+            }));
+            size++;
+        });
+
+        if (size > 0) {
+            $('.orders-change').show();
+        } else {
+            $('.orders-change').hide();
+        }
     });
 });

@@ -33,7 +33,7 @@
     <?php endif;?>
     <?php if (in_array('customer', \Yii::$app->user->getIdentity()->group->availableActions)):?>
 <li <?php echo (Yii::$app->controller->id == 'customer' || Yii::$app->controller->id == 'customer-group') ? 'class="active"' : '';?>>
-    <a href="javascript:void(0)"><i class="fa fa-shopping-cart"></i> <span class="nav-label">Клииенты</span><span class="fa arrow"></span></a>
+    <a href="javascript:void(0)"><i class="fa fa-shopping-cart"></i> <span class="nav-label">Клиенты</span><span class="fa arrow"></span></a>
     <ul class="nav nav-second-level collapse">
         <li <?php echo (Yii::$app->controller->id == 'customer') ? 'class="active"' : '';?>>
             <a href="<?= Url::to('/admin/customer/list')?>">Список клиентов</a>

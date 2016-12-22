@@ -1,9 +1,8 @@
 <?php
-
-use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Breadcrumbs;
 use yii\helpers\Url;
+use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\admin\models\search\OrderSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -29,10 +28,28 @@ foreach (\app\models\OrderStatus::find()->asArray()->all() as $status) {
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-sm-2 m-b-xs">
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <?php echo Html::beginForm('/admin/order/orders', 'post', ['class' => 'orders-form']);?>
+                                    <?php echo Html::endForm();?>
+                                    <button class="btn btn-primary orders-change" style="display: none;">Работа с заказами</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
+            [
+                'label' => false,
+                'format' => 'raw',
+                'value' => function($model) {
+                    return '<input type="checkbox" class="order-selected" value="' .$model->id. '" />';
+                }
+            ],
             'id',
             'fullName',
 //            [

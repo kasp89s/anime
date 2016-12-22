@@ -110,25 +110,38 @@ class SocialController extends AbstractController
             ->one();
 
         if (empty($customer)) {
-            $customer = new Customer();
-            $customer->email = $params['email'];
-            $customer->password = md5(uniqid());
-            $customer->customerGroupId = $group->id;
-            $customer->isActive = 1;
-            $customer->registrationIp = $_SERVER['REMOTE_ADDR'];
-            $customer->authID = (string) $params['id'];
-            $customer->authMethod = $method;
-            $customer->fullName = $params['name'];
-            if (!$customer->validate()) {
-                $errors = $customer->getErrors();
-                $errors = end($errors);
-                throw new \yii\web\NotFoundHttpException($errors[0]);
-            } else {
-                $customer->save();
 
-                $customerAddress = new CustomerAddress();
-                $customerAddress->customerId = $customer->id;
-                $customerAddress->save(false);
+            $customer = Customer::find()
+                ->where(['email' => $params['email']])
+                ->one();
+
+            // Пользователя вобще нет
+            if (empty($customer)) {
+                $customer = new Customer();
+                $customer->email = $params['email'];
+                $customer->password = md5(uniqid());
+                $customer->customerGroupId = $group->id;
+                $customer->isActive = 1;
+                $customer->registrationIp = $_SERVER['REMOTE_ADDR'];
+                $customer->authID = (string)$params['id'];
+                $customer->authMethod = $method;
+                $customer->fullName = $params['name'];
+                if (!$customer->validate()) {
+                    $errors = $customer->getErrors();
+                    $errors = end($errors);
+                    throw new \yii\web\NotFoundHttpException($errors[0]);
+                } else {
+                    $customer->save();
+
+                    $customerAddress = new CustomerAddress();
+                    $customerAddress->customerId = $customer->id;
+                    $customerAddress->save(false);
+                }
+            } else {
+                $customer = new Customer();
+                $customer->authID = (string)$params['id'];
+                $customer->authMethod = $method;
+                $customer->save();
             }
         }
 

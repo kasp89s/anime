@@ -43,10 +43,58 @@ class OrderController extends AdminController
     {
         $searchModel = new OrderSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+//        $dataProvider->pagination->pageSize=5;
 
         return $this->render(Yii::$app->controller->action->id, [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionOrders()
+    {
+        Yii::$app->view->params['breadcrumbs'][] = [
+            'template' => "<li>{link}</li>\n",
+            'label' => 'Работа с заказами',
+            'url' => false
+        ];
+
+        $orders = Order::find()->where(['id' => $this->_post['orders']])->all();
+
+        if (!empty($this->_post['status'])) {
+            foreach ($orders as $order) {
+                $historyModel = new OrderHistory();
+                $historyModel->orderId = $order->id;
+                $historyModel->createUserId = \Yii::$app->user->id;
+                $historyModel->orderStatus = $this->_post['status'];
+                if ($historyModel->validate()) {
+                    $isRecalculate = false;
+                    $newStatus = OrderStatus::find()->where(['statusCode' => $historyModel->orderStatus])->one();
+                    if ($newStatus->isAway($order->status)) {
+                        $order->awayProducts();
+                    }
+
+                    if ($newStatus->isReturn($order->status)) {
+                        $order->returnProducts();
+                    }
+
+                    if ($newStatus->isRecalculateGroup($order->status)) {
+                        $isRecalculate = true;
+                    }
+                    $order->orderStatus = $newStatus->statusCode;
+                    $order->save();
+                    $historyModel->save();
+
+                    if ($isRecalculate) {
+                        $order->recalculateGroup();
+                    }
+                }
+            }
+            return $this->redirect('/'. Yii::$app->controller->module->id .'/' .Yii::$app->controller->id. '/list');
+        }
+
+        return $this->render(Yii::$app->controller->action->id, [
+            'orders' => $orders
         ]);
     }
 

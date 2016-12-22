@@ -40,6 +40,20 @@ foreach (\app\models\CustomerGroup::find()->all() as $record) {
                             'id',
                             'email:email',
                             [
+                                'label' => 'Соц сеть',
+                                'format' => 'raw',
+                                'value' => function($model) {
+                                    if (empty($model->authMethod))
+                                        return '-';
+
+                                    if ($model->authMethod == 'vk')
+                                        return '<a href="https://vk.com/id' . $model->authID . '" target="_blank">Вконтакте</a>';
+
+                                    if ($model->authMethod == 'facebook')
+                                        return '<a href="https://www.facebook.com/' . $model->authID . '" target="_blank">Facebook</a>';
+                                }
+                            ],
+                            [
                                 'attribute' => 'customerGroupId',
                                 'filter' => $groups,
                                 'format' => 'raw',

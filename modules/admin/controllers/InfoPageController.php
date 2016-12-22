@@ -3,9 +3,10 @@ namespace app\modules\admin\controllers;
 
 use app\models\InfoPage;
 use Yii;
-use yii\data\Pagination;
 use app\modules\admin\models\search\InfoPageSearch;
 use yii\web\NotFoundHttpException;
+use yii\helpers\BaseFileHelper;
+use yii\web\Response;
 class InfoPageController extends AdminController {
 
     public function actionList()
@@ -46,7 +47,22 @@ class InfoPageController extends AdminController {
         return parent::actionChange($id);
     }
 
+    public function actionUpload()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $path = Yii::getAlias('@webroot') . '/uploads/info-page';
+        if (!is_dir($path)) {
+            BaseFileHelper::createDirectory($path);
+        }
 
+        copy($_FILES['file']['tmp_name'], $path . '/' . $_FILES['file']['name']);
+
+        return [
+            'folder' => Yii::$app->params['serverName'] . '/uploads/info-page/',
+            'file' => $_FILES['file']['name']
+
+        ];
+    }
     /**
      * Finds the Banner model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
