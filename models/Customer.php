@@ -172,6 +172,22 @@ class Customer extends \yii\db\ActiveRecord
     }
 
     /**
+     * Массив адресов пользователя для урезаного метода доствки.
+     *
+     * @return array
+     */
+    public function getLoopAddressArray()
+    {
+        $result = [];
+        foreach ($this->address as $address)
+        {
+            $result[$address->id] = $address->city;
+        }
+
+        return $result;
+    }
+
+    /**
      * Возвращает сумму покупок пользователя.
      *
      * @return int

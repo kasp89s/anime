@@ -74,7 +74,8 @@ class Group extends \yii\db\ActiveRecord
             'option' => 'Опции',
             'order' => 'Заказы',
             'order-status' => 'Статусы заказов',
-            'comment' => 'Комментарии'
+            'comment' => 'Комментарии',
+            'mail-delivery' => 'Рассылка'
         ];
     }
 }

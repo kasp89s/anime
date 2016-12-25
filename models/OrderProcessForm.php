@@ -34,6 +34,8 @@ class OrderProcessForm extends Model
 
     public $couponCode;
 
+    public $loopAddress;
+
     /**
      * @return array the validation rules.
      */
@@ -43,7 +45,8 @@ class OrderProcessForm extends Model
             // email and password are both required
             [['fullName', 'phone', 'shipping', 'payment'], 'required'],
             [['address'], 'required', 'on' => self::SCENARIO_REGISTERED],
-            [['email', 'address', 'city', 'zip'], 'required', 'on' => self::SCENARIO_GUEST],
+            [['email', 'city'], 'required', 'on' => self::SCENARIO_GUEST],
+            [['loopAddress'], 'string'],
             [['comment'], 'string'],
             ['email', 'email', 'message' => 'Поле должно содержать корректный E-mail'],
             [['couponCode', 'city', 'zip', 'address'], 'string'],
@@ -60,6 +63,7 @@ class OrderProcessForm extends Model
             'fullName' => 'Имя Фамилия',
             'phone' => 'Моб. телефон',
             'address' => 'Адрес',
+            'loopAddress' => 'Адрес',
             'city' => 'Город',
             'zip' => 'Индекс',
             'shipping' => 'Доставка',

@@ -1,5 +1,34 @@
 $(document).ready(function(){
-	var INDEX = 0;
+	var INDEX = 0,
+		selectedShipping = $('[name="OrderProcessForm[shipping]"]:checked');
+
+    function reOpenNewAddress() {
+
+        if (selectedShipping.data('lopped') == 1) {
+            $('.field-orderprocessform-loopaddress').show();
+            $('.field-orderprocessform-address').hide();
+            $('.field-orderprocessform-zip').hide();
+            $('.field-orderprocessform-loopaddress').insertAfter($('.field-orderprocessform-address'));
+
+            if ($('.new-city-order').is(':visible')) {
+                $('.new-address-order').hide().val('');
+                $('.new-zip-order').hide().val('');
+            }
+        } else {
+            $('.field-orderprocessform-loopaddress').hide();
+            $('.field-orderprocessform-address').show();
+            $('.field-orderprocessform-zip').show();
+            $('.field-orderprocessform-address').insertAfter($('.field-orderprocessform-loopaddress'));
+
+            if ($('.new-city-order').is(':visible')) {
+                $('.new-address-order').show();
+                $('.new-zip-order').show();
+            }
+        }
+    }
+
+    reOpenNewAddress();
+
 	$('.main-slider').slick({
 		dots:true,
 		arrows:false,
@@ -107,7 +136,14 @@ $(document).ready(function(){
 	});
 
 	$(".add-address-order").on('click', function () {
-		$('.new-address-order').toggle();
+		if (selectedShipping.data('lopped') == 1) {
+            $('.new-city-order').toggle();
+		} else {
+            $('.new-city-order').toggle();
+            $('.new-address-order').toggle();
+            $('.new-zip-order').toggle();
+		}
+
 	});
 
 	$(".add-number").click(function(){
@@ -512,6 +548,9 @@ $(document).ready(function(){
     });
 
     $('.delivery-type').find('[name="OrderProcessForm[shipping]"]').on('change', function () {
+        selectedShipping = $(this);
+        reOpenNewAddress();
+
         var price = $(this).data('price-message'),
             insurance = $(this).data('insurance-message'),
             priceValue = parseInt($(this).data('price-value')),

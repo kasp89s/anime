@@ -83,6 +83,7 @@ use yii\widgets\ActiveForm;
                         Выбор способов доставки и оплаты
                     </p>
                     <?php if (!empty($this->params['user']->address)):?>
+                        <?= $form->field($orderForm, 'loopAddress')->dropDownList($this->params['user']->loopAddressArray); ?>
                         <?= $form->field($orderForm, 'address')->dropDownList($this->params['user']->addressArray); ?>
                         <div class="form-row clearfix">
                             <table>
@@ -95,7 +96,7 @@ use yii\widgets\ActiveForm;
                                     <td style="width: 100%;">
                                         <?= Html::textInput('newAddress[city]', null, [
                                                 'placeholder' => 'Город',
-                                                'class' => 'order-input new-address-order',
+                                                'class' => 'order-input new-city-order',
                                                 'style' => 'display: none;'
                                             ])?>
                                     </td>
@@ -115,7 +116,7 @@ use yii\widgets\ActiveForm;
                                     <td style="width: 100%">
                                         <?= Html::textInput('newAddress[zip]', null, [
                                                 'placeholder' => 'Индекс',
-                                                'class' => 'order-input new-address-order',
+                                                'class' => 'order-input new-zip-order',
                                                 'style' => 'display: none;'
                                             ])?>
                                     </td>
@@ -143,6 +144,7 @@ use yii\widgets\ActiveForm;
                                         class="no-courier"
                                         type="radio"
                                         value="<?= $method->id?>"
+                                        data-lopped="<?= $method->lopped?>"
                                         data-price-value="<?= round($method->price)?>"
                                         data-insurance-value="<?= round($method->insurancePercent)?>"
                                         data-price-message="<?= ($method->price > 0) ? '* Доставка ' . $method->name . ': + ' . round($method->price). ' грн к стоимости заказа.' : ''?>"

@@ -40,7 +40,15 @@ use yii\helpers\Html;
                 <div class="order-info-row">
 
                     <div class="enter-info">
-                        Адресс: <span><?= $order->customerInfo->city?>, <?= $order->customerInfo->address?>, <?= $order->customerInfo->zip?></span>
+                        Адресс: <span>
+                            <?= $order->customerInfo->city?>
+                            <?php if (!empty($order->customerInfo->address)): ?>
+                            , <?= $order->customerInfo->address?>
+                            <?php endif;?>
+                            <?php if (!empty($order->customerInfo->address)): ?>
+                            , <?= $order->customerInfo->zip?>
+                            <?php endif;?>
+                        </span>
                     </div>
                     <div class="enter-info">
                         <div class="more-info-title">

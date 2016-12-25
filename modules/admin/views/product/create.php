@@ -7,17 +7,25 @@ $categories = [];
 foreach (\app\models\Category::find()->asArray()->all() as $record) {
     $categories[$record['id']] = $record['name'];
 }
+
 $discounts = [];
 foreach (\app\models\Discount::find()->all() as $record) {
     $discounts[$record['id']] = $record['description'];
 }
+
 $manufactures = [];
 foreach (\app\models\Manufacture::find()->all() as $record) {
     $manufactures[$record['id']] = $record['name'];
 }
+
 $currencies = [];
 foreach (\app\models\Currencies::find()->all() as $record) {
     $currencies[$record['code']] = $record['name'];
+}
+
+$relatedProducts = [];
+foreach (\app\models\Product::find()->asArray()->all() as $record) {
+    $relatedProducts[$record['id']] = $record['sku'];
 }
 ?>
 <div class="row wrapper border-bottom white-bg page-heading">
@@ -99,7 +107,7 @@ foreach (\app\models\Currencies::find()->all() as $record) {
                     <h5>Дополнительные параметры</h5>
                 </div>
                 <div class="ibox-content">
-                    <?= $form->field($relatedProduct, 'relatedProductId');?>
+                    <?= $form->field($relatedProduct, 'relatedProductId')->dropDownList($relatedProducts, ['data-placeholder' => 'Укакжите SKU', 'class' => 'chosen-select', 'tabindex' => 2]);?>
                     <div class="hr-line-dashed"></div>
                     <?= $form->field($model, 'productDisountId')->dropDownList($discounts);?>
                     <div class="hr-line-dashed"></div>
@@ -119,7 +127,7 @@ foreach (\app\models\Currencies::find()->all() as $record) {
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">
                         <?= Html::submitInput('Сохранить', ['class' => 'btn btn-primary']) ?>
-                        <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/list')?>" class="btn btn-white" type="submit">Cancel</a>
+                        <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/list')?>" class="btn btn-white" type="submit">Отмена</a>
                     </div>
                 </div>
             </div>

@@ -28,6 +28,7 @@ abstract class AdminController extends Controller {
         parent::init();
         if (\Yii::$app->user->isGuest) {
             Yii::$app->response->redirect(array('admin/login'));
+            Yii::$app->end();
         }
         Yii::$app->view->params['breadcrumbs'][] = [
             'template' => "<li>{link}</li>\n",

@@ -1,8 +1,6 @@
 <?php
 use yii\widgets\Breadcrumbs;
 use yii\helpers\Url;
-use yii\helpers\Html;
-
 ?>
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
@@ -16,32 +14,32 @@ use yii\helpers\Html;
     </div>
 </div>
 <div class="wrapper wrapper-content animated fadeInRight">
-<div class="row">
-    <div class="col-lg-12">
-        <div class="ibox float-e-margins">
-            <div class="ibox-content">
-                <div class="row">
-                    <div class="col-sm-2 m-b-xs">
-                        <div class="col-sm-6">
-                            <div class="input-group">
-                                <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/create')?>" class="btn btn-primary">Создать</a>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-sm-2 m-b-xs">
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/create')?>" class="btn btn-primary">Создать</a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <?= \yii\grid\GridView::widget([
+                    <?= \yii\grid\GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'columns' => [
                             'id',
-                            'name',
-                            'description:ntext',
+                            'title',
+                            'body:ntext',
+                            'status',
                             [
-                                'attribute' => 'image',
+                                'label' => 'Адресатов',
                                 'format' => 'raw',
-                                'filter' => false,
                                 'value' => function($model) {
-                                    return Html::img('/uploads/manufacture/' . $model->id .'/' . $model->image, ['class' => 'img-rounded img-md']);
+                                    return $model->mailQueuesCount;
                                 }
                             ],
                             [
@@ -55,8 +53,8 @@ use yii\helpers\Html;
                             ],
                         ],
                     ]); ?>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </div>

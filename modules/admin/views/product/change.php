@@ -116,7 +116,7 @@ foreach ($model->categories as $category) {
                                 <?= $form->field($model, 'productManufactureId')->dropDownList($manufactures);?>
                                 <div class="form-group">
                                     <?= Html::submitInput('Сохранить', ['class' => 'btn btn-primary']) ?>
-                                    <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/list')?>" class="btn btn-white" type="submit">Cancel</a>
+                                    <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/list')?>" class="btn btn-white" type="submit">Отмена</a>
                                 </div>
                             </fieldset>
                             <?php ActiveForm::end(); ?>
@@ -135,7 +135,7 @@ foreach ($model->categories as $category) {
 
                                     <div class="form-group">
                                         <?= Html::submitInput('Сохранить', ['class' => 'btn btn-primary']) ?>
-                                        <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/list')?>" class="btn btn-white" type="submit">Cancel</a>
+                                        <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/list')?>" class="btn btn-white" type="submit">Отмена</a>
                                     </div>
 
                                 <?php ActiveForm::end(); ?>
@@ -171,7 +171,7 @@ foreach ($model->categories as $category) {
 
                                         <div class="form-group">
                                             <?= Html::submitInput('Сохранить', ['class' => 'btn btn-primary']) ?>
-                                            <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/list')?>" class="btn btn-white" type="submit">Cancel</a>
+                                            <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/list')?>" class="btn btn-white" type="submit">Отмена</a>
                                         </div>
                                     <?php ActiveForm::end(); ?>
                                 </fieldset>
@@ -200,7 +200,7 @@ foreach ($model->categories as $category) {
 
                                         <div class="form-group">
                                             <?= Html::submitInput('Сохранить', ['class' => 'btn btn-primary']) ?>
-                                            <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/list')?>" class="btn btn-white" type="submit">Cancel</a>
+                                            <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/list')?>" class="btn btn-white" type="submit">Отмена</a>
                                         </div>
                                     <?php ActiveForm::end(); ?>
                                 </fieldset>
@@ -253,7 +253,7 @@ foreach ($model->categories as $category) {
                                 <?php endif;?>
                                 <div class="form-group">
                                     <?= Html::submitInput('Сохранить', ['class' => 'btn btn-primary']) ?>
-                                    <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/list')?>" class="btn btn-white" type="submit">Cancel</a>
+                                    <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/list')?>" class="btn btn-white" type="submit">Отмена</a>
                                 </div>
                             </div>
                             <?php ActiveForm::end(); ?>

@@ -14,6 +14,7 @@ use Yii;
  * @property string $imageFileName
  * @property string $price
  * @property string $requiredValue
+ * @property string $lopped
  * @property string $insurancePercent
  * @property array $payments
  *
@@ -42,6 +43,7 @@ class ShippingMethod extends \yii\db\ActiveRecord
         return [
             [['name', 'countryCode'], 'required'],
             [['description'], 'string'],
+            [['lopped'], 'safe'],
             [['price', 'insurancePercent'], 'number'],
             [['file'], 'file', 'extensions' => 'gif, jpg, png'],
             [['name', 'imageFileName', 'requiredValue'], 'string', 'max' => 255],
@@ -65,6 +67,7 @@ class ShippingMethod extends \yii\db\ActiveRecord
             'insurancePercent' => 'Процент',
             'file' => 'Картинка',
             'requiredValue' => 'Дополнительное поле доставки',
+            'lopped' => 'Урезаные данные по доставке',
         ];
     }
 

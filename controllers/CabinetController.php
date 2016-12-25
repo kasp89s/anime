@@ -76,9 +76,6 @@ class CabinetController extends AbstractController
     {
         parent::init();
 
-        if (empty($this->user->id))
-            \Yii::$app->response->redirect(['/']);
-
         $this->facebook = new \Facebook\Facebook([
             'app_id' => Yii::$app->params['social']['facebook']['id'],
             'app_secret' => Yii::$app->params['social']['facebook']['secret'],
@@ -107,6 +104,14 @@ class CabinetController extends AbstractController
             'label' => ' Мой кабинет',
             'url' => ['/cabinet']
         ];
+    }
+
+    public function beforeAction($event)
+    {
+        if (empty($this->user) && !in_array(\Yii::$app->controller->action->id, ['basket', 'viewed', 'order-checkout', 'order-checkout', 'order-complete']))
+            \Yii::$app->response->redirect(['/']);
+
+        return parent::beforeAction($event);
     }
 
     /**
@@ -472,6 +477,26 @@ class CabinetController extends AbstractController
 
             $shippingMethod = ShippingMethod::findOne($orderForm->shipping);
             $paymentMethod = PaymentMethod::findOne($orderForm->payment);
+
+            if ($shippingMethod->lopped == 1) {
+                if (!empty($post['newAddress']['city'])) {
+                    $AddressModel = (object) [
+                        'city' => $post['newAddress']['city'],
+                        'address' => null,
+                        'zip' => null,
+                    ];
+                } elseif(!empty($orderForm->loopAddress) && !empty($this->user)) {
+                    $AddressModel = CustomerAddress::findOne($orderForm->loopAddress);
+                    $AddressModel->address = null;
+                    $AddressModel->zip = null;
+                } elseif (empty($this->user)) {
+                    $AddressModel = (object) [
+                        'city' => $orderForm->city,
+                        'address' => null,
+                        'zip' => null,
+                    ];
+                }
+            }
 
             $totalAmount = $this->_basket->productsPrice;
             $totalDiscount = !empty ($this->user) ? $this->user->getDiscountByOrderAmount($totalAmount) : 0;

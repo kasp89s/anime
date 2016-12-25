@@ -48,9 +48,11 @@ foreach (\app\models\PaymentMethod::find()->asArray()->all() as $record) {
                     <div class="hr-line-dashed"></div>
                     <?= $form->field($model, 'requiredValue') ?>
                     <div class="hr-line-dashed"></div>
+                    <?= $form->field($model, 'lopped')->checkbox(['value' => 1]) ?>
+                    <div class="hr-line-dashed"></div>
                     <div class="form-group">
                         <?= Html::submitInput('Сохранить', ['class' => 'btn btn-primary']) ?>
-                        <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/list')?>" class="btn btn-white" type="submit">Cancel</a>
+                        <a href="<?= Url::to('/admin/'. Yii::$app->controller->id .'/list')?>" class="btn btn-white" type="submit">Отмена</a>
                     </div>
                     <?php ActiveForm::end(); ?>
                 </div>
