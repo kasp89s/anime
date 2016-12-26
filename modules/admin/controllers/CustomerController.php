@@ -15,8 +15,19 @@ use app\modules\admin\models\search\CustomerSearch;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
+
+/**
+ * CustomerController Контроллер управления клиентами.
+ *
+ * @package app\modules\admin\controllers
+ */
 class CustomerController extends AdminController {
 
+    /**
+     * Список записей.
+     *
+     * @return string
+     */
     public function actionList()
     {
         $searchModel = new CustomerSearch();
@@ -28,6 +39,11 @@ class CustomerController extends AdminController {
             ]);
     }
 
+    /**
+     * Создание записи.
+     *
+     * @return string
+     */
     public function actionCreate()
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -43,6 +59,13 @@ class CustomerController extends AdminController {
         return parent::actionCreate();
     }
 
+    /**
+     * Редактировние записи.
+     *
+     * @param int $id
+     *
+     * @return string
+     */
     public function actionChange($id)
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -62,6 +85,13 @@ class CustomerController extends AdminController {
         return parent::actionChange($id);
     }
 
+    /**
+     * Редактировние адреса пользователя.
+     *
+     * @param $id
+     *
+     * @throws NotFoundHttpException
+     */
     public function actionChangeAddress($id)
     {
         $customer = Customer::findOne($id);
@@ -90,6 +120,11 @@ class CustomerController extends AdminController {
             }
     }
 
+    /**
+     * Создание нового адреса.
+     *
+     * @return array
+     */
     public function actionNewAddress()
     {
         $model = new CustomerAddress();
@@ -107,6 +142,11 @@ class CustomerController extends AdminController {
         }
     }
 
+    /**
+     * Создание нового телефона
+     *
+     * @return array
+     */
     public function actionNewPhone()
     {
         $model = new CustomerPhone();

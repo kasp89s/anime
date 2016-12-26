@@ -6,6 +6,11 @@ use app\models\Group;
 use Yii;
 use yii\data\Pagination;
 
+/**
+ * GroupController Контроллер управления скидками.
+ *
+ * @package app\modules\admin\controllers
+ */
 class GroupController extends AdminController {
 
     public function actionList()

@@ -4,14 +4,39 @@ namespace app\modules\admin\controllers;
 use yii\web\Controller;
 use Yii;
 
+/**
+ * AdminController содержит общие стандартные методы управления CRUD.
+ *
+ * @package app\modules\admin\controllers
+ */
 abstract class AdminController extends Controller {
 
+    /**
+     * Шаблон.
+     *
+     * @var string
+     */
     public $layout = 'default';
 
+    /**
+     * Текущая модель.
+     *
+     * @var
+     */
     protected $_activeModel;
 
+    /**
+     * Пост данные для удобной перегрузки.
+     *
+     * @var
+     */
     protected $_post;
 
+    /**
+     * Залогиненый админ.
+     *
+     * @var
+     */
     protected $_user;
 
     public function actions()
@@ -23,6 +48,9 @@ abstract class AdminController extends Controller {
         ];
     }
 
+    /**
+     * Инициализация.
+     */
     public function init()
     {
         parent::init();
@@ -40,6 +68,15 @@ abstract class AdminController extends Controller {
         $this->_user = \Yii::$app->user->getIdentity();
     }
 
+    /**
+     * Предварительные действия.
+     *
+     * @param \yii\base\Action $event
+     *
+     * @return bool
+     *
+     * @throws \yii\web\NotFoundHttpException
+     */
     public function beforeAction($event)
     {
         if (!in_array(Yii::$app->controller->id, $this->_user->group->availableActions) && Yii::$app->controller->id != 'index')
@@ -54,6 +91,11 @@ abstract class AdminController extends Controller {
         return parent::beforeAction($event);
     }
 
+    /**
+     * Метод создания записи.
+     *
+     * @return string
+     */
     public function actionCreate()
     {
         $this->_activeModel = $this->getCurrentModel(Yii::$app->controller->id);
@@ -69,6 +111,13 @@ abstract class AdminController extends Controller {
             ]);
     }
 
+    /**
+     * Метод редактирования записи.
+     *
+     * @param integer $id Идентификатор модели.
+     *
+     * @return string
+     */
     public function actionChange($id)
     {
         $this->_activeModel = $this->getCurrentModel(Yii::$app->controller->id);
@@ -84,6 +133,13 @@ abstract class AdminController extends Controller {
             ]);
     }
 
+    /**
+     * Метод удаления модели.
+     *
+     * @param integer $id Идентификатор модели.
+     *
+     * @return \yii\web\Response
+     */
     public function actionRemove($id)
     {
         $this->_activeModel = $this->getCurrentModel(Yii::$app->controller->id);
@@ -96,6 +152,13 @@ abstract class AdminController extends Controller {
         return $this->redirect(Yii::$app->request->referrer);
     }
 
+    /**
+     * Метод активации модели.
+     *
+     * @param integer $id Идентификатор модели.
+     *
+     * @return \yii\web\Response
+     */
     public function actionActive($id)
     {
         $this->_activeModel = $this->getCurrentModel(Yii::$app->controller->id);
@@ -109,6 +172,13 @@ abstract class AdminController extends Controller {
         return $this->redirect(Yii::$app->request->referrer);
     }
 
+    /**
+     * Возвращает текущую модель.
+     *
+     * @param string $controllerId Текущий контроллер.
+     *
+     * @return string
+     */
     protected function getCurrentModel($controllerId)
     {
         $modelName = str_ireplace('-', ' ', $controllerId);

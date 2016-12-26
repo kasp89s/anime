@@ -6,8 +6,19 @@ use Yii;
 use yii\data\Pagination;
 use app\modules\admin\models\search\DiscountSearch;
 use yii\web\NotFoundHttpException;
+
+/**
+ * DiscountController Контроллер управления скидками.
+ *
+ * @package app\modules\admin\controllers
+ */
 class DiscountController extends AdminController {
 
+    /**
+     * Список записей.
+     *
+     * @return string
+     */
     public function actionList()
     {
         $searchModel = new DiscountSearch();
@@ -19,6 +30,11 @@ class DiscountController extends AdminController {
             ]);
     }
 
+    /**
+     * Создание записи.
+     *
+     * @return string
+     */
     public function actionCreate()
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -30,6 +46,13 @@ class DiscountController extends AdminController {
         return parent::actionCreate();
     }
 
+    /**
+     * Редактировние записи.
+     *
+     * @param int $id
+     *
+     * @return string
+     */
     public function actionChange($id)
     {
         Yii::$app->view->params['breadcrumbs'][] = [

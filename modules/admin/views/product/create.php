@@ -107,7 +107,10 @@ foreach (\app\models\Product::find()->asArray()->all() as $record) {
                     <h5>Дополнительные параметры</h5>
                 </div>
                 <div class="ibox-content">
-                    <?= $form->field($relatedProduct, 'relatedProductId')->dropDownList($relatedProducts, ['data-placeholder' => 'Укакжите SKU', 'class' => 'chosen-select', 'tabindex' => 2]);?>
+                    <?= $form->field($relatedProduct, 'relatedProductId')->dropDownList(
+                            $relatedProducts,
+                        ['class' => 'chosen-select', 'tabindex' => 2, 'multiple' => true]
+                    );?>
                     <div class="hr-line-dashed"></div>
                     <?= $form->field($model, 'productDisountId')->dropDownList($discounts);?>
                     <div class="hr-line-dashed"></div>

@@ -20,6 +20,11 @@ foreach (\app\models\Currencies::find()->all() as $record) {
     $currencies[$record['code']] = $record['name'];
 }
 
+$relatedProducts = [];
+foreach (\app\models\Product::find()->asArray()->all() as $record) {
+    $relatedProducts[$record['id']] = $record['sku'];
+}
+
 $attributes = [];
 $specifications = [];
 foreach ($model->categories as $category) {
@@ -161,8 +166,6 @@ foreach ($model->categories as $category) {
                                                         <div>
                                                             <input value="<?= $item->specification->name?>" readonly=""/>
                                                             <input name="specifications[<?= $item->specification->id?>][value]" value="<?= $item->value?>"/>
-                                                            <lable>Поиск</lable>
-                                                            <input type="checkbox" name="specifications[<?= $item->specification->id?>][isSearch]" value="1" <?= ($item->isSearch) ? 'checked' : ''?>/>
                                                         </div>
                                                     <?php endforeach;?>
                                                 <?php endif;?>
@@ -184,7 +187,21 @@ foreach ($model->categories as $category) {
                             <div class="ibox-content">
                                 <fieldset class="form-horizontal">
                                     <?php $form = ActiveForm::begin();?>
-                                         <?= $form->field($model->relatedProduct, 'relatedProductId');?>
+                                    <?php
+                                    $selectedValues = [];
+                                    foreach (array_flip(json_decode($model->relatedProduct->relatedProductId)) as $key => $value) {
+                                        $selectedValues[$key] = ['selected' => 'selected'];
+                                    }
+                                    ?>
+                                        <?= $form->field($model->relatedProduct, 'relatedProductId')->dropDownList(
+                                            $relatedProducts,
+                                            [
+                                                'class' => 'chosen-select',
+                                                'tabindex' => 2,
+                                                'multiple' => true,
+                                                'options' => $selectedValues,
+                                            ]
+                                        );?>
 
                                         <?= $form->field($model->marker, 'isActive')->checkbox(['value' => 1]) ?>
 

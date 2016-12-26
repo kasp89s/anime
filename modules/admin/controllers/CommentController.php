@@ -10,6 +10,8 @@ use yii\filters\VerbFilter;
 
 /**
  * CommentController implements the CRUD actions for Comment model.
+ *
+ * @package app\modules\admin\controllers
  */
 class CommentController extends AdminController
 {
@@ -30,6 +32,7 @@ class CommentController extends AdminController
 
     /**
      * Lists all Comment models.
+     *
      * @return mixed
      */
     public function actionList()
@@ -43,6 +46,13 @@ class CommentController extends AdminController
         ]);
     }
 
+    /**
+     * Редактировние записи.
+     *
+     * @param int $id
+     *
+     * @return string
+     */
     public function actionChange($id)
     {
         Yii::$app->view->params['breadcrumbs'][] = [

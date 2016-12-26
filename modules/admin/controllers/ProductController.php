@@ -167,11 +167,12 @@ class ProductController extends AdminController {
 
             if (!empty($this->_post['specifications'])) {
                 foreach ($this->_post['specifications'] as $specificationId => $specificationData) {
+                    $specification = Specification::findOne($specificationId);
                     $productSpecificationRelation = new ProductSpecificationRelation();
                     $productSpecificationRelation->productId = $model->id;
                     $productSpecificationRelation->productSpecificationId = $specificationId;
                     $productSpecificationRelation->value = $specificationData['value'];
-                    $productSpecificationRelation->isSearch = !empty($specificationData['isSearch']) ? 1 : 0;
+                    $productSpecificationRelation->isSearch = !empty($specification->isSearch) ? 1 : 0;
                     $productSpecificationRelation->save();
                 }
             }
@@ -193,8 +194,11 @@ class ProductController extends AdminController {
             $incomingPrice->productId = $model->id;
             $incomingPrice->save();
 
-            $relatedProduct->idProduct = $model->id;
-            $relatedProduct->save();
+            if (!empty($this->_post['RelatedProduct']['relatedProductId'])) {
+                $relatedProduct->idProduct = $model->id;
+                $relatedProduct->relatedProductId = json_encode($this->_post['RelatedProduct']['relatedProductId']);
+                $relatedProduct->save();
+            }
 
             $productMarker->productId = $model->id;
             $productMarker->save();
@@ -305,7 +309,9 @@ class ProductController extends AdminController {
             Yii::$app->session->setFlash('tab', 2);
         }
 
-        if ($model->relatedProduct->load($this->_post) && $model->relatedProduct->validate()) {
+        if (!empty($this->_post['RelatedProduct']['relatedProductId'])) {
+            $model->relatedProduct->load($this->_post);
+            $model->relatedProduct->relatedProductId = json_encode($this->_post['RelatedProduct']['relatedProductId']);
             $model->relatedProduct->save();
             Yii::$app->session->setFlash('save', 'Изменения успешно сохранены.');
             Yii::$app->session->setFlash('tab', 4);

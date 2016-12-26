@@ -1,9 +1,4 @@
 <?php
-/**
- * Контроллер управления банерами.
- *
- * @version 1.0
- */
 namespace app\modules\admin\controllers;
 
 use app\models\Category;
@@ -13,8 +8,18 @@ use Yii;
 use yii\web\UploadedFile;
 use yii\helpers\BaseFileHelper;
 
+/**
+ * CategoryController Контроллер управления категориями товаров.
+ *
+ * @package app\modules\admin\controllers
+ */
 class CategoryController extends AdminController {
 
+    /**
+     * Список записей.
+     *
+     * @return string
+     */
     public function actionList()
     {
         $records = Category::find()->where(['level' => 0])->orderBy('sortOrder desc')->all();
@@ -26,6 +31,11 @@ class CategoryController extends AdminController {
         );
     }
 
+    /**
+     * Создание записи.
+     *
+     * @return string
+     */
     public function actionCreate()
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -81,6 +91,15 @@ class CategoryController extends AdminController {
             ]);
     }
 
+    /**
+     * Редактировние записи.
+     *
+     * @param int $id
+     *
+     * @return string
+     *
+     * @throws \yii\web\NotFoundHttpException
+     */
     public function actionChange($id)
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -143,6 +162,15 @@ class CategoryController extends AdminController {
             ]);
     }
 
+    /**
+     * Создать подкатегорию.
+     *
+     * @param $id
+     *
+     * @return string
+     *
+     * @throws \yii\web\NotFoundHttpException
+     */
     public function actionCreateSub($id)
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -202,6 +230,13 @@ class CategoryController extends AdminController {
         ]);
     }
 
+    /**
+     * Возвращет порядок сортировки категорий.
+     *
+     * @param Category $model
+     *
+     * @return int|mixed
+     */
     protected function getNextSortValue(Category $model)
     {
         $result = Category::find()->select('max(sortOrder) as orderValue')->where(['level' => $model->level])->asArray()->one();

@@ -34,9 +34,9 @@ class RelatedProduct extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-//            [['idProduct'], 'required'],
-            [['idProduct', 'relatedProductId', 'isAutoRelation'], 'integer'],
-            [['idProduct', 'relatedProductId'], 'unique', 'targetAttribute' => ['idProduct', 'relatedProductId'], 'message' => 'The combination of Id Product and Related Product ID has already been taken.'],
+            [['relatedProductId'], 'safe'],
+            [['idProduct', 'isAutoRelation'], 'integer'],
+            [['idProduct'], 'unique', 'targetAttribute' => ['idProduct'], 'message' => 'The combination of Id Product and Related Product ID has already been taken.'],
             [['idProduct'], 'exist', 'skipOnError' => true, 'targetClass' => Product::className(), 'targetAttribute' => ['idProduct' => 'id']],
         ];
     }

@@ -6,8 +6,19 @@ use Yii;
 use yii\data\Pagination;
 use app\modules\admin\models\search\CouponSearch;
 use yii\web\NotFoundHttpException;
+
+/**
+ * CouponController Контроллер управления скидочными купонами.
+ *
+ * @package app\modules\admin\controllers
+ */
 class CouponController extends AdminController {
 
+    /**
+     * Список записей.
+     *
+     * @return string
+     */
     public function actionList()
     {
         $searchModel = new CouponSearch();
@@ -19,6 +30,11 @@ class CouponController extends AdminController {
             ]);
     }
 
+    /**
+     * Создание записи.
+     *
+     * @return string
+     */
     public function actionCreate()
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -30,6 +46,13 @@ class CouponController extends AdminController {
         return parent::actionCreate();
     }
 
+    /**
+     * Редактировние записи.
+     *
+     * @param int $id
+     *
+     * @return string
+     */
     public function actionChange($id)
     {
         Yii::$app->view->params['breadcrumbs'][] = [

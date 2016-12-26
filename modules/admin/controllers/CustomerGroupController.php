@@ -7,8 +7,18 @@ use Yii;
 use app\modules\admin\models\search\CustomerGroupSearch;
 use yii\web\NotFoundHttpException;
 
+/**
+ * CustomerGroupController Контроллер управления групами клиентов.
+ *
+ * @package app\modules\admin\controllers
+ */
 class CustomerGroupController extends AdminController {
 
+    /**
+     * Список записей.
+     *
+     * @return string
+     */
     public function actionList()
     {
         $searchModel = new CustomerGroupSearch();
@@ -20,6 +30,11 @@ class CustomerGroupController extends AdminController {
             ]);
     }
 
+    /**
+     * Создание записи.
+     *
+     * @return string
+     */
     public function actionCreate()
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -31,6 +46,13 @@ class CustomerGroupController extends AdminController {
         return parent::actionCreate();
     }
 
+    /**
+     * Редактировние записи.
+     *
+     * @param int $id
+     *
+     * @return string
+     */
     public function actionChange($id)
     {
         Yii::$app->view->params['breadcrumbs'][] = [
