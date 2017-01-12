@@ -5,15 +5,17 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "orderpostbarcode".
+ * Модель таблицы "orderpostbarcode".
  *
- * @property integer $id
- * @property string $orderId
- * @property string $createTime
- * @property string $barcode
- * @property integer $isAvailable
+ * @property integer $id          Идентификатор.
+ * @property string  $orderId     Ссылка на заказ.
+ * @property string  $createTime  Время создания.
+ * @property string  $barcode     Штрихкод.
+ * @property integer $isAvailable Флаг доступности.
  *
- * @property Order $order
+ * @property Order $order Модель заказа.
+ *
+ * @package app\models
  */
 class OrderPostBarcode extends \yii\db\ActiveRecord
 {

@@ -5,22 +5,24 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "orderproduct".
+ * Модель таблицы "orderproduct".
  *
- * @property string $id
- * @property string $orderId
- * @property string $productId
- * @property string $productSku
- * @property string $productName
- * @property string $productQuantity
- * @property string $productPrice
- * @property string $productIncomingPrice
- * @property integer $isPreOrder
- * @property string $currencyCode
+ * @property string  $id                   Идентификатор.
+ * @property string  $orderId              Ссылка на заказ.
+ * @property string  $productId            Ссылка на продукт.
+ * @property string  $productSku           Артикул продукта.
+ * @property string  $productName          Название продукта.
+ * @property string  $productQuantity      Количество.
+ * @property string  $productPrice         Стоимость продукта.
+ * @property string  $productIncomingPrice Входящая цена.
+ * @property integer $isPreOrder           Флаг предзаказа.
+ * @property string  $currencyCode         Валюта.
  *
- * @property Product $product
- * @property Order $order
- * @property OrderProductAttribute[] $productAttributes
+ * @property Product                 $product           Модель продукта.
+ * @property Order                   $order             Модель заказа.
+ * @property OrderProductAttribute[] $productAttributes Модель атрибута продукта.
+ *
+ * @package app\models
  */
 class OrderProduct extends \yii\db\ActiveRecord
 {
@@ -92,6 +94,11 @@ class OrderProduct extends \yii\db\ActiveRecord
         return $this->hasMany(OrderProductAttribute::className(), ['orderProductId' => 'id']);
     }
 
+    /**
+     * Возвращает стоимость с учетом наценки атрибутов.
+     *
+     * @return string
+     */
     public function getPriceWithAttributes()
     {
         $price = $this->productPrice;

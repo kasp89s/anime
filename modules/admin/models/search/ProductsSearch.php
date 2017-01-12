@@ -9,6 +9,8 @@ use app\models\Product;
 
 /**
  * ProductsSearch represents the model behind the search form about `app\models\Product`.
+ *
+ * @package app\modules\admin\models\search
  */
 class ProductsSearch extends Product
 {

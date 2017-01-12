@@ -8,7 +8,9 @@ use yii\data\ActiveDataProvider;
 use app\models\Manufacture;
 
 /**
- * ManufactureSearch represents the model behind the search form about `app\models\Manufacture`.
+ * ManufactureSearch represents the model behind the search form about `app\models\Manufacture`.\
+ *
+ * @package app\modules\admin\models\search
  */
 class ManufactureSearch extends Manufacture
 {

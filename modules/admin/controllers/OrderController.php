@@ -16,7 +16,9 @@ use yii\web\Response;
 use yii\widgets\ActiveForm;
 
 /**
- * OrderController implements the CRUD actions for Order model.
+ * OrderController Контроллер управления заказами.
+ *
+ * @package app\modules\admin\controllers
  */
 class OrderController extends AdminController
 {
@@ -36,8 +38,9 @@ class OrderController extends AdminController
     }
 
     /**
-     * Lists all Order models.
-     * @return mixed
+     * Список записей.
+     *
+     * @return string
      */
     public function actionList()
     {
@@ -51,6 +54,11 @@ class OrderController extends AdminController
         ]);
     }
 
+    /**
+     * Мульти редактирование заказа.
+     *
+     * @return string|Response
+     */
     public function actionOrders()
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -98,6 +106,15 @@ class OrderController extends AdminController
         ]);
     }
 
+    /**
+     * Редактировние записи.
+     *
+     * @param int $id
+     *
+     * @return string
+     *
+     * @throws NotFoundHttpException
+     */
     public function actionChange($id)
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -198,6 +215,13 @@ class OrderController extends AdminController
             ]);
     }
 
+    /**
+     * Сметить количество товаров.
+     *
+     * @return Response
+     *
+     * @throws NotFoundHttpException
+     */
     public function actionChangeProductQuantity()
     {
         $orderProduct = OrderProduct::findOne($this->_post['OrderProduct']['id']);
@@ -221,6 +245,13 @@ class OrderController extends AdminController
         return $this->redirect(Yii::$app->request->referrer);
     }
 
+    /**
+     * Сметить стоимость товаров.
+     *
+     * @return Response
+     *
+     * @throws NotFoundHttpException
+     */
     public function actionChangeProductPrice()
     {
         $orderProduct = OrderProduct::findOne($this->_post['OrderProduct']['id']);
@@ -244,6 +275,11 @@ class OrderController extends AdminController
         return $this->redirect(Yii::$app->request->referrer);
     }
 
+    /**
+     * Добавить товар в заказ.
+     *
+     * @return array|Response
+     */
     public function actionAddProduct()
     {
         if (Yii::$app->request->isAjax) {
@@ -284,8 +320,11 @@ class OrderController extends AdminController
     /**
      * Finds the Order model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
+     *
      * @param string $id
+     *
      * @return Order the loaded model
+     *
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)

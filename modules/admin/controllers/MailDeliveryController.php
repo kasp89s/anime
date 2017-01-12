@@ -10,13 +10,14 @@ use app\modules\admin\models\search\MailDeliverySearch;
 use yii\web\NotFoundHttpException;
 
 /**
- * MailDeliveryController implements the CRUD actions for MailDelivery model.
+ * MailDeliveryController контроллер управления списком рассылки.
  */
 class MailDeliveryController extends AdminController
 {
     /**
-     * Lists all MailDelivery models.
-     * @return mixed
+     * Список записей.
+     *
+     * @return string
      */
     public function actionList()
     {
@@ -29,6 +30,11 @@ class MailDeliveryController extends AdminController
         ]);
     }
 
+    /**
+     * Создание записи.
+     *
+     * @return string
+     */
     public function actionCreate()
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -56,6 +62,15 @@ class MailDeliveryController extends AdminController
         ]);
     }
 
+    /**
+     * Редактировние записи.
+     *
+     * @param int $id
+     *
+     * @return string
+     *
+     * @throws NotFoundHttpException
+     */
     public function actionChange($id)
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -70,8 +85,11 @@ class MailDeliveryController extends AdminController
     /**
      * Finds the MailDelivery model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
+     *
      * @param string $id
+     *
      * @return MailDelivery the loaded model
+     *
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)

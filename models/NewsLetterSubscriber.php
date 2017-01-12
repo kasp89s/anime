@@ -5,16 +5,18 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "newslettersubscriber".
+ * Модель таблицы "newslettersubscriber".
  *
- * @property string $id
- * @property string $customerId
- * @property string $email
- * @property integer $isActive
- * @property string $code
- * @property string $createTime
+ * @property string  $id         Идентификатор.
+ * @property string  $customerId Ссылка на клиента.
+ * @property string  $email      Почта.
+ * @property integer $isActive   Флаг активности.
+ * @property string  $code       Код.
+ * @property string  $createTime Время создания.
  *
- * @property Customer $customer
+ * @property Customer $customer Модель клиента.
+ *
+ * @package app\models
  */
 class NewsLetterSubscriber extends \yii\db\ActiveRecord
 {

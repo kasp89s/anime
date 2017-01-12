@@ -5,18 +5,20 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "paymentmethod".
+ * Модель таблицы "paymentmethod".
  *
- * @property string $id
- * @property string $name
- * @property string $countryCode
- * @property string $description
- * @property string $imageFileName
- * @property string $price
- * @property string $feePercent
+ * @property string $id            Идентификатор.
+ * @property string $name          Название.
+ * @property string $countryCode   Код страны.
+ * @property string $description   Описание.
+ * @property string $imageFileName Имя картинки.
+ * @property string $price         Стоимость.
+ * @property string $feePercent    Процент скидки.
  *
- * @property ShippingPaymentMethodRelation[] $shippingPaymentMethodRelations
- * @property ShippingMethod[] $shippingMethods
+ * @property ShippingPaymentMethodRelation[] $shippingPaymentMethodRelations Модель связи со способом доставки.
+ * @property ShippingMethod[]                $shippingMethods                Модель способа доставки.
+ *
+ * @package app\models
  */
 class PaymentMethod extends \yii\db\ActiveRecord
 {

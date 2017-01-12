@@ -9,6 +9,8 @@ use app\models\Specification;
 
 /**
  * SpecificationSearch represents the model behind the search form about `app\models\Specification`.
+ *
+ * @package app\modules\admin\models\search
  */
 class SpecificationSearch extends Specification
 {

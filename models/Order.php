@@ -5,28 +5,30 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "order".
+ * Модель таблицы "order".
  *
- * @property string $id
- * @property string $customerId
- * @property string $shippingId
- * @property string $paymentId
- * @property string $currencyCode
- * @property string $orderStatus
- * @property string $couponCode
- * @property integer $createTime
- * @property integer $updateTime
- * @property integer $isFinished
+ * @property string  $id           Идентификатор.
+ * @property string  $customerId   Ссылка на клиента.
+ * @property string  $shippingId   Ссылка на способ доставки.
+ * @property string  $paymentId    Ссылка на способ оплаты.
+ * @property string  $currencyCode Код валюты.
+ * @property string  $orderStatus  Статус заказа.
+ * @property string  $couponCode   Код купона.
+ * @property integer $createTime   Время создания.
+ * @property integer $updateTime   Время обновления.
+ * @property integer $isFinished   Флаг завершенного заказа.
  *
- * @property ShippingMethod $shipping
- * @property Customer $customer
- * @property PaymentMethod $payment
- * @property OrderCustomerInfo[] $customerInfo
- * @property OrderHistory[] $orderHistory
- * @property OrderPostBarcode[] $postBarcode
- * @property OrderProduct[] $products
- * @property OrderTotal[] $total
- * @property OrderStatus[] $status
+ * @property ShippingMethod      $shipping     Модель доставки.
+ * @property Customer            $customer     Модель клиента.
+ * @property PaymentMethod       $payment      Модель платежного метода.
+ * @property OrderCustomerInfo[] $customerInfo Модель информации о клиенте.
+ * @property OrderHistory[]      $orderHistory Модель истории заказа.
+ * @property OrderPostBarcode[]  $postBarcode  Модель штрихкода.
+ * @property OrderProduct[]      $products     Модель продукта.
+ * @property OrderTotal[]        $total        Модель окончательной стоимости заказа.
+ * @property OrderStatus[]       $status       Модель статуса заказа.
+ *
+ * @package app\models
  */
 class Order extends \yii\db\ActiveRecord
 {
@@ -157,6 +159,11 @@ class Order extends \yii\db\ActiveRecord
         return $this->customerInfo->fullName;
     }
 
+    /**
+     * Возвращает скидку по купону.
+     *
+     * @return float|int|mixed
+     */
     public function getDiscountByCoupon()
     {
         $coupon = Coupon::find()->where(['code' => $this->couponCode])->one();
@@ -171,6 +178,11 @@ class Order extends \yii\db\ActiveRecord
         }
     }
 
+    /**
+     * Возвращает стоимость с учётом коммисий.
+     *
+     * @return mixed
+     */
     public function calculateAmountWithCommission()
     {
         return $this->totalWithoutCommission -
@@ -180,6 +192,11 @@ class Order extends \yii\db\ActiveRecord
         $this->shipping->calculateIncrease($this->totalWithoutCommission);
     }
 
+    /**
+     * Возвращает стоимость без учёта комисий.
+     *
+     * @return bool|int|string
+     */
     public function getTotalWithoutCommission()
     {
         if ($this->_totalWithoutCommission !== false) {
@@ -225,6 +242,9 @@ class Order extends \yii\db\ActiveRecord
         return date("d {$month} Y г.", $time);
     }
 
+    /**
+     * Выполняет отгрузку подуктов заказа со склада.
+     */
     public function awayProducts()
     {
         foreach ($this->products as $product) {
@@ -234,6 +254,9 @@ class Order extends \yii\db\ActiveRecord
         }
     }
 
+    /**
+     * Выполняет возврат продуктов заказа на склад.
+     */
     public function returnProducts()
     {
         foreach ($this->products as $product) {
@@ -243,6 +266,9 @@ class Order extends \yii\db\ActiveRecord
         }
     }
 
+    /**
+     * Выполняет пересчет скидки для клиента на основании сумарной стоимости выполненых заказов.
+     */
     public function recalculateGroup()
     {
         // Считаем сумму покупок.
@@ -274,6 +300,9 @@ class Order extends \yii\db\ActiveRecord
         }
     }
 
+    /**
+     * Выполняет пересчёт сумарной стоимости заказа.
+     */
     public function recalculateTotal()
     {
         $totalWithCommission = $this->calculateAmountWithCommission();

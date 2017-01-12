@@ -18,8 +18,18 @@ use yii\helpers\BaseFileHelper;
 use app\modules\admin\models\search\ProductsSearch;
 use yii\web\NotFoundHttpException;
 
+/**
+ * ProductController Контроллер управления продуктами.
+ *
+ * @package app\modules\admin\controllers
+ */
 class ProductController extends AdminController {
 
+    /**
+     * Список записей.
+     *
+     * @return string
+     */
     public function actionList()
     {
         $searchModel = new ProductsSearch();
@@ -31,6 +41,15 @@ class ProductController extends AdminController {
             ]);
     }
 
+    /**
+     * Склонировать запись.
+     *
+     * @param $id
+     *
+     * @return \yii\web\Response
+     *
+     * @throws NotFoundHttpException
+     */
     public function actionClone($id)
     {
         $sourceProduct = Product::findOne($id);
@@ -109,6 +128,11 @@ class ProductController extends AdminController {
         return $this->redirect(Yii::$app->request->referrer);
     }
 
+    /**
+     * Создание записи.
+     *
+     * @return string
+     */
     public function actionCreate()
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -214,6 +238,15 @@ class ProductController extends AdminController {
             ]);
     }
 
+    /**
+     * Редактировние записи.
+     *
+     * @param int $id
+     *
+     * @return string
+     *
+     * @throws NotFoundHttpException
+     */
     public function actionChange($id)
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -337,6 +370,13 @@ class ProductController extends AdminController {
         ]);
     }
 
+    /**
+     * Удаление картинки.
+     *
+     * @param $id
+     *
+     * @return \yii\web\Response
+     */
     public function actionImageRemove($id)
     {
         ProductImage::deleteAll('id = :id', [':id' => $id]);
@@ -347,6 +387,9 @@ class ProductController extends AdminController {
         return $this->redirect(Yii::$app->request->referrer);
     }
 
+    /**
+     * Возвращает атрибуты.
+     */
     public function actionGetAttributes()
     {
         $this->layout = false;
@@ -394,6 +437,13 @@ class ProductController extends AdminController {
         Yii::$app->end();
     }
 
+    /**
+     * Перегрузка активации.
+     *
+     * @param int $id
+     *
+     * @return \yii\web\Response
+     */
     public function actionActive($id)
     {
         $marker = ProductMarker::find()->where(['productId' => $id])->one();
@@ -409,8 +459,11 @@ class ProductController extends AdminController {
     /**
      * Finds the Product model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
+     *
      * @param string $id
+     *
      * @return Product the loaded model
+     *
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)

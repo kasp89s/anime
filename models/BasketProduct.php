@@ -5,16 +5,18 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "basketproduct".
+ * Модель таблицы "basketproduct".
  *
- * @property string $id
- * @property string $basketId
- * @property string $productId
- * @property string $quantity
+ * @property string $id        Идентификатор.
+ * @property string $basketId  Ссылка на корзину.
+ * @property string $productId Ссылка на продукт.
+ * @property string $quantity  Количество.
  *
- * @property Product $product
- * @property Basket $basket
- * @property BasketProductAttribute[] $productAttributes
+ * @property Product                  $product           Модель продукта.
+ * @property Basket                   $basket            Модель корзины.
+ * @property BasketProductAttribute[] $productAttributes Модель атрибутов товара в корзине.
+ *
+ * @package app\models
  */
 class BasketProduct extends \yii\db\ActiveRecord
 {

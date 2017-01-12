@@ -5,15 +5,17 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "wishlist".
+ * Модель таблицы "wishlist".
  *
- * @property integer $id
- * @property string $productId
- * @property string $customerId
- * @property string $creteTime
+ * @property integer $id         Идентификатор.
+ * @property string  $productId  Ссылка на продукт.
+ * @property string  $customerId Ссылка на клиента.
+ * @property string  $creteTime  Время создания.
  *
- * @property Customer $customer
- * @property Product $product
+ * @property Customer $customer Модель клиента.
+ * @property Product  $product  Модель продукта.
+ *
+ * @package app\models
  */
 class WishList extends \yii\db\ActiveRecord
 {

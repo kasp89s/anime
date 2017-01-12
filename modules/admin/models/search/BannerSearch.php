@@ -9,6 +9,8 @@ use app\models\Banner;
 
 /**
  * BannerSearch represents the model behind the search form about `app\models\Banner`.
+ *
+ * @package app\modules\admin\models\search
  */
 class BannerSearch extends Banner
 {

@@ -9,6 +9,8 @@ use app\models\Option;
 
 /**
  * OptionSearch represents the model behind the search form about `app\models\Option`.
+ *
+ * @package app\modules\admin\models\search
  */
 class OptionSearch extends Option
 {

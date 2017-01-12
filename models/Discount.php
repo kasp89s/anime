@@ -5,16 +5,18 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "productdiscount".
+ * Модель таблицы "productdiscount".
  *
- * @property string $id
- * @property string $description
- * @property integer $startTime
- * @property integer $endTime
- * @property string $type
- * @property string $value
+ * @property string  $id          Идентификатор.
+ * @property string  $description Описание.
+ * @property integer $startTime   Время начала.
+ * @property integer $endTime     Время окончания.
+ * @property string  $type        Тип скидки.
+ * @property string  $value       Значение.
  *
- * @property Product[] $products
+ * @property Product[] $products Модель продукта.
+ *
+ * @package app\models
  */
 class Discount extends \yii\db\ActiveRecord
 {

@@ -5,15 +5,17 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "productoption".
+ * Модель таблицы "productoption".
  *
- * @property string $id
- * @property string $name
+ * @property string $id   Идентификатор.
+ * @property string $name Название.
  *
- * @property BasketProductAttribute[] $basketProductAttributes
- * @property Attribute[] $optionAttributes
- * @property Category[] $categories
- * @property OptionValue[] $values
+ * @property BasketProductAttribute[] $basketProductAttributes Модель атрибута продукта в корзине.
+ * @property Attribute[]              $optionAttributes        Модель атрибута.
+ * @property Category[]               $categories              Модель категории.
+ * @property OptionValue[]            $values                  Модель значения атрибута.
+ *
+ * @package app\models
  */
 class Option extends \yii\db\ActiveRecord
 {

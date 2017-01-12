@@ -5,18 +5,20 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "orderstatus".
+ * Модель таблицы "orderstatus".
  *
- * @property integer $id
- * @property string $statusCode
- * @property string $name
- * @property integer $isDefault
- * @property integer $isChargeble
- * @property integer $isPaid
- * @property integer $isShipped
- * @property integer $isRestock
- * @property integer $isPenalty
- * @property integer $isFinished
+ * @property integer $id          Идентификатор.
+ * @property string  $statusCode  Статус.
+ * @property string  $name        Название.
+ * @property integer $isDefault   По умолчанию.
+ * @property integer $isChargeble Подлежащий оплате.
+ * @property integer $isPaid      Оплаченный.
+ * @property integer $isShipped   Доставлен.
+ * @property integer $isRestock   Возврат.
+ * @property integer $isPenalty   Заблокирован.
+ * @property integer $isFinished  Законченый.
+ *
+ * @package app\models
  */
 class OrderStatus extends \yii\db\ActiveRecord
 {
@@ -60,11 +62,23 @@ class OrderStatus extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * Возвращает статус по умолчанию.
+     *
+     * @return mixed
+     */
     public static function getDefault()
     {
         return self::find()->where(['isDefault' => 1])->one()->statusCode;
     }
 
+    /**
+     * Возвращает флаг отгрузки заказа.
+     *
+     * @param OrderStatus $old Модель старого статуса.
+     *
+     * @return bool
+     */
     public function isAway($old)
     {
         if (
@@ -80,6 +94,13 @@ class OrderStatus extends \yii\db\ActiveRecord
         return false;
     }
 
+    /**
+     * Возвращает флаг возврата заказа.
+     *
+     * @param OrderStatus $old Модель старого статуса.
+     *
+     * @return bool
+     */
     public function isReturn($old)
     {
         if (
@@ -94,6 +115,13 @@ class OrderStatus extends \yii\db\ActiveRecord
         return false;
     }
 
+    /**
+     * Возвращает флаг необходимости пересчета группы скидки.
+     *
+     * @param OrderStatus $old Модель старого статуса.
+     *
+     * @return bool
+     */
     public function isRecalculateGroup($old)
     {
         if (

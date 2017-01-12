@@ -9,6 +9,8 @@ use app\models\User;
 
 /**
  * UserSearch represents the model behind the search form about `app\models\User`.
+ *
+ * @package app\modules\admin\models\search
  */
 class UserSearch extends User
 {

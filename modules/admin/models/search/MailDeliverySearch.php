@@ -9,6 +9,8 @@ use app\models\MailDelivery;
 
 /**
  * MailDeliverySearch represents the model behind the search form about `app\models\MailDelivery`.
+ *
+ * @package app\modules\admin\models\search
  */
 class MailDeliverySearch extends MailDelivery
 {

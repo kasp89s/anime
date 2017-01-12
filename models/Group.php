@@ -5,11 +5,13 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "usergroup".
+ * Модель таблицы "usergroup".
  *
- * @property string $id
- * @property string $name
- * @property string $actions
+ * @property string $id      Идентификатор.
+ * @property string $name    Название.
+ * @property string $actions Действия.
+ *
+ * @package app\models
  */
 class Group extends \yii\db\ActiveRecord
 {

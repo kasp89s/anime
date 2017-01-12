@@ -35,12 +35,33 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
+
+/**
+ * Базовый контроллер по работе с кабинетом пользователя.
+ *
+ * @package app\controllers
+ */
 class CabinetController extends AbstractController
 {
+    /**
+     * Перегрузка дефолтного шаблона.
+     *
+     * @var string
+     */
     public $layout = 'main';
 
+    /**
+     * Параметр инициализации движка фейсбук.
+     *
+     * @var
+     */
     public $facebook;
 
+    /**
+     * Параметр инициализации движка VK.
+     *
+     * @var
+     */
     public $vk;
 
     public function behaviors()
@@ -72,20 +93,27 @@ class CabinetController extends AbstractController
         ];
     }
 
+    /**
+     * Инициализация кабинета.
+     */
     public function init()
     {
         parent::init();
 
-        $this->facebook = new \Facebook\Facebook([
-            'app_id' => Yii::$app->params['social']['facebook']['id'],
-            'app_secret' => Yii::$app->params['social']['facebook']['secret'],
-        ]);
+        $this->facebook = new \Facebook\Facebook(
+            [
+                'app_id' => Yii::$app->params['social']['facebook']['id'],
+                'app_secret' => Yii::$app->params['social']['facebook']['secret'],
+            ]
+        );
 
-        $this->vk = new Vk([
-            'client_id' => Yii::$app->params['social']['vk']['id'],
-            'client_secret' => Yii::$app->params['social']['vk']['secret'],
-            'redirect_uri' => 'http://' . Yii::$app->getRequest()->serverName . '/social/vk',
-        ]);
+        $this->vk = new Vk(
+            [
+                'client_id' => Yii::$app->params['social']['vk']['id'],
+                'client_secret' => Yii::$app->params['social']['vk']['secret'],
+                'redirect_uri' => 'http://' . Yii::$app->getRequest()->serverName . '/social/vk',
+            ]
+        );
 
         Yii::$app->view->params['vk'] = $this->vk;
         Yii::$app->view->params['facebook'] = $this->facebook;
@@ -108,8 +136,13 @@ class CabinetController extends AbstractController
 
     public function beforeAction($event)
     {
-        if (empty($this->user) && !in_array(\Yii::$app->controller->action->id, ['basket', 'viewed', 'order-checkout', 'order-checkout', 'order-complete']))
+        if (empty($this->user) && !in_array(
+                \Yii::$app->controller->action->id,
+                ['basket', 'viewed', 'order-checkout', 'order-checkout', 'order-complete']
+            )
+        ) {
             \Yii::$app->response->redirect(['/']);
+        }
 
         return parent::beforeAction($event);
     }
@@ -131,16 +164,26 @@ class CabinetController extends AbstractController
             ->joinWith('order')
             ->joinWith('order.status')
             ->joinWith('product')
-            ->where([
-                'order.customerId' => $this->user->id,
-                'orderstatus.isFinished' => 1,
-            ])
+            ->where(
+                [
+                    'order.customerId' => $this->user->id,
+                    'orderstatus.isFinished' => 1,
+                ]
+            )
             ->all();
-        return $this->render(Yii::$app->controller->action->id, [
-            'purchasedProducts' => $purchasedProducts
-        ]);
+        return $this->render(
+            Yii::$app->controller->action->id,
+            [
+                'purchasedProducts' => $purchasedProducts
+            ]
+        );
     }
 
+    /**
+     * Редактирование личных данных.
+     *
+     * @return array|string
+     */
     public function actionChange()
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -170,7 +213,9 @@ class CabinetController extends AbstractController
 
             if (!empty($post['phones'])) {
                 foreach ($post['phones'] as $phone) {
-                    if (empty($phone)) continue;
+                    if (empty($phone)) {
+                        continue;
+                    }
 
                     $phoneModel = new CustomerPhone();
                     $phoneModel->customerId = $this->user->id;
@@ -181,7 +226,9 @@ class CabinetController extends AbstractController
 
             if (!empty($post['address'])) {
                 foreach ($post['address'] as $index => $address) {
-                    if (!is_numeric($index)) continue;
+                    if (!is_numeric($index)) {
+                        continue;
+                    }
 
                     $phoneModel = new CustomerAddress();
                     $phoneModel->customerId = $this->user->id;
@@ -198,11 +245,19 @@ class CabinetController extends AbstractController
             \Yii::$app->response->redirect(['cabinet/index']);
         }
 
-        return $this->render(Yii::$app->controller->action->id, [
-            'model' => $model
-        ]);
+        return $this->render(
+            Yii::$app->controller->action->id,
+            [
+                'model' => $model
+            ]
+        );
     }
 
+    /**
+     * Просмотр личных данных.
+     *
+     * @return array|string
+     */
     public function actionViewed()
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -213,43 +268,57 @@ class CabinetController extends AbstractController
 
         $currentList = json_decode(Yii::$app->request->cookies->getValue('LastView'), true);
 
-        if (empty($currentList))
+        if (empty($currentList)) {
             return [];
+        }
 
         $query = Product::find()
             ->where(['product.id' => $currentList])
             ->joinWith('discount')
             ->joinWith('marker');
 
-        if (!empty($_GET['time']))
+        if (!empty($_GET['time'])) {
             $query->orderBy('product.updateTime desc');
+        }
 
-        if (!empty($_GET['price_d']))
+        if (!empty($_GET['price_d'])) {
             $query->orderBy('product.price desc');
+        }
 
-        if (!empty($_GET['price_a']))
+        if (!empty($_GET['price_a'])) {
             $query->orderBy('product.price asc');
+        }
 
-        if (!empty($_GET['stock']))
+        if (!empty($_GET['stock'])) {
             $query->orderBy('product.quantityInStock desc');
+        }
 
-        if (!empty($_GET['sold']))
+        if (!empty($_GET['sold'])) {
             $query->orderBy('product.quantityOfSold desc');
+        }
 
         $models = $query->all();
         $totalAmount = 0;
 
         foreach ($models as $model) {
-            $totalAmount+= $model->realPrice;
+            $totalAmount += $model->realPrice;
         }
 
-        return $this->render(Yii::$app->controller->action->id, [
-            'totalAmount' => $totalAmount,
-            'productsCount' => count($models),
-            'viewProductList' => array_chunk($models, 5),
-        ]);
+        return $this->render(
+            Yii::$app->controller->action->id,
+            [
+                'totalAmount' => $totalAmount,
+                'productsCount' => count($models),
+                'viewProductList' => array_chunk($models, 5),
+            ]
+        );
     }
 
+    /**
+     * Заказы клиента.
+     *
+     * @return string
+     */
     public function actionOrders()
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -272,11 +341,19 @@ class CabinetController extends AbstractController
             ->joinWith('total')
             ->orderBy('createTime desc')->all();
 
-        return $this->render(Yii::$app->controller->action->id, [
-            'orders' => $orders
-        ]);
+        return $this->render(
+            Yii::$app->controller->action->id,
+            [
+                'orders' => $orders
+            ]
+        );
     }
 
+    /**
+     * Список ожидания.
+     *
+     * @return string
+     */
     public function actionWaitingList()
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -291,32 +368,44 @@ class CabinetController extends AbstractController
             ]
         );
 
-        if (!empty($_GET['price_d']))
+        if (!empty($_GET['price_d'])) {
             $query->orderBy('product.price desc');
+        }
 
-        if (!empty($_GET['price_a']))
+        if (!empty($_GET['price_a'])) {
             $query->orderBy('product.price asc');
+        }
 
-        if (!empty($_GET['stock']))
+        if (!empty($_GET['stock'])) {
             $query->orderBy('product.quantityInStock desc');
+        }
 
-        if (!empty($_GET['sold']))
+        if (!empty($_GET['sold'])) {
             $query->orderBy('product.quantityOfSold desc');
+        }
 
         $models = $query->all();
         $totalAmount = 0;
 
         foreach ($models as $model) {
-            $totalAmount+= $model->product->realPrice;
+            $totalAmount += $model->product->realPrice;
         }
 
-        return $this->render(Yii::$app->controller->action->id, [
-            'totalAmount' => $totalAmount,
-            'productsCount' => count($models),
-            'viewProductList' => array_chunk($models, 5),
-        ]);
+        return $this->render(
+            Yii::$app->controller->action->id,
+            [
+                'totalAmount' => $totalAmount,
+                'productsCount' => count($models),
+                'viewProductList' => array_chunk($models, 5),
+            ]
+        );
     }
 
+    /**
+     * Текущая корзина пользователя.
+     *
+     * @return string
+     */
     public function actionBasket()
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -325,10 +414,18 @@ class CabinetController extends AbstractController
             'url' => false
         ];
 
-        return $this->render(Yii::$app->controller->action->id, [
-        ]);
+        return $this->render(
+            Yii::$app->controller->action->id,
+            [
+            ]
+        );
     }
 
+    /**
+     * Страница списка желаний.
+     *
+     * @return string
+     */
     public function actionWishList()
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -370,20 +467,31 @@ class CabinetController extends AbstractController
         $totalAmount = 0;
 
         foreach ($models as $model) {
-            $totalAmount+= $model->realPrice;
+            $totalAmount += $model->realPrice;
         }
 
-        return $this->render(Yii::$app->controller->action->id, [
-            'totalAmount' => $totalAmount,
-            'productsCount' => count($models),
-            'wishProducts' => array_chunk($models, 5),
-        ]);
+        return $this->render(
+            Yii::$app->controller->action->id,
+            [
+                'totalAmount' => $totalAmount,
+                'productsCount' => count($models),
+                'wishProducts' => array_chunk($models, 5),
+            ]
+        );
     }
 
+    /**
+     * Страница оформления заказа.
+     *
+     * @return string
+     *
+     * @throws \yii\web\NotFoundHttpException
+     */
     public function actionOrderCheckout()
     {
-        if (empty($this->_basket->basketProducts))
+        if (empty($this->_basket->basketProducts)) {
             throw new \yii\web\NotFoundHttpException();
+        }
 
         $totalAmount = $this->_basket->productsPrice;
 
@@ -405,12 +513,15 @@ class CabinetController extends AbstractController
                     [
                         'code' => Yii::$app->request->post('code'),
                         'isActive' => 1,
-                    ])
-                ->andWhere('startTime <= :time AND endTime >= :time AND minimalOrderCost <= :orderAmount',
+                    ]
+                )
+                ->andWhere(
+                    'startTime <= :time AND endTime >= :time AND minimalOrderCost <= :orderAmount',
                     [
                         ':time' => date('Y-m-d H:i:s', time()),
                         ':orderAmount' => $totalAmount
-                    ])
+                    ]
+                )
                 ->one();
             if (!empty($coupon)) {
                 $couponDiscount = $coupon->getDiscountByAmount($totalAmount);
@@ -419,23 +530,34 @@ class CabinetController extends AbstractController
             }
         }
 
-        return $this->render(Yii::$app->controller->action->id, [
+        return $this->render(
+            Yii::$app->controller->action->id,
+            [
                 'coupon' => !empty($coupon) ? $coupon : null,
                 'orderForm' => $orderForm,
                 'costumerGroupDiscount' => $costumerGroupDiscount,
                 'couponDiscount' => $couponDiscount,
-                'totalDiscount' => $costumerGroupDiscount + (int) $couponDiscount,
+                'totalDiscount' => $costumerGroupDiscount + (int)$couponDiscount,
                 'totalAmount' => $totalAmount,
                 'shippingMethods' => $shippingMethods,
                 'paymentMethods' => $paymentMethods,
                 'couponError' => $couponError,
-        ]);
+            ]
+        );
     }
 
+    /**
+     * Страница оформленого заказа.
+     *
+     * @return array|string
+     *
+     * @throws \yii\web\NotFoundHttpException
+     */
     public function actionOrderComplete()
     {
-        if (empty($this->_basket->basketProducts))
+        if (empty($this->_basket->basketProducts)) {
             throw new \yii\web\NotFoundHttpException();
+        }
 
         $orderForm = new OrderProcessForm(
             ['scenario' => !empty($this->user) ? OrderProcessForm::SCENARIO_REGISTERED : OrderProcessForm::SCENARIO_GUEST]
@@ -465,10 +587,10 @@ class CabinetController extends AbstractController
                 $AddressModel->address = $post['newAddress']['address'];
                 $AddressModel->zip = $post['newAddress']['zip'];
                 $AddressModel->save();
-            } elseif(!empty($orderForm->address) && !empty($this->user)) {
+            } elseif (!empty($orderForm->address) && !empty($this->user)) {
                 $AddressModel = CustomerAddress::findOne($orderForm->address);
             } elseif (empty($this->user)) {
-                $AddressModel = (object) [
+                $AddressModel = (object)[
                     'city' => $orderForm->city,
                     'address' => $orderForm->address,
                     'zip' => $orderForm->zip,
@@ -480,17 +602,17 @@ class CabinetController extends AbstractController
 
             if ($shippingMethod->lopped == 1) {
                 if (!empty($post['newAddress']['city'])) {
-                    $AddressModel = (object) [
+                    $AddressModel = (object)[
                         'city' => $post['newAddress']['city'],
                         'address' => null,
                         'zip' => null,
                     ];
-                } elseif(!empty($orderForm->loopAddress) && !empty($this->user)) {
+                } elseif (!empty($orderForm->loopAddress) && !empty($this->user)) {
                     $AddressModel = CustomerAddress::findOne($orderForm->loopAddress);
                     $AddressModel->address = null;
                     $AddressModel->zip = null;
                 } elseif (empty($this->user)) {
-                    $AddressModel = (object) [
+                    $AddressModel = (object)[
                         'city' => $orderForm->city,
                         'address' => null,
                         'zip' => null,
@@ -501,11 +623,11 @@ class CabinetController extends AbstractController
             $totalAmount = $this->_basket->productsPrice;
             $totalDiscount = !empty ($this->user) ? $this->user->getDiscountByOrderAmount($totalAmount) : 0;
             $totalIncrease = $shippingMethod->calculateIncrease($totalAmount);
-            $totalIncrease+= $paymentMethod->calculateIncrease($totalAmount);
+            $totalIncrease += $paymentMethod->calculateIncrease($totalAmount);
             if (!empty($orderForm->couponCode)) {
                 $coupon = Coupon::find()->where(['code' => $orderForm->couponCode])->one();
                 if (!empty($coupon)) {
-                    $totalDiscount+= $coupon->getDiscountByAmount($totalAmount);
+                    $totalDiscount += $coupon->getDiscountByAmount($totalAmount);
                 }
             }
 
@@ -574,15 +696,27 @@ class CabinetController extends AbstractController
             }
 
             $email = !empty($this->user) ? $this->user->email : $orderForm->email;
-            $this->sendEmail($email, Yii::$app->params['newOrderSubject'], $this->renderPartial('emailTemplates/new-order', ['order' => $order]));
+            $this->sendEmail(
+                $email,
+                Yii::$app->params['newOrderSubject'],
+                $this->renderPartial('emailTemplates/new-order', ['order' => $order])
+            );
             BasketProduct::deleteAll('basketId = :id', [':id' => $this->_basket->id]);
         }
 
-        return $this->render(Yii::$app->controller->action->id, [
-            'order' => $order
-        ]);
+        return $this->render(
+            Yii::$app->controller->action->id,
+            [
+                'order' => $order
+            ]
+        );
     }
 
+    /**
+     * Быстрый заказ без добавления в корзину и авторизации.
+     *
+     * @return string
+     */
     public function actionQuickOrder()
     {
         $model = new QuickOrderForm();
@@ -644,11 +778,18 @@ class CabinetController extends AbstractController
         $orderProduct->save();
 
         if (!empty ($this->user)) {
-            $this->sendEmail($this->user->email, Yii::$app->params['newOrderSubject'], $this->renderPartial('emailTemplates/new-order', ['order' => $order]));
+            $this->sendEmail(
+                $this->user->email,
+                Yii::$app->params['newOrderSubject'],
+                $this->renderPartial('emailTemplates/new-order', ['order' => $order])
+            );
         }
 
-        return $this->render('order-complete', [
-            'order' => $order
-        ]);
+        return $this->render(
+            'order-complete',
+            [
+                'order' => $order
+            ]
+        );
     }
 }

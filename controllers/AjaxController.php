@@ -9,29 +9,51 @@ use app\models\WishList;
 use Yii;
 use yii\web\Response;
 
+/**
+ * Контроллер для обработки аякс запросов клиентской части.
+ *
+ * @package app\controllers
+ */
 class AjaxController extends AbstractController
 {
-	private $_post;
-	
-	public function init()
-	{
+    /**
+     * Перегрузка поста для удобства использования.
+     *
+     * @var
+     */
+    private $_post;
+
+    /**
+     * Инициализация базовые настройки.
+     *
+     * @throws \yii\web\NotFoundHttpException
+     */
+    public function init()
+    {
         parent::init();
 
         if (!Yii::$app->request->isAjax) {
-			throw new \yii\web\NotFoundHttpException();
-		}
-		
-		$this->_post = Yii::$app->request->post();
-	}
+            throw new \yii\web\NotFoundHttpException();
+        }
 
-	public function actionAddWish()
-	{
+        $this->_post = Yii::$app->request->post();
+    }
+
+    /**
+     * Добавить в список желаний.
+     *
+     * @return array
+     */
+    public function actionAddWish()
+    {
         Yii::$app->response->format = Response::FORMAT_JSON;
 
-	    $wish = WishList::find()->where([
-	        'productId' => $this->_post['productId'],
-	        'customerId' => $this->user->id,
-        ])->one();
+        $wish = WishList::find()->where(
+            [
+                'productId' => $this->_post['productId'],
+                'customerId' => $this->user->id,
+            ]
+        )->one();
 
         if (!empty($wish)) {
             $wish->delete();
@@ -44,9 +66,14 @@ class AjaxController extends AbstractController
         $wish->save();
 
         return ['success' => 'add'];
-	}
+    }
 
-	public function actionSetBasketProductCount()
+    /**
+     * Установить количество для товара в корзине.
+     *
+     * @return array
+     */
+    public function actionSetBasketProductCount()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
 
@@ -56,7 +83,7 @@ class AjaxController extends AbstractController
             return ['error' => 'Товар не найден в корзине!'];
         }
 
-        $newQuantity = $this->_post['count'] + (int) $this->_post['value'];
+        $newQuantity = $this->_post['count'] + (int)$this->_post['value'];
         if ($newQuantity <= 0) {
             $basketProduct->delete();
             return ['success' => 'remove'];
@@ -68,15 +95,22 @@ class AjaxController extends AbstractController
         return ['success' => 'update'];
     }
 
+    /**
+     * Добавить товар в корзину.
+     *
+     * @return array
+     */
     public function actionAddProduct()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         $basketProducts = BasketProduct::find()
-            ->where([
-                'basketId' => $this->_basket->id,
-                'productId' => $this->_post['productId']
-            ])->all();
+            ->where(
+                [
+                    'basketId' => $this->_basket->id,
+                    'productId' => $this->_post['productId']
+                ]
+            )->all();
 
         if (empty($basketProducts)) {
             // В корзине нет такого продукта.
@@ -84,8 +118,9 @@ class AjaxController extends AbstractController
             $basketProduct->basketId = $this->_basket->id;
             $basketProduct->productId = $this->_post['productId'];
             $basketProduct->quantity = Product::DEFAULT_QUANTITY;
-            if (!$basketProduct->validate())
+            if (!$basketProduct->validate()) {
                 return $basketProduct->getErrors();
+            }
 
             $basketProduct->save();
             if (!empty($this->_post['option'])) {
@@ -94,8 +129,9 @@ class AjaxController extends AbstractController
                     $basketProductAttribute->basketProductId = $basketProduct->id;
                     $basketProductAttribute->productOptionId = $optionId;
                     $basketProductAttribute->productOptionValueId = $optionValueId;
-                    if (!$basketProductAttribute->validate())
+                    if (!$basketProductAttribute->validate()) {
                         return $basketProductAttribute->getErrors();
+                    }
 
                     $basketProductAttribute->save();
                 }
@@ -120,7 +156,7 @@ class AjaxController extends AbstractController
                     // Если нет различий найден товар с нужными атрибутами.
                     // Добавляем количество.
                     if (empty($diff)) {
-                        $product->quantity+= Product::DEFAULT_QUANTITY;
+                        $product->quantity += Product::DEFAULT_QUANTITY;
                         $product->save();
                         $isFind = true;
                         break;
@@ -149,7 +185,7 @@ class AjaxController extends AbstractController
 
                     // Найден товар без атрибутов добавим количество.
                     if (empty($product->productAttributes)) {
-                        $product->quantity+= Product::DEFAULT_QUANTITY;
+                        $product->quantity += Product::DEFAULT_QUANTITY;
                         $product->save();
                         $isFind = true;
                         break;
@@ -170,6 +206,13 @@ class AjaxController extends AbstractController
         return ['success' => 'add'];
     }
 
+    /**
+     * Возвращает поле с валидатором телефонного номера.
+     *
+     * Используеться для отложеной загрузки полей ввода номера мобильного телефона.
+     *
+     * @return string
+     */
     public function actionGetNumberField()
     {
         return $this->renderPartial('number-field', ['maskedValidator' => $this->_post['maskedValidator']]);

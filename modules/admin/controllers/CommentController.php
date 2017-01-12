@@ -9,7 +9,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * CommentController implements the CRUD actions for Comment model.
+ * CommentController контроллер управления отзывами.
  *
  * @package app\modules\admin\controllers
  */
@@ -31,9 +31,9 @@ class CommentController extends AdminController
     }
 
     /**
-     * Lists all Comment models.
+     * Список записей.
      *
-     * @return mixed
+     * @return string
      */
     public function actionList()
     {
@@ -79,8 +79,11 @@ class CommentController extends AdminController
     /**
      * Finds the Comment model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
+     *
      * @param string $id
+     *
      * @return Comment the loaded model
+     *
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)

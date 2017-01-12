@@ -5,18 +5,20 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "productmarker".
+ * Модель таблицы "productmarker".
  *
- * @property string $id
- * @property string $productId
- * @property integer $isActive
- * @property integer $isPreOrder
- * @property integer $isSpecialOffer
- * @property integer $isNew
- * @property integer $isSale
- * @property integer $isAdult
+ * @property string  $id             Идентификатор.
+ * @property string  $productId      Ссылка на продукт.
+ * @property integer $isActive       Активен.
+ * @property integer $isPreOrder     Предзаказ.
+ * @property integer $isSpecialOffer Специальное предложение.
+ * @property integer $isNew          Новый продукт.
+ * @property integer $isSale         Доступен к продаже.
+ * @property integer $isAdult        Для взрослых.
  *
- * @property Product $product
+ * @property Product $product Модель продукта.
+ *
+ * @package app\models
  */
 class ProductMarker extends \yii\db\ActiveRecord
 {
@@ -34,7 +36,6 @@ class ProductMarker extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-//            [['productId'], 'required'],
             [['productId', 'isActive', 'isPreOrder', 'isSpecialOffer', 'isNew', 'isSale', 'isAdult'], 'integer'],
             [['productId'], 'exist', 'skipOnError' => true, 'targetClass' => Product::className(), 'targetAttribute' => ['productId' => 'id']],
         ];

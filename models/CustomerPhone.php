@@ -5,13 +5,15 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "customerphone".
+ * Модель таблицы "customerphone".
  *
- * @property string $id
- * @property string $customerId
- * @property string $phone
+ * @property string $id         Идентификатор.
+ * @property string $customerId Ссылка на клиента.
+ * @property string $phone      Номер телефона.
  *
- * @property Customer $customer
+ * @property Customer $customer Модель клиента.
+ *
+ * @package app\models
  */
 class CustomerPhone extends \yii\db\ActiveRecord
 {

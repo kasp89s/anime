@@ -9,6 +9,8 @@ use app\models\Order;
 
 /**
  * OrderSearch represents the model behind the search form about `app\models\Order`.
+ *
+ * @package app\modules\admin\models\search
  */
 class OrderSearch extends Order
 {

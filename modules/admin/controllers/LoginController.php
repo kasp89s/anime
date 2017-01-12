@@ -9,8 +9,19 @@ namespace app\modules\admin\controllers;
 use yii\web\Controller;
 use app\modules\admin\models\LoginForm;
 use Yii;
+
+/**
+ * LoginController Контраллер авторизации администратора.
+ *
+ * @package app\modules\admin\controllers
+ */
 class LoginController extends Controller {
 
+    /**
+     * Перегрузка стандартного шаблона.
+     *
+     * @var string
+     */
     public $layout = 'login';
 
     public function init()
@@ -18,6 +29,11 @@ class LoginController extends Controller {
         parent::init();
     }
 
+    /**
+     * Главная авторизации.
+     *
+     * @return string
+     */
     public function actionIndex()
     {
 
@@ -32,7 +48,7 @@ class LoginController extends Controller {
     }
 
     /**
-     * Exit.
+     * Выход.
      *
      * @return mixed
      */

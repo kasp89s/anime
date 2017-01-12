@@ -5,17 +5,19 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "orderhistory".
+ * Модель таблицы "orderhistory".
  *
- * @property string $id
- * @property string $orderId
- * @property string $orderStatus
- * @property string $comment
- * @property integer $isCustomerNotified
- * @property string $createTime
- * @property integer $createUserId
+ * @property string  $id                 Идентификатор.
+ * @property string  $orderId            Ссылка на заказ.
+ * @property string  $orderStatus        Статус.
+ * @property string  $comment            Комментарий.
+ * @property integer $isCustomerNotified Флаг уведомления пользователя о смене в заказе.
+ * @property string  $createTime         Время создания.
+ * @property integer $createUserId       Ссылка на админа.
  *
- * @property Order $order
+ * @property Order $order Модель заказа.
+ *
+ * @package app\models
  */
 class OrderHistory extends \yii\db\ActiveRecord
 {

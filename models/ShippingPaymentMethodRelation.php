@@ -5,13 +5,15 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "shippingpaymentmethodrelation".
+ * Модель таблицы "shippingpaymentmethodrelation".
  *
- * @property string $shippingMethodId
- * @property string $paymentMethodId
+ * @property string $shippingMethodId Ссылка на метод доставки.
+ * @property string $paymentMethodId  Ссылка на платежный метод.
  *
- * @property PaymentMethod $paymentMethod
- * @property ShippingMethod $shippingMethod
+ * @property PaymentMethod  $paymentMethod  Модель платежного метода.
+ * @property ShippingMethod $shippingMethod Модель метода доставки.
+ *
+ * @package app\models
  */
 class ShippingPaymentMethodRelation extends \yii\db\ActiveRecord
 {

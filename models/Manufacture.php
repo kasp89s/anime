@@ -5,14 +5,16 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "productmanufacture".
+ * Модель таблицы "productmanufacture".
  *
- * @property string $id
- * @property string $name
- * @property string $description
- * @property string $image
+ * @property string $id          Идентификатор.
+ * @property string $name        Название.
+ * @property string $description Описание.
+ * @property string $image       Картинка.
  *
- * @property Product[] $products
+ * @property Product[] $products Модель продукта.
+ *
+ * @package app\models
  */
 class Manufacture extends \yii\db\ActiveRecord
 {

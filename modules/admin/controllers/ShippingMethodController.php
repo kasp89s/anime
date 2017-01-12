@@ -9,8 +9,19 @@ use yii\web\UploadedFile;
 use yii\helpers\BaseFileHelper;
 use app\modules\admin\models\search\ShippingMethodSearch;
 use yii\web\NotFoundHttpException;
+
+/**
+ * ShippingMethodController Контроллер управления методами доставки.
+ *
+ * @package app\modules\admin\controllers
+ */
 class ShippingMethodController extends AdminController {
 
+    /**
+     * Список записей.
+     *
+     * @return string
+     */
     public function actionList()
     {
         $searchModel = new ShippingMethodSearch();
@@ -22,6 +33,11 @@ class ShippingMethodController extends AdminController {
             ]);
     }
 
+    /**
+     * Создание записи.
+     *
+     * @return string
+     */
     public function actionCreate()
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -66,6 +82,15 @@ class ShippingMethodController extends AdminController {
             ]);
     }
 
+    /**
+     * Редактировние записи.
+     *
+     * @param int $id
+     *
+     * @return string
+     *
+     * @throws NotFoundHttpException
+     */
     public function actionChange($id)
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -117,8 +142,11 @@ class ShippingMethodController extends AdminController {
     /**
      * Finds the ShippingMethod model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
+     *
      * @param string $id
+     *
      * @return ShippingMethod the loaded model
+     *
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)

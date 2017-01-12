@@ -6,8 +6,19 @@ use Yii;
 use yii\data\Pagination;
 use app\modules\admin\models\search\SpecificationSearch;
 use yii\web\NotFoundHttpException;
+
+/**
+ * SpecificationController Контроллер управления спецификациями.
+ *
+ * @package app\modules\admin\controllers
+ */
 class SpecificationController extends AdminController {
 
+    /**
+     * Список записей.
+     *
+     * @return string
+     */
     public function actionList()
     {
         $searchModel = new SpecificationSearch();
@@ -19,6 +30,11 @@ class SpecificationController extends AdminController {
             ]);
     }
 
+    /**
+     * Создание записи.
+     *
+     * @return string
+     */
     public function actionCreate()
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -30,6 +46,15 @@ class SpecificationController extends AdminController {
         return parent::actionCreate();
     }
 
+    /**
+     * Редактировние записи.
+     *
+     * @param int $id
+     *
+     * @return string
+     *
+     * @throws NotFoundHttpException
+     */
     public function actionChange($id)
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -44,8 +69,11 @@ class SpecificationController extends AdminController {
     /**
      * Finds the Specification model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
+     *
      * @param string $id
+     *
      * @return Specification the loaded model
+     *
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)

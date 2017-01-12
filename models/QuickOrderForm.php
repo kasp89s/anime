@@ -6,14 +6,31 @@ use Yii;
 use yii\base\Model;
 
 /**
- * QuickOrderForm is the model behind the login form.
+ * Модель формы быстрого заказа.
+ *
+ * @package app\models
  */
 class QuickOrderForm extends Model
 {
+    /**
+     * Имя.
+     *
+     * @var
+     */
     public $name;
 
+    /**
+     * Телефон.
+     *
+     * @var
+     */
     public $phone;
 
+    /**
+     * Ссылка на продуктю
+     *
+     * @var
+     */
     public $productId;
 
     /**

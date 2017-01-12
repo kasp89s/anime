@@ -7,8 +7,19 @@ use Yii;
 use yii\data\Pagination;
 use app\modules\admin\models\search\OptionSearch;
 use yii\web\NotFoundHttpException;
+
+/**
+ * OptionController Контроллер управления атрибутами.
+ *
+ * @package app\modules\admin\controllers
+ */
 class OptionController extends AdminController {
 
+    /**
+     * Список записей.
+     *
+     * @return string
+     */
     public function actionList()
     {
         $searchModel = new OptionSearch();
@@ -20,6 +31,11 @@ class OptionController extends AdminController {
             ]);
     }
 
+    /**
+     * Создание записи.
+     *
+     * @return string
+     */
     public function actionCreate()
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -31,6 +47,15 @@ class OptionController extends AdminController {
         return parent::actionCreate();
     }
 
+    /**
+     * Редактировние записи.
+     *
+     * @param int $id
+     *
+     * @return string
+     *
+     * @throws NotFoundHttpException
+     */
     public function actionChange($id)
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -42,6 +67,13 @@ class OptionController extends AdminController {
         return parent::actionChange($id);
     }
 
+    /**
+     * Добавить значение атрибута.
+     *
+     * @return string
+     *
+     * @throws NotFoundHttpException
+     */
     public function actionOptionCreate()
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -68,6 +100,15 @@ class OptionController extends AdminController {
         ]);
     }
 
+    /**
+     * Изменить значение атрибута.
+     *
+     * @param $id
+     *
+     * @return string
+     *
+     * @throws NotFoundHttpException
+     */
     public function actionOptionChange($id)
     {
         $model = OptionValue::findOne($id);
@@ -84,6 +125,13 @@ class OptionController extends AdminController {
         ]);
     }
 
+    /**
+     * Удалить значение атрибута.
+     *
+     * @param $id
+     *
+     * @return \yii\web\Response
+     */
     public function actionOptionRemove($id)
     {
         $model = OptionValue::findOne($id);;
@@ -97,8 +145,11 @@ class OptionController extends AdminController {
     /**
      * Finds the Option model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
+     *
      * @param string $id
+     *
      * @return Option the loaded model
+     *
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)

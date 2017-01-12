@@ -5,15 +5,17 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "mailqueue".
+ * Модель таблицы "mailqueue".
  *
- * @property string $id
- * @property string $sourceId
- * @property string $customerId
- * @property string $status
+ * @property string $id         Идентификатор.
+ * @property string $sourceId   Ссылка на рассылку.
+ * @property string $customerId Ссылка на клиента.
+ * @property string $status     Статус.
  *
- * @property Customer $customer
- * @property MailDelivery $source
+ * @property Customer     $customer Модель клиента.
+ * @property MailDelivery $source   Модель рассылки.
+ *
+ * @package app\models
  */
 class MailQueue extends \yii\db\ActiveRecord
 {

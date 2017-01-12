@@ -8,8 +8,19 @@ use yii\web\UploadedFile;
 use yii\helpers\BaseFileHelper;
 use app\modules\admin\models\search\NewsSearch;
 use yii\web\NotFoundHttpException;
+
+/**
+ * NewsController Контроллер управления новостями.
+ *
+ * @package app\modules\admin\controllers
+ */
 class NewsController extends AdminController {
 
+    /**
+     * Список записей.
+     *
+     * @return string
+     */
     public function actionList()
     {
         $searchModel = new NewsSearch();
@@ -21,6 +32,11 @@ class NewsController extends AdminController {
             ]);
     }
 
+    /**
+     * Создание записи.
+     *
+     * @return string
+     */
     public function actionCreate()
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -60,6 +76,15 @@ class NewsController extends AdminController {
         ]);
     }
 
+    /**
+     * Редактировние записи.
+     *
+     * @param int $id
+     *
+     * @return string
+     *
+     * @throws NotFoundHttpException
+     */
     public function actionChange($id)
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -107,8 +132,11 @@ class NewsController extends AdminController {
     /**
      * Finds the News model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
+     *
      * @param string $id
+     *
      * @return News the loaded model
+     *
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)

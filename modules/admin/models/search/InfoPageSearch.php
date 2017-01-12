@@ -9,6 +9,8 @@ use app\models\InfoPage;
 
 /**
  * InfoPageSearch represents the model behind the search form about `app\models\InfoPage`.
+ *
+ * @package app\modules\admin\models\search
  */
 class InfoPageSearch extends InfoPage
 {

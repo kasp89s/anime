@@ -6,20 +6,35 @@ use yii\db\ActiveRecord;
 /**
  * Модель пользователя.
  *
- * @property string $id
- * @property string $email
- * @property string $password
- * @property string $userGroupId
- * @property integer $isActive
- * @property string $description
+ * @property string  $id          Идентификатор.
+ * @property string  $email       Почта.
+ * @property string  $password    Пароль.
+ * @property string  $userGroupId Ссылка на группу.
+ * @property integer $isActive    Флаг активности.
+ * @property string  $description Описание
+ *
+ * @package app\models
  */
 
 class User extends ActiveRecord implements \yii\web\IdentityInterface
 {
+    /**
+     * ПИдентификатор пользователя по умолчанию.
+     */
     const DEFAULT_USER = 0;
 
+    /**
+     * Ключ авторизации.
+     *
+     * @var
+     */
     protected $authKey;
 
+    /**
+     * Подтверждение пароля.
+     *
+     * @var
+     */
     public $passwordConfirm;
 
     /**
@@ -95,7 +110,7 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
     }
 
     /**
-     * Finds user by email
+     * Выполняет поиск пользователя по запрашиваемому параметру.
      *
      * @param  string      $email
      * @return static|null
@@ -134,9 +149,10 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
     }
 
     /**
-     * Validates password
+     * Выполняет валидацию пароля.
      *
      * @param  string  $password password to validate
+     *
      * @return boolean if password provided is valid for current user
      */
     public function validatePassword($password)
@@ -144,6 +160,9 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
         return $this->password === md5($password);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {

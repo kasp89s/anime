@@ -4,7 +4,9 @@ use Yii;
 use yii\base\ErrorException;
 use yii\base\Model;
 /**
- * RegisterForm is the model behind the login form.
+ * Модель формы регистрации клиента.
+ *
+ * @package app\models
  */
 class RegisterForm extends Customer
 {
@@ -15,8 +17,18 @@ class RegisterForm extends Customer
      */
     public $email;
 
+    /**
+     * Подтверждение пароля.
+     *
+     * @var
+     */
     public $passwordConfirm;
 
+    /**
+     * Пароль.
+     *
+     * @var
+     */
     public $password;
 
     /**
@@ -45,6 +57,11 @@ class RegisterForm extends Customer
         ];
     }
 
+    /**
+     * Проверяет существование пользователя.
+     *
+     * @return bool
+     */
     public function check()
     {
         if ($this->validate()) {
@@ -56,6 +73,13 @@ class RegisterForm extends Customer
         }
     }
 
+    /**
+     * Выполняет регистрацию клиента в системе.
+     *
+     * @return Customer|bool
+     *
+     * @throws ErrorException
+     */
     public function register()
     {
         if ($this->validate()) {

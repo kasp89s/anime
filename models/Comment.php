@@ -5,18 +5,20 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "comment".
+ * Модель таблицы "comment".
  *
- * @property string $id
- * @property string $productId
- * @property string $userName
- * @property string $userEmail
- * @property integer $rating
- * @property string $message
- * @property string $date
- * @property string $isActive
+ * @property string  $id        Идентификатор.
+ * @property string  $productId Ссылка на продукт.
+ * @property string  $userName  Имя пользователя.
+ * @property string  $userEmail Почта пользователя.
+ * @property integer $rating    Оценка.
+ * @property string  $message   Сообщение.
+ * @property string  $date      Время.
+ * @property string  $isActive  Флаг активности.
  *
- * @property Product $product
+ * @property Product $product Модель продукта.
+ *
+ * @package app\models
  */
 class Comment extends \yii\db\ActiveRecord
 {

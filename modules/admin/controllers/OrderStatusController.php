@@ -9,7 +9,9 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * OrderStatusController implements the CRUD actions for OrderStatus model.
+ * OrderStatusController Контроллер управления статусами заказа.
+ *
+ * @package app\modules\admin\controllers
  */
 class OrderStatusController extends AdminController
 {
@@ -29,8 +31,9 @@ class OrderStatusController extends AdminController
     }
 
     /**
-     * Lists all OrderStatus models.
-     * @return mixed
+     * Список записей.
+     *
+     * @return string
      */
     public function actionList()
     {
@@ -46,8 +49,11 @@ class OrderStatusController extends AdminController
     /**
      * Finds the OrderStatus model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
+     *
      * @param integer $id
+     *
      * @return OrderStatus the loaded model
+     *
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)

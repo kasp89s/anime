@@ -7,8 +7,19 @@ use app\modules\admin\models\search\InfoPageSearch;
 use yii\web\NotFoundHttpException;
 use yii\helpers\BaseFileHelper;
 use yii\web\Response;
+
+/**
+ * InfoPageController контроллер управления статическими страницами.
+ *
+ * @package app\modules\admin\controllers
+ */
 class InfoPageController extends AdminController {
 
+    /**
+     * Список записей.
+     *
+     * @return string
+     */
     public function actionList()
     {
         $searchModel = new InfoPageSearch();
@@ -20,6 +31,11 @@ class InfoPageController extends AdminController {
             ]);
     }
 
+    /**
+     * Создание записи.
+     *
+     * @return string
+     */
     public function actionCreate()
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -31,6 +47,15 @@ class InfoPageController extends AdminController {
         return parent::actionCreate();
     }
 
+    /**
+     * Редактировние записи.
+     *
+     * @param int $id
+     *
+     * @return string
+     *
+     * @throws NotFoundHttpException
+     */
     public function actionChange($id)
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -47,6 +72,11 @@ class InfoPageController extends AdminController {
         return parent::actionChange($id);
     }
 
+    /**
+     * Загрузка картинки.
+     *
+     * @return array
+     */
     public function actionUpload()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -66,8 +96,11 @@ class InfoPageController extends AdminController {
     /**
      * Finds the Banner model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
+     *
      * @param integer $id
-     * @return Banner the loaded model
+     *
+     * @return InfoPage the loaded model
+     *
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)

@@ -5,15 +5,17 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "productincomingprice".
+ * Модель таблицы "productincomingprice".
  *
- * @property string $id
- * @property string $productId
- * @property string $price
- * @property string $currencyCode
- * @property string $time
+ * @property string $id           Идентификатор.
+ * @property string $productId    Ссылка на продукт.
+ * @property string $price        Стоимость.
+ * @property string $currencyCode Код валюты.
+ * @property string $time         Время.
  *
- * @property Product $product
+ * @property Product $product Модель продукта.
+ *
+ * @package app\models
  */
 class IncomingPrice extends \yii\db\ActiveRecord
 {
@@ -31,7 +33,6 @@ class IncomingPrice extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-//            [['productId'], 'required'],
             [['productId'], 'integer'],
             [['price'], 'number'],
             [['time'], 'safe'],

@@ -9,6 +9,8 @@ use app\models\Customer;
 
 /**
  * CustomerSearch represents the model behind the search form about `app\models\Customer`.
+ *
+ * @package app\modules\admin\models\search
  */
 class CustomerSearch extends Customer
 {

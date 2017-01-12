@@ -5,14 +5,16 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "productspecification".
+ * Модель таблицы "productspecification".
  *
- * @property string $id
- * @property string $name
- * @property string $isSearch
+ * @property string $id       Идентификатор.
+ * @property string $name     Название.
+ * @property string $isSearch Флаг доступности для поиска.
  *
- * @property Category[] $categories
- * @property Product[] $products
+ * @property Category[] $categories Модель категории.
+ * @property Product[]  $products   Модель продукта.
+ *
+ * @package app\models
  */
 class Specification extends \yii\db\ActiveRecord
 {
@@ -66,6 +68,11 @@ class Specification extends \yii\db\ActiveRecord
         return $this->hasMany(Product::className(), ['id' => 'productId'])->viaTable('productproductspecificationrelation', ['productSpecificationId' => 'id']);
     }
 
+    /**
+     * Выполняет поиск количества продуктов по спецификациям связаных с указаными категориями и их потомками.
+     *
+     * @param $categories
+     */
     public function findProducts($categories)
     {
         $categories = implode(',', $categories);
@@ -85,6 +92,11 @@ class Specification extends \yii\db\ActiveRecord
         $this->productsCount = $command->queryAll();
     }
 
+    /**
+     * Возвращает выбраные данные количества продуктов по спецификациям.
+     *
+     * @return null
+     */
     public function getValuesByProductsCount()
     {
         return $this->productsCount;

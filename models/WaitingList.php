@@ -5,16 +5,18 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "waitinglist".
+ * Модель таблицы "waitinglist".
  *
- * @property integer $id
- * @property string $productId
- * @property string $customerId
- * @property string $email
- * @property string $creteTime
+ * @property integer $id         Идентификатор.
+ * @property string  $productId  Ссылка на продукт.
+ * @property string  $customerId Ссылка на клиента.
+ * @property string  $email      Почта.
+ * @property string  $creteTime  Время создания.
  *
- * @property Customer $customer
- * @property Product $product
+ * @property Customer $customer Клиент.
+ * @property Product  $product  Продукт.
+ *
+ * @package app\models
  */
 class WaitingList extends \yii\db\ActiveRecord
 {

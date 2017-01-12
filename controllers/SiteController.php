@@ -1,9 +1,4 @@
 <?php
-/**
- * Базовый контроллер сайта.
- *
- * @version 1.0
- */
 namespace app\controllers;
 
 use app\models\Customer;
@@ -32,12 +27,32 @@ use app\models\Comment;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
 
+/**
+ * Базовый контролер клиентской части.
+ *
+ * @package app\controllers
+ */
 class SiteController extends AbstractController
 {
+    /**
+     * Перегрузка дефолтного шаблона.
+     *
+     * @var string
+     */
     public $layout = 'main';
 
+    /**
+     * Параметр инициализации движка фейсбук.
+     *
+     * @var
+     */
     public $facebook;
 
+    /**
+     * Параметр инициализации движка VK.
+     *
+     * @var
+     */
     public $vk;
 
     public function behaviors()
@@ -58,6 +73,9 @@ class SiteController extends AbstractController
         ];
     }
 
+    /**
+     * Инициализация.
+     */
     public function init()
     {
         parent::init();
@@ -141,6 +159,11 @@ class SiteController extends AbstractController
         ]);
     }
 
+    /**
+     * Страница поиска.
+     *
+     * @return string
+     */
     public function actionSearch()
     {
         $search = \Yii::$app->request->get('s');
@@ -166,6 +189,13 @@ class SiteController extends AbstractController
         ]);
     }
 
+    /**
+     * Страница поиска по идентификатору.
+     *
+     * @param $id
+     *
+     * @return string
+     */
     public function actionSpecification($id)
     {
         $productSpecificationRelation = ProductSpecificationRelation::findOne($id);
@@ -219,6 +249,13 @@ class SiteController extends AbstractController
         ]);
     }
 
+    /**
+     * Отложеная загрузка товаров для постранички.
+     *
+     * @param $id Идентификатор категории.
+     *
+     * @return string
+     */
     public function actionLoadProducts($id)
     {
         $category = Category::findOne($id);
@@ -271,6 +308,15 @@ class SiteController extends AbstractController
         );
     }
 
+    /**
+     * Страничка категории.
+     *
+     * @param $id Идентификатор категории.
+     *
+     * @return string
+     *
+     * @throws \yii\web\NotFoundHttpException
+     */
     public function actionCategory($id)
     {
         //Yii::$app->cache
@@ -354,6 +400,15 @@ class SiteController extends AbstractController
         ]);
     }
 
+    /**
+     * Страница товара.
+     *
+     * @param $id Идентификатор товара.
+     *
+     * @return array|string|Response
+     *
+     * @throws \yii\web\NotFoundHttpException
+     */
     public function actionProduct($id)
     {
         $comment = new Comment();
@@ -422,6 +477,15 @@ class SiteController extends AbstractController
         ]);
     }
 
+    /**
+     * Статические страници.
+     *
+     * @param $url
+     *
+     * @return string
+     *
+     * @throws \yii\web\NotFoundHttpException
+     */
     public function actionStatic($url)
     {
         $page = InfoPage::find()->where(['code' => $url])->one();
@@ -440,6 +504,11 @@ class SiteController extends AbstractController
         ]);
     }
 
+    /**
+     * Подписка на рассылку.
+     *
+     * @return array|string
+     */
     public function actionSubscribe()
     {
         $model = new NewsLetterSubscriber();
@@ -466,6 +535,15 @@ class SiteController extends AbstractController
         }
     }
 
+    /**
+     * Подтверждение подписки на рассылку.
+     *
+     * @param $code Код подписки.
+     *
+     * @return string
+     *
+     * @throws \yii\web\NotFoundHttpException
+     */
     public function actionSubscribeApprove($code)
     {
         $model = NewsLetterSubscriber::find()->where(['code' => $code])->one();
@@ -480,6 +558,15 @@ class SiteController extends AbstractController
         return $this->render(Yii::$app->controller->action->id, []);
     }
 
+    /**
+     * Отмена подписки на рассылку.
+     *
+     * @param $id Идентификатор подписки.
+     *
+     * @return string
+     *
+     * @throws \yii\web\NotFoundHttpException
+     */
     public function actionDeactivationSubscribe($id)
     {
         $model = NewsLetterSubscriber::findOne($id);
@@ -491,6 +578,11 @@ class SiteController extends AbstractController
         return $this->render(Yii::$app->controller->action->id, []);
     }
 
+    /**
+     * Страничка всех товаров без фильтра по категории.
+     *
+     * @return string
+     */
     public function actionAllProducts()
     {
         $filter = Yii::$app->request->get('filter');
@@ -562,6 +654,11 @@ class SiteController extends AbstractController
         ]);
     }
 
+    /**
+     * Уведомить о наличии для не авторизированих пользователей.
+     *
+     * @return array
+     */
     public function actionWaitGuest()
     {
         $model = new WaitForm();
@@ -585,6 +682,11 @@ class SiteController extends AbstractController
         return ['success' => true];
     }
 
+    /**
+     * Уведомить о наличие для авторизированых пользователей.
+     *
+     * @return array
+     */
     public function actionWait()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;

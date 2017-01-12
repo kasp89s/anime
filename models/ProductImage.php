@@ -5,14 +5,16 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "productimage".
+ * Модель таблицы "productimage".
  *
- * @property string $id
- * @property string $productId
- * @property string $imageFileName
- * @property string $rank
+ * @property string $id            Идентификатор.
+ * @property string $productId     Ссылка на продукт.
+ * @property string $imageFileName Имя картинки.
+ * @property string $rank          Порядок сортировки.
  *
  * @property Product $product
+ *
+ * @package app\models
  */
 class ProductImage extends \yii\db\ActiveRecord
 {

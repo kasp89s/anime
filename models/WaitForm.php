@@ -6,12 +6,24 @@ use Yii;
 use yii\base\Model;
 
 /**
- * QuickOrderForm is the model behind the login form.
+ * Модель формы сообщить о наличие.
+ *
+ * @package app\models
  */
 class WaitForm extends Model
 {
+    /**
+     * Почта.
+     *
+     * @var
+     */
     public $email;
 
+    /**
+     * Ссылка на продукт.
+     *
+     * @var
+     */
     public $productId;
 
     /**
@@ -36,6 +48,9 @@ class WaitForm extends Model
         ];
     }
 
+    /**
+     * Выполняет проверку подписан ли пользователь на указанный продукт.
+     */
     public function validateProduct()
     {
         $model = WaitingList::find()

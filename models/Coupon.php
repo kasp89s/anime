@@ -5,24 +5,23 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "coupon".
+ * Модель таблицы "coupon".
  *
- * @property string $id
- * @property string $code
- * @property string $description
- * @property integer $startTime
- * @property integer $endTime
- * @property string $type
- * @property string $value
- * @property string $minimalOrderCost
- * @property integer $isActive
- * @property string $createTime
- * @property string $updateTime
- * @property string $createUserId
- * @property string $updateUserId
+ * @property string  $id               Идентификатор.
+ * @property string  $code             Код купона.
+ * @property string  $description      Описание.
+ * @property integer $startTime        Время начала.
+ * @property integer $endTime          Время окончания.
+ * @property string  $type             Тип.
+ * @property string  $value            Значение.
+ * @property string  $minimalOrderCost Минимальная сумма заказа.
+ * @property integer $isActive         Флаг активности.
+ * @property string  $createTime       Время создания.
+ * @property string  $updateTime       Время обновления.
+ * @property string  $createUserId  Ссылка на администратора который создал запись.
+ * @property string  $updateUserId  Ссылка на администратора который обновил запись.
  *
- * @property User $updateUser
- * @property User $createUser
+ * @package app\models
  */
 class Coupon extends \yii\db\ActiveRecord
 {
@@ -94,6 +93,13 @@ class Coupon extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'createUserId']);
     }
 
+    /**
+     * Возвращает скидку по купону исходя из стоимости.
+     *
+     * @param float|int|string $amount Стоимость.
+     *
+     * @return float|int|string
+     */
     public function getDiscountByAmount($amount)
     {
         if ($this->type == self::TYPE_PERCENT) {

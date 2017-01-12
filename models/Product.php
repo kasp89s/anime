@@ -5,54 +5,81 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "product".
+ * Модель таблицы "product".
  *
- * @property string $id
- * @property string $sku
- * @property string $name
- * @property string $description
- * @property string $quantityInStock
- * @property string $quantityOfSold
- * @property string $barcode1
- * @property string $barcode2
- * @property string $barcode3
- * @property string $availableTime
- * @property string $createTime
- * @property string $updateTime
- * @property string $price
- * @property string $currencyCode
- * @property string $productDisountId
- * @property string $productManufactureId
- * @property string $imageFileName
- * @property string $image
- * @property string $imagesMultiple
- * @property string $categoriesMultiple
+ * @property string $id                   Идентификатор.
+ * @property string $sku                  Артикул.
+ * @property string $name                 Название.
+ * @property string $description          Описание.
+ * @property string $quantityInStock      Количество в наличие.
+ * @property string $quantityOfSold       Количество проданых.
+ * @property string $barcode1             Штрихкод.
+ * @property string $barcode2             Штрихкод.
+ * @property string $barcode3             Штрихкод.
+ * @property string $availableTime        Время доступности.
+ * @property string $createTime           Время создания.
+ * @property string $updateTime           Время обновления.
+ * @property string $price                Стоимость.
+ * @property string $currencyCode         Валюта.
+ * @property string $productDisountId     Ссылка на скидку.
+ * @property string $productManufactureId Ссылка на производителя.
+ * @property string $imageFileName        Имя картинки.
  *
- * @property BasketProduct[] $basketProducts
- * @property Comment[] $comments
- * @property Manufacture $manufacture
- * @property Discount $discount
- * @property Attribute[] $productAttributes
- * @property Specification[] $specifications
- * @property Category[] $categories
- * @property ProductImage[] $images
- * @property ProductCategoryRelation[] $categoryRelation
- * @property IncomingPrice $incomingPrice
- * @property ProductMarker[] $marker
- * @property ProductSpecificationRelation[] $specificationRelations
+ * @property BasketProduct[]                $basketProducts         Модель продукта в корзине.
+ * @property Comment[]                      $comments               Модель отзыва.
+ * @property Manufacture                    $manufacture            Модель производителя.
+ * @property Discount                       $discount               Модель скидки.
+ * @property Attribute[]                    $productAttributes      Модель атрибута продукта.
+ * @property Specification[]                $specifications         Модель спецификации.
+ * @property Category[]                     $categories             Модель категории.
+ * @property ProductImage[]                 $images                 Модель картинки продукта.
+ * @property ProductCategoryRelation[]      $categoryRelation       Модель связи с категорией.
+ * @property IncomingPrice                  $incomingPrice          Модель входящей цены.
+ * @property ProductMarker[]                $marker                 Модель маркера продукта.
+ * @property ProductSpecificationRelation[] $specificationRelations Модель связи со спецификацией.
+ *
+ * @package app\models
  */
 class Product extends \yii\db\ActiveRecord
 {
+    /**
+     * количество по умолчанию.
+     */
     const DEFAULT_QUANTITY = 1;
 
+    /**
+     * Параметр для работы с картинкой.
+     *
+     * @var
+     */
     public $image;
 
+    /**
+     * Параметр для работы с несколькими картинками.
+     *
+     * @var
+     */
     public $imagesMultiple;
 
+    /**
+     * Параметр мультивыбора категорий.
+     *
+     * @var
+     */
     public $categoriesMultiple;
 
+    /**
+     * Параметр мультивыбора спецификаций.
+     *
+     * @var
+     */
     public $specificationsMultiple;
 
+    /**
+     * Параметр мультивыбора атрибутов.
+     *
+     * @var
+     */
     public $attributesMultiple;
 
     /**
@@ -246,6 +273,11 @@ class Product extends \yii\db\ActiveRecord
         return $this->hasMany(Comment::className(), ['productId' => 'id']);
     }
 
+    /**
+     * Возвращает реальную стоимость продукта.
+     *
+     * @return float
+     */
     public function getRealPrice()
     {
         if (!empty($this->discount) && (strtotime($this->discount->startTime) < time()) && (time() < strtotime($this->discount->endTime))){
@@ -263,6 +295,11 @@ class Product extends \yii\db\ActiveRecord
         return round($this->price);
     }
 
+    /**
+     * Возвращает стоимость с учетом скидки группы клиента.
+     *
+     * @return float|mixed
+     */
     public function getPriceWithCustomerDiscount()
     {
         if (\Yii::$app->session->get('user')) {
@@ -278,6 +315,11 @@ class Product extends \yii\db\ActiveRecord
         return $this->realPrice;
     }
 
+    /**
+     * Возвращает общую оценку по отзывам.
+     *
+     * @return float|int
+     */
     public function getCommentsRate()
     {
         if (empty($this->comments)) {

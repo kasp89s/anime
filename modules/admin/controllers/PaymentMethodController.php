@@ -8,8 +8,19 @@ use yii\web\UploadedFile;
 use yii\helpers\BaseFileHelper;
 use app\modules\admin\models\search\PaymentMethodSearch;
 use yii\web\NotFoundHttpException;
+
+/**
+ * PaymentMethodController Контроллер управления платежными методами.
+ *
+ * @package app\modules\admin\controllers
+ */
 class PaymentMethodController extends AdminController {
 
+    /**
+     * Список записей.
+     *
+     * @return string
+     */
     public function actionList()
     {
         $searchModel = new PaymentMethodSearch();
@@ -21,6 +32,11 @@ class PaymentMethodController extends AdminController {
             ]);
     }
 
+    /**
+     * Создание записи.
+     *
+     * @return string
+     */
     public function actionCreate()
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -56,6 +72,15 @@ class PaymentMethodController extends AdminController {
             ]);
     }
 
+    /**
+     * Редактировние записи.
+     *
+     * @param int $id
+     *
+     * @return string
+     *
+     * @throws NotFoundHttpException
+     */
     public function actionChange($id)
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -96,8 +121,11 @@ class PaymentMethodController extends AdminController {
     /**
      * Finds the PaymentMethod model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
+     *
      * @param string $id
+     *
      * @return PaymentMethod the loaded model
+     *
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)

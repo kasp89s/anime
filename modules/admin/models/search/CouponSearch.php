@@ -9,6 +9,8 @@ use app\models\Coupon;
 
 /**
  * CouponSearch represents the model behind the search form about `app\models\Coupon`.
+ *
+ * @package app\modules\admin\models\search
  */
 class CouponSearch extends Coupon
 {

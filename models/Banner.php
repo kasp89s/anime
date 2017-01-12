@@ -5,18 +5,20 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "banner".
+ * Модель таблицы "banner".
  *
- * @property integer $id
- * @property string $name
- * @property string $imageFileName
- * @property string $startTime
- * @property string $endTime
- * @property integer $isActive
- * @property string $createTime
- * @property string $updateTime
- * @property string $createUserId
- * @property string $updateUserId
+ * @property integer $id            Идентификатор.
+ * @property string  $name          Имя банера.
+ * @property string  $imageFileName Имя картинки.
+ * @property string  $startTime     Время начала показа.
+ * @property string  $endTime       Время окончания показа.
+ * @property integer $isActive      Активность.
+ * @property string  $createTime    Время создания.
+ * @property string  $updateTime    Время обновления.
+ * @property string  $createUserId  Ссылка на администратора который создал запись.
+ * @property string  $updateUserId  Ссылка на администратора который обновил запись.
+ *
+ * @package app\models
  */
 class Banner extends \yii\db\ActiveRecord
 {

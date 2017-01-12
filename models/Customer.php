@@ -5,7 +5,7 @@ namespace app\models;
 use Yii;
 
 /**
- * Это модель класса для таблицы "customer".
+ * Модель таблицы "customer".
  *
  * @property string  $id               ID.
  * @property string  $email            E-mail.
@@ -26,6 +26,8 @@ use Yii;
  * @property WishList[]        $wishes          Желания.
  * @property WaitingList[]     $waitingProducts Лист ожидания (Уведомить о наличие).
  * @property Product[]         $wishProducts    Избранные продукты.
+ *
+ * @package app\models
  */
 class Customer extends \yii\db\ActiveRecord
 {

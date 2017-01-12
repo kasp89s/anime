@@ -5,8 +5,19 @@ use Yii;
 use app\models\NewsLetterSubscriber;
 use app\modules\admin\models\search\NewsLetterSubscriberSearch;
 use yii\web\NotFoundHttpException;
+
+/**
+ * NewsLetterSubscriberController контроллер управления новостной рассылкой.
+ *
+ * @package app\modules\admin\controllers
+ */
 class NewsLetterSubscriberController extends AdminController {
 
+    /**
+     * Список записей.
+     *
+     * @return string
+     */
     public function actionList()
     {
         $searchModel = new NewsLetterSubscriberSearch();
@@ -18,6 +29,11 @@ class NewsLetterSubscriberController extends AdminController {
             ]);
     }
 
+    /**
+     * Создание записи.
+     *
+     * @return string
+     */
     public function actionCreate()
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -29,6 +45,15 @@ class NewsLetterSubscriberController extends AdminController {
         return parent::actionCreate();
     }
 
+    /**
+     * Редактировние записи.
+     *
+     * @param int $id
+     *
+     * @return string
+     *
+     * @throws NotFoundHttpException
+     */
     public function actionChange($id)
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -43,8 +68,11 @@ class NewsLetterSubscriberController extends AdminController {
     /**
      * Finds the NewsLetterSubscriber model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
+     *
      * @param string $id
+     *
      * @return NewsLetterSubscriber the loaded model
+     *
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)

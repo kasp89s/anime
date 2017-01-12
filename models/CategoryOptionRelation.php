@@ -5,14 +5,16 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "productcategoryproductoptionrelation".
+ * Модель таблицы "productcategoryproductoptionrelation".
  *
- * @property string $id
- * @property string $productCategoryId
- * @property string $productOptionId
+ * @property string $id                Идентификатор.
+ * @property string $productCategoryId Ссылка на категорию.
+ * @property string $productOptionId   Ссылка на опцию.
  *
- * @property Category $category
- * @property Option   $option
+ * @property Category $category Модель категории.
+ * @property Option   $option   Модель опции.
+ *
+ * @package app\models
  */
 class CategoryOptionRelation extends \yii\db\ActiveRecord
 {

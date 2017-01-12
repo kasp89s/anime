@@ -6,34 +6,97 @@ use Yii;
 use yii\base\Model;
 
 /**
- * LoginForm is the model behind the login form.
+ * Форма заказа.
+ *
+ * @package app\models
  */
 class OrderProcessForm extends Model
 {
+    /**
+     * Сценарий для авторизированого пользователя.
+     */
     const SCENARIO_REGISTERED = 'REGISTERED';
 
+    /**
+     * Сценарий для гостя.
+     */
     const SCENARIO_GUEST = 'GUEST';
 
+    /**
+     * Почта.
+     *
+     * @var
+     */
     public $email;
 
+    /**
+     * Город.
+     *
+     * @var
+     */
     public $city;
 
+    /**
+     * Индекс.
+     *
+     * @var
+     */
     public $zip;
 
+    /**
+     * ФИО.
+     *
+     * @var
+     */
     public $fullName;
 
+    /**
+     * Телефон.
+     *
+     * @var
+     */
     public $phone;
 
+    /**
+     * Адресс.
+     *
+     * @var
+     */
     public $address;
 
+    /**
+     * Способ доставки.
+     *
+     * @var
+     */
     public $shipping;
 
+    /**
+     * Способ оплаты.
+     *
+     * @var
+     */
     public $payment;
 
+    /**
+     * Комментарий.
+     *
+     * @var
+     */
     public $comment;
 
+    /**
+     * Код купона.
+     *
+     * @var
+     */
     public $couponCode;
 
+    /**
+     * Новый адресс.
+     *
+     * @var
+     */
     public $loopAddress;
 
     /**

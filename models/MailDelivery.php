@@ -5,14 +5,16 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "maildelivery".
+ * Модель таблицы "maildelivery".
  *
- * @property string $id
- * @property string $title
- * @property string $body
- * @property string $status
+ * @property string $id     Идентификатор.
+ * @property string $title  Название сообщения.
+ * @property string $body   Тело сообщения.
+ * @property string $status Статус.
  *
- * @property MailQueue[] $mailqueues
+ * @property MailQueue[] $mailqueues Модель очереди писем.
+ *
+ * @package app\models
  */
 class MailDelivery extends \yii\db\ActiveRecord
 {

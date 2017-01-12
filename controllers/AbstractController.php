@@ -1,9 +1,4 @@
 <?php
-/**
- * Базовый контроллер содержит общие методы и параметры.
- *
- * @version 1.0
- */
 namespace app\controllers;
 
 use app\models\Basket;
@@ -22,25 +17,45 @@ use yii\widgets\ActiveForm;
 $phpMailer = Yii::getAlias('@app/vendor/phpmailer/PHPMailer.php');
 require_once($phpMailer);
 
-class AbstractController extends Controller {
+/**
+ * Базовый контроллер содержит общие методы и параметры.
+ *
+ * @package app\controllers
+ */
+class AbstractController extends Controller
+{
 
-    public $session = false;
-
+    /**
+     * Килиент
+     *
+     * @var bool
+     */
     public $user = false;
 
-    public $_theme = '';
-
+    /**
+     * Идентификатор сессии клиента.
+     *
+     * @var
+     */
     public $_sessionId;
 
+    /**
+     * Инстенс корзины.
+     *
+     * @var
+     */
     public $_basket;
 
+    /**
+     * Инициализирует пользователя и корзину.
+     */
     public function init()
     {
-		if (\Yii::$app->session->get('user')) {
-			$this->user = \Yii::$app->session->get('user');
-		}
+        if (\Yii::$app->session->get('user')) {
+            $this->user = \Yii::$app->session->get('user');
+        }
 
-		foreach (InfoPage::find()->all() as $page) {
+        foreach (InfoPage::find()->all() as $page) {
             Yii::$app->view->params['pages'][$page->code] = $page;
         }
 
@@ -58,10 +73,14 @@ class AbstractController extends Controller {
 
             // Если пользователь зашол с другого компютера и авторизировался синхронизируем его корзину.
             if (!empty($this->_basket) && $this->_sessionId != $this->_basket->sessionId) {
-                Yii::$app->response->cookies->add(new \yii\web\Cookie([
-                        'name' => '_sid',
-                        'value' => $this->_basket->sessionId,
-                ]));
+                Yii::$app->response->cookies->add(
+                    new \yii\web\Cookie(
+                        [
+                            'name' => '_sid',
+                            'value' => $this->_basket->sessionId,
+                        ]
+                    )
+                );
 
                 // И удалим корзину гостя. Перенеся все что в ней было в корзину пользователя.
                 Basket::synchronization($this->_sessionId, $this->_basket);
@@ -78,10 +97,14 @@ class AbstractController extends Controller {
                 $this->_basket->save();
 
                 // Обновим сессию.
-                Yii::$app->response->cookies->add(new \yii\web\Cookie([
-                        'name' => '_sid',
-                        'value' => $this->_basket->sessionId,
-                    ]));
+                Yii::$app->response->cookies->add(
+                    new \yii\web\Cookie(
+                        [
+                            'name' => '_sid',
+                            'value' => $this->_basket->sessionId,
+                        ]
+                    )
+                );
 
                 // И удалим корзину гостя. Перенеся все что в ней было в корзину пользователя.
                 Basket::synchronization($this->_sessionId, $this->_basket);
@@ -115,19 +138,31 @@ class AbstractController extends Controller {
         ];
     }
 
+    /**
+     * Метод работы с сессией для корзины.
+     */
     protected function instanceBasketSession()
     {
         $this->_sessionId = Yii::$app->request->cookies->getValue('_sid');
 
         if (empty($this->_sessionId)) {
             $this->_sessionId = md5(time());
-            Yii::$app->response->cookies->add(new \yii\web\Cookie([
-                    'name' => '_sid',
-                    'value' => $this->_sessionId,
-                ]));
+            Yii::$app->response->cookies->add(
+                new \yii\web\Cookie(
+                    [
+                        'name' => '_sid',
+                        'value' => $this->_sessionId,
+                    ]
+                )
+            );
         }
     }
 
+    /**
+     * Авторизация.
+     *
+     * @return array|Response
+     */
     public function actionLogin()
     {
         if (!\Yii::$app->session->get('user')) {
@@ -146,6 +181,11 @@ class AbstractController extends Controller {
         return $this->goHome();
     }
 
+    /**
+     * Регистрация.
+     *
+     * @return array|string
+     */
     public function actionRegistration()
     {
         $model = new RegisterForm();
@@ -156,7 +196,7 @@ class AbstractController extends Controller {
             return ActiveForm::validate($model);
         }
 
-        if($model->load(Yii::$app->request->post()) && $model->validate()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $customer = $model->register();
 
             $this->sendEmail(
@@ -165,17 +205,30 @@ class AbstractController extends Controller {
                 $this->renderPartial('emailTemplates/registration', ['customer' => $customer])
             );
 
-            return $this->render(Yii::$app->controller->action->id, [
-                'customer' => $customer
-            ]);
+            return $this->render(
+                Yii::$app->controller->action->id,
+                [
+                    'customer' => $customer
+                ]
+            );
         }
     }
 
+    /**
+     * Подтверждение регистрации.
+     *
+     * @param $code Код подтверждения.
+     *
+     * @return string
+     *
+     * @throws \yii\web\NotFoundHttpException
+     */
     public function actionRegistrationConfirm($code)
     {
         $model = Customer::find()->where(['code' => $code])->one();
-        if (empty($model))
+        if (empty($model)) {
             throw new \yii\web\NotFoundHttpException();
+        }
 
         $model->code = null;
         $model->isActive = 1;
@@ -185,6 +238,11 @@ class AbstractController extends Controller {
         return $this->render(Yii::$app->controller->action->id, []);
     }
 
+    /**
+     * Восстановление пароля.
+     *
+     * @return array|string
+     */
     public function actionRecover()
     {
         $model = new RecoverForm();
@@ -206,14 +264,17 @@ class AbstractController extends Controller {
                 $this->renderPartial('emailTemplates/recover', ['newPassword' => $newPassword])
             );
 
-            return $this->render(Yii::$app->controller->action->id, [
+            return $this->render(
+                Yii::$app->controller->action->id,
+                [
                     'newPassword' => $newPassword
-            ]);
+                ]
+            );
         }
     }
 
     /**
-     * Exit.
+     * Логаут.
      *
      * @return mixed
      */
@@ -232,8 +293,8 @@ class AbstractController extends Controller {
         $mailer->isHTML(true);
 
         $mailer->Subject = $subject;
-        $mailer->Body    = $body;
-        if(!$mailer->send()) {
+        $mailer->Body = $body;
+        if (!$mailer->send()) {
             error_log($mailer->ErrorInfo);
         }
     }
@@ -241,7 +302,7 @@ class AbstractController extends Controller {
     /**
      * Устанавливает продукт как просмотреный.
      *
-     * @param $productId Иедентификатор продукта.
+     * @param $productId Идентификатор продукта.
      */
     protected function setLastViewProduct($productId)
     {
@@ -254,10 +315,14 @@ class AbstractController extends Controller {
             $currentList = json_encode($currentList);
         }
 
-        Yii::$app->response->cookies->add(new \yii\web\Cookie([
-                'name' => 'LastView',
-                'value' => $currentList,
-            ]));
+        Yii::$app->response->cookies->add(
+            new \yii\web\Cookie(
+                [
+                    'name' => 'LastView',
+                    'value' => $currentList,
+                ]
+            )
+        );
     }
 
     /**
@@ -269,8 +334,9 @@ class AbstractController extends Controller {
     {
         $currentList = json_decode(Yii::$app->request->cookies->getValue('LastView'), true);
 
-        if (empty($currentList))
+        if (empty($currentList)) {
             return [];
+        }
 
         $models = Product::find()->where(['product.id' => $currentList])->joinWith('discount')->limit(6)->all();
 

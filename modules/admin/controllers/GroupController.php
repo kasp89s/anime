@@ -7,12 +7,17 @@ use Yii;
 use yii\data\Pagination;
 
 /**
- * GroupController Контроллер управления скидками.
+ * GroupController Контроллер управления группами пользователей.
  *
  * @package app\modules\admin\controllers
  */
 class GroupController extends AdminController {
 
+    /**
+     * Список записей.
+     *
+     * @return string
+     */
     public function actionList()
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -38,6 +43,11 @@ class GroupController extends AdminController {
         );
     }
 
+    /**
+     * Создание записи.
+     *
+     * @return string
+     */
     public function actionCreate()
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -49,6 +59,13 @@ class GroupController extends AdminController {
         return parent::actionCreate();
     }
 
+    /**
+     * Редактировние записи.
+     *
+     * @param int $id
+     *
+     * @return string
+     */
     public function actionChange($id)
     {
         Yii::$app->view->params['breadcrumbs'][] = [

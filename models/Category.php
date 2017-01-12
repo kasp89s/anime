@@ -5,33 +5,50 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "productcategory".
+ * Модель таблицы "productcategory".
  *
- * @property string $id
- * @property string $name
- * @property string $parentId
- * @property string $sortOrder
- * @property string $description
- * @property string $imageFileName
- * @property integer $isActive
- * @property string $createTime
- * @property string $updateTime
+ * @property string $id            Идентификатор.
+ * @property string $name          Название категории.
+ * @property string $parentId      Ссылка на родителя.
+ * @property string $sortOrder     Значение сортировки относительно элементов уровня.
+ * @property string $description   Описание.
+ * @property string $imageFileName Имя файла картинки.
+ * @property integer $isActive     Флаг активности.
+ * @property string $createTime    Время создания.
+ * @property string $updateTime    Время обновления.
  * @property integer $left
  * @property integer $right
  * @property integer $level
  *
- * @property Category $parent
- * @property Category[] $categories
- * @property Option[] $options
- * @property Specification[] $specifications
- * @property Product[] $products
+ * @property Category        $parent         Модель категории.
+ * @property Category[]      $categories     Модель Категории.
+ * @property Option[]        $options        Модель Опции.
+ * @property Specification[] $specifications Модель Спецификации.
+ * @property Product[]       $products       Модель Товара.
+ *
+ * @package app\models
  */
 class Category extends \yii\db\ActiveRecord
 {
+    /**
+     * Картинка.
+     *
+     * @var
+     */
     public $image;
 
+    /**
+     * Форматированый список опций.
+     *
+     * @var
+     */
     public $optionsList;
 
+    /**
+     * Форматированый список спецификаций.
+     *
+     * @var
+     */
     public $specificationsList;
 
     /**
@@ -56,7 +73,6 @@ class Category extends \yii\db\ActiveRecord
             [['name'], 'string', 'max' => 500],
             [['imageFileName'], 'string', 'max' => 255],
             [['image'], 'file', 'extensions' => 'gif, jpg, png'],
-//            [['parentId'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['parentId' => 'id']],
         ];
     }
 
@@ -74,7 +90,6 @@ class Category extends \yii\db\ActiveRecord
             'image' => 'Картинка',
             'optionsList' => 'Атрибуты категории',
             'specificationsList' => 'Спецификации категории',
-//            'imageFileName' => 'Image File Name',
             'isActive' => 'Активность',
             'createTime' => 'Создан',
             'updateTime' => 'Обновлен',

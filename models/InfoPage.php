@@ -5,19 +5,21 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "infopage".
+ * Модель таблицы "infopage".
  *
- * @property string $id
- * @property string $code
- * @property string $title
- * @property string $content
- * @property string $createTime
- * @property string $updateTime
- * @property string $createUserId
- * @property string $updateUserId
+ * @property string  $id            Идентификатор.
+ * @property string  $code          Код.
+ * @property string  $title         Название.
+ * @property string  $content       Контент.
+ * @property string  $createTime    Время создания.
+ * @property string  $updateTime    Время обновления.
+ * @property string  $createUserId  Ссылка на администратора который создал запись.
+ * @property string  $updateUserId  Ссылка на администратора который обновил запись.
  *
- * @property User $updateUser
- * @property User $createUser
+ * @property User $updateUser Модель админа.
+ * @property User $createUser Модель админа.
+ *
+ * @package app\models
  */
 class InfoPage extends \yii\db\ActiveRecord
 {

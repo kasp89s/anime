@@ -5,11 +5,13 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "currencies".
+ * Модель таблицы "currencies".
  *
- * @property string $id
- * @property string $code
- * @property string $name
+ * @property string $id   Идентификатор.
+ * @property string $code Код.
+ * @property string $name Название.
+ *
+ * @package app\models
  */
 class Currencies extends \yii\db\ActiveRecord
 {

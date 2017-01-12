@@ -5,11 +5,13 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "newsletter".
+ * Модель таблицы "newsletter".
  *
- * @property string $id
- * @property string $title
- * @property string $description
+ * @property string $id          Идентификатор.
+ * @property string $title       Титулка.
+ * @property string $description Описание.
+ *
+ * @package app\models
  */
 class NewsLetter extends \yii\db\ActiveRecord
 {

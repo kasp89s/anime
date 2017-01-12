@@ -7,15 +7,17 @@ use Yii;
 /**
  * This is the model class for table "customeraddress".
  *
- * @property string $id
- * @property string $customerId
- * @property string $countryCode
- * @property string $city
- * @property string $zip
- * @property string $address
- * @property integer $isPrimary
+ * @property string  $id          Идентификатор.
+ * @property string  $customerId  Ссылка на клиента.
+ * @property string  $countryCode Код страны.
+ * @property string  $city        Город.
+ * @property string  $zip         Индекс.
+ * @property string  $address     Адресс.
+ * @property integer $isPrimary   Флаг важности.
  *
- * @property Customer $customer
+ * @property Customer $customer   Модель клиента.
+ *
+ * @package app\models
  */
 class CustomerAddress extends \yii\db\ActiveRecord
 {
@@ -49,8 +51,6 @@ class CustomerAddress extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-//            'id' => 'ID',
-//            'customerId' => 'Customer ID',
             'countryCode' => 'Код страны',
             'city' => 'Гогод',
             'zip' => 'Индекс',

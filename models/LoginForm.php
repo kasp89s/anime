@@ -7,14 +7,38 @@ use yii\base\Model;
 use app\models\Customer;
 
 /**
- * LoginForm is the model behind the login form.
+ * Форма авторизации.
+ *
+ * @package app\models
  */
 class LoginForm extends Model
 {
+    /**
+     * Почта.
+     *
+     * @var
+     */
     public $email;
+
+    /**
+     * Пароль.
+     *
+     * @var
+     */
     public $password;
+
+    /**
+     * Запомнить меня.
+     *
+     * @var bool
+     */
     public $rememberMe = true;
 
+    /**
+     * Параметр инициализации клиента.
+     *
+     * @var bool
+     */
     private $_user = false;
 
 
@@ -49,7 +73,7 @@ class LoginForm extends Model
      * This method serves as the inline validation for password.
      *
      * @param string $attribute the attribute currently being validated
-     * @param array $params the additional name-value pairs given in the rule
+     * @param array  $params    the additional name-value pairs given in the rule
      */
     public function validatePassword($attribute, $params)
     {
@@ -64,6 +88,7 @@ class LoginForm extends Model
 
     /**
      * Logs in a user using the provided email and password.
+     *
      * @return boolean whether the user is logged in successfully
      */
     public function login()

@@ -3,6 +3,11 @@ namespace app\components;
 
 use yii\base\Widget;
 
+/**
+ * Витжет комментариев.
+ *
+ * @package app\components
+ */
 class CommentWidget extends Widget{
 
 	public $model;

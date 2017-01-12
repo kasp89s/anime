@@ -5,16 +5,18 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "productproductspecificationrelation".
+ * Модель таблицы "productproductspecificationrelation".
  *
- * @property string $id
- * @property string $productId
- * @property string $productSpecificationId
- * @property string $value
- * @property string $isSearch
+ * @property string $id                     Идентификатор.
+ * @property string $productId              Ссылка на продукт.
+ * @property string $productSpecificationId Ссылка на спецификацию.
+ * @property string $value                  Значение.
+ * @property string $isSearch               Доступен к поиску.
  *
- * @property Product $product
- * @property Specification $specification
+ * @property Product       $product         Модель продукта.
+ * @property Specification $specification   Модель спецификации.
+ *
+ * @package app\models
  */
 class ProductSpecificationRelation extends \yii\db\ActiveRecord
 {

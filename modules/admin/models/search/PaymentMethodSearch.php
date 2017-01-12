@@ -9,6 +9,8 @@ use app\models\PaymentMethod;
 
 /**
  * PaymentMethodSearch represents the model behind the search form about `app\models\PaymentMethod`.
+ *
+ * @package app\modules\admin\models\search
  */
 class PaymentMethodSearch extends PaymentMethod
 {

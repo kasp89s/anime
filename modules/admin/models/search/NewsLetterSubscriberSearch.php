@@ -9,6 +9,8 @@ use app\models\NewsLetterSubscriber;
 
 /**
  * NewsLetterSubscriberSearch represents the model behind the search form about `app\models\NewsLetterSubscriber`.
+ *
+ * @package app\modules\admin\models\search
  */
 class NewsLetterSubscriberSearch extends NewsLetterSubscriber
 {

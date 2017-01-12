@@ -3,6 +3,11 @@ namespace app\assets;
 
 use yii\web\AssetBundle;
 
+/**
+ * Class AdminLoginAsset
+ *
+ * @package app\assets
+ */
 class AdminLoginAsset extends AssetBundle
 {
     public $basePath = '@webroot';

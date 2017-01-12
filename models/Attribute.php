@@ -5,18 +5,20 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "productattribute".
+ * Модель таблицы "productattribute".
  *
- * @property string $id
- * @property string $productId
- * @property string $productOptionId
- * @property string $productOptionValueId
- * @property string $price
- * @property string $quantityInStock
+ * @property string $id                   Идентификатор.
+ * @property string $productId            Ссылка на товар.
+ * @property string $productOptionId      Ссылка на опцию.
+ * @property string $productOptionValueId Ссылка на значение опции.
+ * @property string $price                Стоимость.
+ * @property string $quantityInStock      Количество.
  *
- * @property OptionValue $optionValue
- * @property Product $product
- * @property Option $option
+ * @property OptionValue $optionValue     Модель значения опции.
+ * @property Product     $product         Модель товара.
+ * @property Option      $option          Модель опции.
+ *
+ * @package app\models
  */
 class Attribute extends \yii\db\ActiveRecord
 {

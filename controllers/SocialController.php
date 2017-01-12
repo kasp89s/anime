@@ -11,34 +11,61 @@ use Yii;
 use Facebook;
 use \BW\Vkontakte as Vk;
 
+/**
+ * Контроллер авторизации через соц сети.
+ *
+ * @package app\controllers
+ */
 class SocialController extends AbstractController
 {
+    /**
+     * Параметр инициализации движка фейсбук.
+     *
+     * @var
+     */
     public $facebook;
 
+    /**
+     * Параметр инициализации движка VK.
+     *
+     * @var
+     */
     public $vk;
 
+    /**
+     * Инициализация.
+     */
     public function init()
     {
         parent::init();
 
-        $this->facebook = new \Facebook\Facebook([
-            'app_id' => Yii::$app->params['social']['facebook']['id'],
-            'app_secret' => Yii::$app->params['social']['facebook']['secret'],
-        ]);
+        $this->facebook = new \Facebook\Facebook(
+            [
+                'app_id' => Yii::$app->params['social']['facebook']['id'],
+                'app_secret' => Yii::$app->params['social']['facebook']['secret'],
+            ]
+        );
 
-        $this->vk = new Vk([
-            'client_id' => Yii::$app->params['social']['vk']['id'],
-            'client_secret' => Yii::$app->params['social']['vk']['secret'],
-            'redirect_uri' => 'http://' . Yii::$app->getRequest()->serverName . '/social/vk',
-        ]);
+        $this->vk = new Vk(
+            [
+                'client_id' => Yii::$app->params['social']['vk']['id'],
+                'client_secret' => Yii::$app->params['social']['vk']['secret'],
+                'redirect_uri' => 'http://' . Yii::$app->getRequest()->serverName . '/social/vk',
+            ]
+        );
     }
 
+    /**
+     * Авторизация через сеть ВК.
+     */
     public function actionVk()
     {
         if (isset($_GET['code'])) {
             $this->vk->authenticate();
 
-            $user = $this->vk->api('users.get', [
+            $user = $this->vk->api(
+                'users.get',
+                [
                     'user_id' => $this->vk->getUserId(),
                     'fields' => [
                         'nickname',
@@ -46,33 +73,40 @@ class SocialController extends AbstractController
                         'city',
                         'sex',
                     ],
-                ]);
+                ]
+            );
 
-            $this->auth([
-                    'id' => (string) $user[0]['id'],
+            $this->auth(
+                [
+                    'id' => (string)$user[0]['id'],
                     'name' => $user[0]['first_name'] . ' ' . $user[0]["last_name"],
                     'email' => $this->vk->getUserEmail(),
-                ], 'vk');
+                ],
+                'vk'
+            );
         }
     }
 
+    /**
+     * Авторизация через сеть ФБ.
+     */
     public function actionFacebook()
     {
         $helper = $this->facebook->getRedirectLoginHelper();
 
         try {
             $accessToken = $helper->getAccessToken();
-        } catch(Facebook\Exceptions\FacebookResponseException $e) {
+        } catch (Facebook\Exceptions\FacebookResponseException $e) {
             // When Graph returns an error
             echo 'Graph returned an error: ' . $e->getMessage();
             exit;
-        } catch(Facebook\Exceptions\FacebookSDKException $e) {
+        } catch (Facebook\Exceptions\FacebookSDKException $e) {
             // When validation fails or other local issues
             echo 'Facebook SDK returned an error: ' . $e->getMessage();
             exit;
         }
 
-        if (! isset($accessToken)) {
+        if (!isset($accessToken)) {
             if ($helper->getError()) {
                 header('HTTP/1.0 401 Unauthorized');
                 echo "Error: " . $helper->getError() . "\n";
@@ -88,21 +122,38 @@ class SocialController extends AbstractController
 
         $response = $this->facebook->get('/me?fields=id,name,email', $accessToken->getValue());
         $user = $response->getGraphUser();
-        $this->auth([
-            'id' => $user->getId(),
-            'name' => $user->getName(),
-            'email' => $user->getEmail(),
-        ], 'facebook');
+        $this->auth(
+            [
+                'id' => $user->getId(),
+                'name' => $user->getName(),
+                'email' => $user->getEmail(),
+            ],
+            'facebook'
+        );
     }
 
+    /**
+     * Создает нового пользователя или выполняет авторизацию существующего через заданую соц сеть.
+     *
+     * @param array $params Параметры авторизации.
+     * @param string $method Метод авторизации.
+     *
+     * @return \yii\web\Response
+     *
+     * @throws ErrorException
+     * @throws \yii\web\NotFoundHttpException
+     */
     private function auth($params, $method)
     {
-        $group = CustomerGroup::find()->where([
-            'isDefault' => 1
-        ])->one();
+        $group = CustomerGroup::find()->where(
+            [
+                'isDefault' => 1
+            ]
+        )->one();
 
-        if (empty($group))
+        if (empty($group)) {
             throw new ErrorException('Группа пользователей по умолчанию не назначена');
+        }
 
         $customer = Customer::find()
             ->where(['authID' => $params['id']])

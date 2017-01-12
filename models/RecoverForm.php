@@ -7,12 +7,24 @@ use yii\base\Model;
 use app\models\Customer;
 
 /**
- * LoginForm is the model behind the login form.
+ * Модель формы восстановления пароля.
+ *
+ * @package app\models
  */
 class RecoverForm extends Model
 {
+    /**
+     * Почта.
+     *
+     * @var
+     */
     public $email;
 
+    /**
+     * Клиент.
+     *
+     * @var
+     */
     public $customer;
 
     /**

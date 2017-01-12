@@ -9,6 +9,8 @@ use app\models\News;
 
 /**
  * NewsSearch represents the model behind the search form about `app\models\News`.
+ *
+ * @package app\modules\admin\models\search
  */
 class NewsSearch extends News
 {

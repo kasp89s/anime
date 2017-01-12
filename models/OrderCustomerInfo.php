@@ -5,20 +5,22 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "ordercustomerinfo".
+ * Модель таблицы "ordercustomerinfo".
  *
- * @property string $id
- * @property string $orderId
- * @property string $countryCode
- * @property string $city
- * @property string $zip
- * @property string $address
- * @property string $fullName
- * @property string $phone1
- * @property string $phone2
- * @property string $shippingValue
+ * @property string $id            Идентификатор.
+ * @property string $orderId       Ссылка на заказ.
+ * @property string $countryCode   Код страны.
+ * @property string $city          Город.
+ * @property string $zip           Индекс.
+ * @property string $address       Адресс.
+ * @property string $fullName      ФИО.
+ * @property string $phone1        Телефон.
+ * @property string $phone2        Телефон.
+ * @property string $shippingValue Дополнительная информация о доставке.
  *
  * @property Order $order
+ *
+ * @package app\models
  */
 class OrderCustomerInfo extends \yii\db\ActiveRecord
 {

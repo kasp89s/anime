@@ -5,21 +5,23 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "shopinfo".
+ * Модель таблицы "shopinfo".
  *
- * @property string $id
- * @property string $title
- * @property string $description
- * @property string $imageFileName
- * @property string $phone1
- * @property string $phone2
- * @property string $phone3
- * @property string $phone4
- * @property string $email
- * @property string $countryCode
- * @property string $city
- * @property string $zip
- * @property string $address
+ * @property string $id            Идентификатор.
+ * @property string $title         Название.
+ * @property string $description   Описание.
+ * @property string $imageFileName Имя картинки.
+ * @property string $phone1        Телефон.
+ * @property string $phone2        Телефон.
+ * @property string $phone3        Телефон.
+ * @property string $phone4        Телефон.
+ * @property string $email         Почта.
+ * @property string $countryCode   Код страны.
+ * @property string $city          Город.
+ * @property string $zip           Индекс.
+ * @property string $address       Адресс.
+ *
+ * @package app\models
  */
 class Shopinfo extends \yii\db\ActiveRecord
 {

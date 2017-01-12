@@ -5,18 +5,20 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "customergroup".
+ * Модель таблицы "customergroup".
  *
- * @property string $id
- * @property string $name
- * @property string $description
- * @property double $groupDiscount
- * @property integer $isAutomaticGroup
- * @property integer $isActive
- * @property integer $isDefault
- * @property double $groupAccumulatedLimit
+ * @property string  $id                    Идентификатор.
+ * @property string  $name                  Название.
+ * @property string  $description           Описание.
+ * @property double  $groupDiscount         Скидка группы.
+ * @property integer $isAutomaticGroup      Флаг возможности автоматического перехода в группу.
+ * @property integer $isActive              Флаг активности.
+ * @property integer $isDefault             Группа устанавливается по умолчанию.
+ * @property double  $groupAccumulatedLimit Необходимая сумма заказов для применения группы к клиету.
  *
- * @property Customer[] $customers
+ * @property Customer[] $customers Модель.
+ *
+ * @package app\models
  */
 class CustomerGroup extends \yii\db\ActiveRecord
 {

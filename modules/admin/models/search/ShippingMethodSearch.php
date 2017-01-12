@@ -9,6 +9,8 @@ use app\models\ShippingMethod;
 
 /**
  * ShippingMethodSearch represents the model behind the search form about `app\models\ShippingMethod`.
+ *
+ * @package app\modules\admin\models\search
  */
 class ShippingMethodSearch extends ShippingMethod
 {

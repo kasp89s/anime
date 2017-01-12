@@ -9,6 +9,8 @@ use app\models\Discount;
 
 /**
  * DiscountSearch represents the model behind the search form about `app\models\Discount`.
+ *
+ * @package app\modules\admin\models\search
  */
 class DiscountSearch extends Discount
 {

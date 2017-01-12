@@ -16,12 +16,33 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
+
+/**
+ * Контроллер новостей.
+ *
+ * @package app\controllers
+ */
 class NewsController extends AbstractController
 {
+    /**
+     * Перегрузка дефолтного шаблона.
+     *
+     * @var string
+     */
     public $layout = 'main';
 
+    /**
+     * Параметр инициализации движка фейсбук.
+     *
+     * @var
+     */
     public $facebook;
 
+    /**
+     * Параметр инициализации движка VK.
+     *
+     * @var
+     */
     public $vk;
 
     public function behaviors()
@@ -53,20 +74,27 @@ class NewsController extends AbstractController
         ];
     }
 
+    /**
+     * Инициализация.
+     */
     public function init()
     {
         parent::init();
 
-        $this->facebook = new \Facebook\Facebook([
-            'app_id' => Yii::$app->params['social']['facebook']['id'],
-            'app_secret' => Yii::$app->params['social']['facebook']['secret'],
-        ]);
+        $this->facebook = new \Facebook\Facebook(
+            [
+                'app_id' => Yii::$app->params['social']['facebook']['id'],
+                'app_secret' => Yii::$app->params['social']['facebook']['secret'],
+            ]
+        );
 
-        $this->vk = new Vk([
-            'client_id' => Yii::$app->params['social']['vk']['id'],
-            'client_secret' => Yii::$app->params['social']['vk']['secret'],
-            'redirect_uri' => 'http://' . Yii::$app->getRequest()->serverName . '/social/vk',
-        ]);
+        $this->vk = new Vk(
+            [
+                'client_id' => Yii::$app->params['social']['vk']['id'],
+                'client_secret' => Yii::$app->params['social']['vk']['secret'],
+                'redirect_uri' => 'http://' . Yii::$app->getRequest()->serverName . '/social/vk',
+            ]
+        );
 
         Yii::$app->view->params['vk'] = $this->vk;
         Yii::$app->view->params['facebook'] = $this->facebook;
@@ -88,7 +116,7 @@ class NewsController extends AbstractController
     }
 
     /**
-     * Главная.
+     * Страница списка новостей.
      *
      * @return string
      */
@@ -96,15 +124,19 @@ class NewsController extends AbstractController
     {
         $query = News::find()->where(['isActive' => 1]);
         $countQuery = clone $query;
-        $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => \Yii::$app->params['newsPageSize']]);
+        $pages = new Pagination(
+            ['totalCount' => $countQuery->count(), 'pageSize' => \Yii::$app->params['newsPageSize']]
+        );
         $pages->pageSizeParam = false;
         $query->offset($pages->offset)->limit($pages->limit);
 
-        if (!empty($_GET['time']))
+        if (!empty($_GET['time'])) {
             $query->orderBy('publishTime desc');
+        }
 
-        if (!empty($_GET['view']))
+        if (!empty($_GET['view'])) {
             $query->orderBy('publishTime desc');
+        }
 
         $records = $query->all();
 
@@ -112,26 +144,38 @@ class NewsController extends AbstractController
             $record->products;
         }
 
-        return $this->render(Yii::$app->controller->action->id, [
-            'records' => $records,
-            'pages' => $pages,
-            'count' => $query->count(),
-        ]);
+        return $this->render(
+            Yii::$app->controller->action->id,
+            [
+                'records' => $records,
+                'pages' => $pages,
+                'count' => $query->count(),
+            ]
+        );
     }
 
+    /**
+     * Подгрузка следующей страницы.
+     *
+     * @return string
+     */
     public function actionLoad()
     {
         $query = News::find()->where(['isActive' => 1]);
         $countQuery = clone $query;
-        $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => \Yii::$app->params['newsPageSize']]);
+        $pages = new Pagination(
+            ['totalCount' => $countQuery->count(), 'pageSize' => \Yii::$app->params['newsPageSize']]
+        );
         $pages->pageSizeParam = false;
         $query->offset($pages->offset)->limit($pages->limit);
 
-        if (!empty($_GET['time']))
+        if (!empty($_GET['time'])) {
             $query->orderBy('publishTime desc');
+        }
 
-        if (!empty($_GET['view']))
+        if (!empty($_GET['view'])) {
             $query->orderBy('publishTime desc');
+        }
 
         $records = $query->all();
 
@@ -139,17 +183,28 @@ class NewsController extends AbstractController
             $record->products;
         }
 
-        return $this->renderPartial(Yii::$app->controller->action->id,
+        return $this->renderPartial(
+            Yii::$app->controller->action->id,
             ['records' => $records]
         );
     }
 
+    /**
+     * Страница новости.
+     *
+     * @param $id Идентификатор новости.
+     *
+     * @return string
+     *
+     * @throws \yii\web\NotFoundHttpException
+     */
     public function actionItem($id)
     {
         $record = News::findOne($id);
 
-        if (empty($record))
+        if (empty($record)) {
             throw new \yii\web\NotFoundHttpException();
+        }
 
         Yii::$app->view->params['breadcrumbs'][] = [
             'template' => "<li>{link}</li>\n",
@@ -157,9 +212,12 @@ class NewsController extends AbstractController
             'url' => false
         ];
 
-        return $this->render(Yii::$app->controller->action->id, [
-            'record' => $record,
-            'viewProductList' => $this->getLastViewListProduct(),
-        ]);
+        return $this->render(
+            Yii::$app->controller->action->id,
+            [
+                'record' => $record,
+                'viewProductList' => $this->getLastViewListProduct(),
+            ]
+        );
     }
 }

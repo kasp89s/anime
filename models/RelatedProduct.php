@@ -5,13 +5,15 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "relatedproduct".
+ * Модель таблицы "relatedproduct".
  *
- * @property string $idProduct
- * @property integer $relatedProductId
- * @property integer $isAutoRelation
+ * @property string  $idProduct        Ссылка на продукт.
+ * @property integer $relatedProductId Связаные продукты.
+ * @property integer $isAutoRelation   Авто связь.
  *
- * @property Product $idProduct0
+ * @property Product $idProduct0 Модель продукта.
+ *
+ * @package app\models
  */
 class RelatedProduct extends \yii\db\ActiveRecord
 {

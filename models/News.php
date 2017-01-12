@@ -5,28 +5,40 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "news".
+ * Модель таблицы "news".
  *
- * @property string $id
- * @property string $title
- * @property string $shortContent
- * @property string $content
- * @property string $formatedShortContent
- * @property string $formatedContent
- * @property integer $isActive
- * @property string $publishTime
- * @property string $createTime
- * @property string $updateTime
- * @property string $createUserId
- * @property string $updateUserId
+ * @property string  $id                   Идентификатор.
+ * @property string  $title                Титулка.
+ * @property string  $shortContent         Короткий контент.
+ * @property string  $content              Контент.
+ * @property string  $formatedShortContent Форматированый короткий контент.
+ * @property string  $formatedContent      Форматированый контент.
+ * @property integer $isActive             Флаг активности.
+ * @property string  $publishTime          Время публикации.
+ * @property string  $createTime           Время создания.
+ * @property string  $updateTime           Время обновления.
+ * @property string  $createUserId         Ссылка на администратора который создал запись.
+ * @property string  $updateUserId         Ссылка на администратора который обновил запись.
  *
- * @property User $updateUser
- * @property User $createUser
+ * @property User $updateUser Модель админа.
+ * @property User $createUser Модель админа.
+ *
+ * @package app\models
  */
 class News extends \yii\db\ActiveRecord
 {
+    /**
+     * Параметр для работы с картинкой.
+     *
+     * @var
+     */
     public $image;
 
+    /**
+     * Продукты связаные с новостью.
+     *
+     * @var bool
+     */
     public $_products = false;
 
     /**
@@ -93,6 +105,11 @@ class News extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'createUserId']);
     }
 
+    /**
+     * Возвращает продукты связаные с новостью.
+     *
+     * @return array|bool|\yii\db\ActiveRecord[]
+     */
     public function getProducts()
     {
         if (!empty($this->_products))

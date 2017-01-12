@@ -5,15 +5,40 @@ namespace app\modules\admin\models;
 use Yii;
 use yii\base\Model;
 use app\models\User;
+
 /**
- * LoginForm is the model behind the login form.
+ * Модель авторизации администратора.
+ *
+ * @package app\modules\admin\models
  */
 class LoginForm extends Model
 {
+    /**
+     * Почта.
+     *
+     * @var
+     */
     public $email;
+
+    /**
+     * Пароль.
+     *
+     * @var
+     */
     public $password;
+
+    /**
+     * Флаг запомнить меня.
+     *
+     * @var bool
+     */
     public $rememberMe = true;
 
+    /**
+     * Параметр для работы с моделью пользователя.
+     *
+     * @var bool
+     */
     private $_user = false;
 
 
@@ -63,6 +88,7 @@ class LoginForm extends Model
 
     /**
      * Logs in a user using the provided email and password.
+     *
      * @return boolean whether the user is logged in successfully
      */
     public function login()

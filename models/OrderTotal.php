@@ -5,16 +5,18 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "ordertotal".
+ * Модель таблицы "ordertotal".
  *
- * @property string $id
- * @property string $orderId
- * @property string $code
- * @property string $name
- * @property string $amount
- * @property string $currencyCode
+ * @property string $id           Идентификатор.
+ * @property string $orderId      Ссылка на заказ.
+ * @property string $code         Код.
+ * @property string $name         Название.
+ * @property string $amount       Стоимость.
+ * @property string $currencyCode Валюта.
  *
- * @property Order $order
+ * @property Order $order Модель заказа.
+ *
+ * @package app\models
  */
 class OrderTotal extends \yii\db\ActiveRecord
 {

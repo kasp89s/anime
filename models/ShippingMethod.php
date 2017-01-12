@@ -5,21 +5,23 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "shippingmethod".
+ * Модель таблицы "shippingmethod".
  *
- * @property string $id
- * @property string $name
- * @property string $countryCode
- * @property string $description
- * @property string $imageFileName
- * @property string $price
- * @property string $requiredValue
- * @property string $lopped
- * @property string $insurancePercent
- * @property array $payments
+ * @property string $id               Идентификатор.
+ * @property string $name             Название.
+ * @property string $countryCode      Код страны.
+ * @property string $description      Описание.
+ * @property string $imageFileName    Название картинки.
+ * @property string $price            Стоимость.
+ * @property string $requiredValue    Значение.
+ * @property string $lopped           Урезаные данные по доставке.
+ * @property string $insurancePercent Процент.
+ * @property array  $payments         Оплата.
  *
- * @property ShippingPaymentMethodRelation[] $shippingPaymentMethodRelations
- * @property PaymentMethod[] $paymentMethods
+ * @property ShippingPaymentMethodRelation[] $shippingPaymentMethodRelations Модель связи с платенжными методами.
+ * @property PaymentMethod[]                 $paymentMethods                 Модель платежного метода.
+ *
+ * @package app\models
  */
 class ShippingMethod extends \yii\db\ActiveRecord
 {
@@ -71,6 +73,13 @@ class ShippingMethod extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * Возвращает наценку по достаке.
+     *
+     * @param float $amount Сумма заказа.
+     *
+     * @return float|int|string
+     */
     public function calculateIncrease($amount)
     {
         if (!empty($this->price)) {

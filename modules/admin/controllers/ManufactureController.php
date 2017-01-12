@@ -8,8 +8,19 @@ use yii\web\UploadedFile;
 use yii\helpers\BaseFileHelper;
 use app\modules\admin\models\search\ManufactureSearch;
 use yii\web\NotFoundHttpException;
+
+/**
+ * ManufactureController контроллер управления производителями.
+ *
+ * @package app\modules\admin\controllers
+ */
 class ManufactureController extends AdminController {
 
+    /**
+     * Список записей.
+     *
+     * @return string
+     */
     public function actionList()
     {
         $searchModel = new ManufactureSearch();
@@ -21,6 +32,11 @@ class ManufactureController extends AdminController {
             ]);
     }
 
+    /**
+     * Создание записи.
+     *
+     * @return string
+     */
     public function actionCreate()
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -56,6 +72,15 @@ class ManufactureController extends AdminController {
             ]);
     }
 
+    /**
+     * Редактировние записи.
+     *
+     * @param int $id
+     *
+     * @return string
+     *
+     * @throws NotFoundHttpException
+     */
     public function actionChange($id)
     {
         Yii::$app->view->params['breadcrumbs'][] = [
@@ -95,8 +120,11 @@ class ManufactureController extends AdminController {
     /**
      * Finds the Manufacture model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
+     *
      * @param string $id
+     *
      * @return Manufacture the loaded model
+     *
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)

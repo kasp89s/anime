@@ -9,6 +9,8 @@ use app\models\Comment;
 
 /**
  * CommentSearch represents the model behind the search form about `app\models\Comment`.
+ *
+ * @package app\modules\admin\models\search
  */
 class CommentSearch extends Comment
 {

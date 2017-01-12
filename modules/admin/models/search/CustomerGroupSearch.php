@@ -9,6 +9,8 @@ use app\models\CustomerGroup;
 
 /**
  * CustomerGroupSearch represents the model behind the search form about `app\models\CustomerGroup`.
+ *
+ * @package app\modules\admin\models\search
  */
 class CustomerGroupSearch extends CustomerGroup
 {
