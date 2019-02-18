@@ -2,9 +2,9 @@
 
 return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=193.111.140.87;dbname=orion',
-    'username' => 'orion',
-    'password' => 'W6x1F4i1',
+    'dsn' => 'mysql:host=127.0.0.1;dbname=fast1',
+    'username' => 'fast1',
+    'password' => '8K6s8Y3z',
     'charset' => 'utf8',
     'enableSchemaCache' => true,
 
